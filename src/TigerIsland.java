@@ -59,7 +59,8 @@ public class TigerIsland
             }
         });
 
-        fileMenu.add(clear);
+        // EmptyHexes is broken and useless, don't use it
+        //fileMenu.add(clear);
 
         JMenuItem reset = new JMenuItem("Reset Board");
         reset.addActionListener(new ActionListener(){

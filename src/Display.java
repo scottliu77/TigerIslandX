@@ -146,6 +146,10 @@ class DeckDisplay extends Display
 
         orientation = tile.getOrientationPlus(1);
         g2d.drawImage(tile.getB().getImage(), posPoints[orientation].x, posPoints[orientation].y, null);
+
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("#" + tile.getTileId(), 4, 124);
+
     }
 
     public void update()

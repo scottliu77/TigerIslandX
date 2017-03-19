@@ -29,7 +29,7 @@ public class Deck
 
     public void nextTile()
     {
-        topTile = new Tile(randomHex(), randomHex());
+        topTile = new Tile(randomHex(), randomHex(), tileCount);
         tileCount++;
     }
 
@@ -68,5 +68,10 @@ public class Deck
 
         return nextHex;
 
+    }
+
+    public int getTileCount()
+    {
+        return tileCount;
     }
 }

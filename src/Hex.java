@@ -33,10 +33,12 @@ public class Hex
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
 
+        // Define the shape of our hexagon:
         int hexagonX[] = {10, 30, 40, 30, 10, 0};
         int hexagonY[] = {0, 0, 20, 40, 40, 20};
         Polygon hexagon = new Polygon(hexagonX, hexagonY, 6);
 
+        // Draw base and hover hex images for buttons:
         g2d.setColor(color);
         g2d.fill(hexagon);
         g2d.setColor(Color.BLACK);
@@ -49,10 +51,13 @@ public class Hex
         g2d.setStroke(stroke);
         g2d.draw(hexagon);
 
+        // Alternate hover graphic, roughly equivalent to mouse detection box:
         //g2d.setColor(Color.GREEN);
         //g2d.fillOval(5, 5, 32, 32);
 
-        this.typeName = "Default Hex";
+        // Set default values:
+        typeName = "Default Hex";
+        tileId = 0;
     }
 
     public Color getColor()
@@ -74,15 +79,6 @@ public class Hex
     {
         return typeName;
     }
-
-    /*
-    public void drawHex(Graphics2D g2d, Point origin)
-    {
-
-    }
-    */
-
-
 
 
     public int getLevel()

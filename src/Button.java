@@ -194,11 +194,3 @@ class RotateLeftButton extends Button
         board.rotDeckTileLeft();
     }
 }
-
-
-/*
-class RotRightButton extends Button
-{
-
-}
-*/

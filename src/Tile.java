@@ -9,12 +9,17 @@ public class Tile
     private Hex hexA;
     private Hex hexB;
     private int orientation;
+    private int tileId;
 
-    public Tile(Hex hexA, Hex hexB)
+    public Tile(Hex hexA, Hex hexB, int tileId)
     {
+        this.tileId = tileId;
         volcano = new VolcanoHex();
+        volcano.setTileId(tileId);
         this.hexA = hexA;
+        hexA.setTileId(tileId);
         this.hexB = hexB;
+        hexB.setTileId(tileId);
         orientation = 0;
     }
 
@@ -55,6 +60,11 @@ public class Tile
         return hexB;
     }
 
+    public int getTileId()
+    {
+        return tileId;
+    }
+
     private class Orientation
     {
         int state;
@@ -87,9 +97,8 @@ public class Tile
         public void modifyState(int modifier)
         {
             state += modifier;
-            state %= MAX - 1;
+            state %= (MAX - 1);
         }
-
     }
 }
 
