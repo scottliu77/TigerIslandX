@@ -138,8 +138,8 @@ class RockyHex extends Hex
 {
     public RockyHex()
     {
-        //super(Color.GRAY);
-        super(new Color(0x66, 0x33, 0x00));
+        super(Color.GRAY);
+        //super(new Color(0x66, 0x33, 0x00));
         super.setTypeName("Rocky");
     }
 }
@@ -148,7 +148,7 @@ class LakeHex extends Hex
 {
     public LakeHex()
     {
-        super(Color.BLUE);
+        super(Color.CYAN);
         super.setTypeName("Lake");
     }
 }
