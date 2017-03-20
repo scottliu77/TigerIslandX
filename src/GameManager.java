@@ -1,6 +1,7 @@
 import java.util.*;
 import java.awt.*;
 
+// GameManager is an intermediary class between the TigerPanel and the game Menu.
 public class GameManager
 {
     private TigerPanel panel;

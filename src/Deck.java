@@ -4,6 +4,8 @@ import java.util.Random;
 /**
  * Created by Wylie on 3/15/2017.
  */
+
+// The Deck generates and provides Tiles to be placed.
 public class Deck
 {
 

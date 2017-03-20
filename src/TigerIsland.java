@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
  * Created by Wylie on 3/19/2017.
  */
 
+// Main class contains JMenus (i.e., dropdown menus) and emplace a TigerPanel
 public class TigerIsland
 {
     static private final int WIDTH = 1024;
@@ -85,6 +86,7 @@ public class TigerIsland
 
 }
 
+// TigerPanel displays the output image and detects mouse inputs
 class TigerPanel extends JPanel {
     private BufferedImage image;
     private Graphics2D g2d;

@@ -145,6 +145,21 @@ public class Board
                 HexButton button = new HexButton(buttonPoint, new EmptyHex(), this);
                 buttonMap.put(buttonPoint, button);
             }
+            place2ndLayerPerimeter(buttonPoint);
+        }
+    }
+
+    public void place2ndLayerPerimeter(Point center)
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            Point neighborPoint = neighborPts[i];
+            Point buttonPoint = new Point(center.x + neighborPoint.x, center.y + neighborPoint.y);
+            if(!buttonMap.containsKey(buttonPoint))
+            {
+                HexButton button = new HexButton(buttonPoint, new EmptyHex(), this);
+                buttonMap.put(buttonPoint, button);
+            }
         }
     }
 

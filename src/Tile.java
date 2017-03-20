@@ -3,12 +3,17 @@ import java.util.Random;
 /**
  * Created by Wylie on 3/14/2017.
  */
+
+// A Tile is a group of 3 adjacent Hexes: one Volcano and two non-Volcanos
 public class Tile
 {
     private VolcanoHex volcano;
     private Hex hexA;
     private Hex hexB;
     private int orientation;
+
+    // Orientation = the position of hexA relative to the volcano
+    // The position of hexB relative to the volano is always orientation + 1
 
     public Tile(Hex hexA, Hex hexB)
     {
@@ -35,6 +40,9 @@ public class Tile
         return orientation;
     }
 
+    // NEVER MODIFY ORIENTATION OUTSIDE THE TILE CLASS!
+    // If you need to modify a state by n places, ALWAYS use getOrientationPlus(n) or call rotLeft/rotRight in a loop
+    // If you try to just use getOrientation() then modify that, it opens the door to a lot of errors
     public int getOrientationPlus(int number)
     {
         return (orientation + number) % 6;
@@ -55,6 +63,8 @@ public class Tile
         return hexB;
     }
 
+    // I began working on this Orientation class to prevent errors from doing math on the current state and forgetting to mod
+    // Currently unused, so make sure you use getOrientationPlus() whenever you want to get a modified state
     private class Orientation
     {
         int state;

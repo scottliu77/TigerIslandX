@@ -2,14 +2,20 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.awt.*;
 
+// A menu manages its button and display objects.
 public class Menu
 {
     // Member data:
 
+    // Buttons allow the user to interact with the mouse
     private ArrayList<Button> buttons;
+
+    // Displays aren't directly interactive, but can still update in response to actions
     private ArrayList<Display> displays;
 
+    // The menu keeps track of which button is being hovered over
     private Button hoverButton;
+
     // Constructors:
 
     public Menu(ArrayList<Button> buttons, ArrayList<Display> displays)
@@ -28,8 +34,7 @@ public class Menu
         this(new ArrayList<Button>(), new ArrayList<Display>());
     }
 
-    //
-
+    // drawMenu draws the current states of the menu's displays and buttons
     public void drawMenu(Graphics2D g2d)
     {
         drawDisplays(g2d);
@@ -52,6 +57,7 @@ public class Menu
         }
     }
 
+    // updateDisplays causes each member display to execute its update function
     public void updateDisplays()
     {
         for(Display display : displays)
@@ -60,6 +66,7 @@ public class Menu
         }
     }
 
+    // Updates the current hoverButton based on mouse movement input
     public void checkForHover(Point point)
     {
         // Most likely case is that the button previously hovered over is still being hovered over, so check that first:
@@ -82,6 +89,7 @@ public class Menu
         }
     }
 
+    // Presses the button on which the point lies if applicable
     public void checkForPress(Point point)
     {
         for(Button button : buttons)
@@ -125,6 +133,8 @@ public class Menu
     }
 }
 
+// The baseMenu holds the board and most game logic.
+// It's currently the only menu, but I might implement some more menus for settings configuration etc.
 class BaseMenu extends Menu
 {
     BoardDisplay boardDisplay;
@@ -156,7 +166,7 @@ class BaseMenu extends Menu
         HashMap<Point, HexButton> buttonMap = board.getButtonMap();
         for( HexButton button : buttonMap.values())
         {
-            button.changeHex(new EmptyHex());
+            button.resetButton();
         }
         /*
         super.clearButtons();
@@ -193,6 +203,7 @@ class BaseMenu extends Menu
         }
     }
 
+    // To-do: move most of these functions to the RotRightButton and RotLeftButton constructors
     public RotateRightButton makeRotateRightButton(Point origin)
     {
         BufferedImage baseImg = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
