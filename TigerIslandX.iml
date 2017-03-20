@@ -7,5 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="info.cukes:cucumber-java8:1.2.5" level="project" />
+    <orderEntry type="library" name="info.cukes:cucumber-junit:1.2.5" level="project" />
   </component>
 </module>

@@ -8,7 +8,8 @@ import java.util.HashMap;
  */
 public class Board
 {
-    private GameManager manager;
+    Player player1;
+    Player player2;
 
     private ArrayList<HexButton> hexButtons;
     private HashMap<Point, HexButton> buttonMap;
@@ -32,10 +33,8 @@ public class Board
             new Point(-30, 20),
             new Point(-30, -20)};
 
-    public Board(GameManager manager)
+    public Board()
     {
-        this.manager = manager;
-
         hexButtons = new ArrayList<HexButton>();
 
         deck = new Deck();
@@ -126,7 +125,7 @@ public class Board
 
             deck.nextTile();
 
-            manager.updateMenu();
+            //manager.updateMenu();
         }
     }
 
@@ -134,7 +133,7 @@ public class Board
     {
         //deck.resetTileCount();
         deck.resetTileCount();
-        manager.updateMenu();
+        //manager.updateMenu();
     }
 
     public void placeHex(Point center, Hex hex, int orientation)
@@ -152,7 +151,7 @@ public class Board
             buttonMap.put(origin, button);
         }
         placePerimeterHexes(origin);
-        manager.updateHexButtons();
+        //manager.updateHexButtons();
     }
 
     public void placePerimeterHexes(Point center)
@@ -216,13 +215,13 @@ public class Board
     public void rotDeckTileRight()
     {
         deck.getTopTile().rotRight();
-        manager.updateMenu();
+        //manager.updateMenu();
     }
 
     public void rotDeckTileLeft()
     {
         deck.getTopTile().rotLeft();
-        manager.updateMenu();
+        //manager.updateMenu();
     }
 
     public Hex getHoverHex()
@@ -233,7 +232,7 @@ public class Board
     public void setHoverHexButton(HexButton button)
     {
         hoverHexButton = button;
-        manager.updateMenu();
+        //manager.updateMenu();
     }
 
     public HexButton getHoverHexButton()
@@ -241,14 +240,14 @@ public class Board
         return hoverHexButton;
     }
 
-    public boolean tilePlacementIsLegal(Tile tile, HexButton targetButton)
+    private boolean tilePlacementIsLegal(Tile tile, HexButton targetButton)
     {
         if(!targetIsEmptyOrVolcano(targetButton))
         {
             System.out.println("Illegal move: target neither volcano nor empty");
             return false;
         }
-        if (targetButton.getHex().getTypeName() == "Volcano")
+        if (targetButton.getHex().getTypeName().equals("Volcano"))
         {
             if (hexesShareTile(tile, targetButton))
             {
@@ -261,7 +260,7 @@ public class Board
                 return false;
             }
         }
-        else if (targetButton.getHex().getTypeName() == "Empty" && tile.getTileId() != 1)
+        else if (targetButton.getHex().getTypeName().equals("Empty") && tile.getTileId() != 1)
         {
             if (!allHexesEmpty(tile, targetButton))
             {
@@ -278,6 +277,7 @@ public class Board
         return true;
     }
 
+    // adjacentToNonEmptyHex returns true if
     public boolean adjacentToNonEmptyHex(Tile tile, HexButton targetButton)
     {
         int positionA = tile.getOrientation();
@@ -304,17 +304,19 @@ public class Board
         return false;
     }
 
+    // hasNonEmptyNeighbor returns true if any of a hex's neighbors are not Empty
     public boolean hasNonEmptyNeighbor(HexButton targetButton)
     {
         for(int i = 0; i < 6; i++)
         {
             HexButton neighborButton = getNeighborButton(targetButton, i);
             String neighborType = neighborButton.getHex().getTypeName();
-            if (neighborType != "Empty") return true;
+            if (!neighborType.equals("Empty")) return true;
         }
         return false;
     }
 
+    // allHexesEmpty returns true if you are attempting to place a Tile on three Empty hexes
     public boolean allHexesEmpty(Tile tile, HexButton targetButton)
     {
         int positionA = tile.getOrientation();
@@ -327,9 +329,10 @@ public class Board
         String tileA = buttonA.getHex().getTypeName();
         String tileB = buttonB.getHex().getTypeName();
 
-        return(tileV == "Empty" && tileA == "Empty" && tileB == "Empty");
+        return(tileV.equals("Empty") && tileA.equals("Empty") && tileB.equals("Empty"));
     }
 
+    // hexesShareLevel returns true if you are attempting to place a Tile on three hexes of the same level
     public boolean hexesShareLevel(Tile tile, HexButton targetButton)
     {
         int positionA = tile.getOrientation();
@@ -345,6 +348,7 @@ public class Board
         return (levelV == levelA && levelA == levelB);
     }
 
+    // hexesShareTile returns true if you are attempting to place a Tile directly over another
     public boolean hexesShareTile(Tile tile, HexButton targetButton)
     {
         int positionA = tile.getOrientation();
@@ -357,13 +361,14 @@ public class Board
         int tileA = buttonA.getHex().getTileId();
         int tileB = buttonB.getHex().getTileId();
 
-        return (tileV == tileA && tileV == tileB && tileA == tileB && tileV != 0);
+        return (tileV == tileA && tileV == tileB && tileV != 0);
     }
 
+    // targetIsEmptyOrVolcano returns true if the target hex is Empty or a Volcano
     public boolean targetIsEmptyOrVolcano(HexButton targetButton)
     {
         Hex hex = targetButton.getHex();
         String hexType = hex.getTypeName();
-        return (hexType == "Empty" || hexType == "Volcano");
+        return (hexType.equals("Empty") || hexType.equals("Volcano"));
     }
 }

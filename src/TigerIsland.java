@@ -31,6 +31,7 @@ public class TigerIsland
     public static void createAndShowGUI()
     {
         JFrame frame = new JFrame();
+        JFrame secondary = new JFrame();
 
         frame.setTitle("Group O - TigerIsland v1 Development Build");
         frame.setSize(WIDTH + 16, HEIGHT + 62);
@@ -64,14 +65,22 @@ public class TigerIsland
         fileMenu.add(clear);
 
         JMenuItem reset = new JMenuItem("Reset Board");
-        reset.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent event) { panel.resetHexes(); }
+        reset.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent event)
+            {
+                panel.resetHexes();
+            }
         });
         fileMenu.add(reset);
 
         JMenuItem resetWithOneHex = new JMenuItem("Reset with One Hex");
-        resetWithOneHex.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent event) { panel.resetWithOneHex(); }
+        resetWithOneHex.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent event)
+            {
+                panel.resetWithOneHex();
+            }
         });
         fileMenu.add(resetWithOneHex);
 

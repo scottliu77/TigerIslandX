@@ -131,6 +131,11 @@ public class Menu
     {
         buttons.removeAll(oldButtons);
     }
+
+    public ArrayList<Button> getButtons()
+    {
+        return buttons;
+    }
 }
 
 // The baseMenu holds the board and most game logic.
@@ -141,13 +146,13 @@ class BaseMenu extends Menu
 
     Board board;
 
-    public BaseMenu(GameManager manager)
+    public BaseMenu()
     {
         super();
 
         super.addDisplay(new BackgroundDisplay());
 
-        board = new Board(manager);
+        board = new Board();
 
         boardDisplay = new BoardDisplay(board);
         super.addDisplay(boardDisplay);
@@ -176,10 +181,12 @@ class BaseMenu extends Menu
 
     }
 
-    public void updateHexButtons()
+    public void updateHexButtons(Graphics2D G2D)
     {
         HashMap<Point, HexButton> buttonMap = board.getButtonMap();
         addHexButtons(board.getButtonMap());
+        //updateDisplays();
+        //drawMenu(G2D);
     }
 
     public void resetHexes()
@@ -201,6 +208,20 @@ class BaseMenu extends Menu
         for (HexButton button : buttonMap.values())
         {
             super.addButton(button);
+        }
+    }
+
+    // Presses the button on which the point lies if applicable
+    public void checkForPress(Point point)
+    {
+        for(Button button : super.getButtons())
+        {
+            if (button.pointIsOn(point))
+            {
+                button.press();
+                addHexButtons(board.getButtonMap());
+                return;
+            }
         }
     }
 

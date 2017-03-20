@@ -18,7 +18,7 @@ public class GameManager
     public void initializeMenus()
     {
         menus = new ArrayList<Menu>();
-        baseMenu = new BaseMenu(this);
+        baseMenu = new BaseMenu();
         menus.add(baseMenu);
         activeMenu = menus.get(0);
         activeMenu.drawMenu(panel.getG2D());
@@ -27,12 +27,13 @@ public class GameManager
     public void checkForPress(Point point)
     {
         activeMenu.checkForPress(point);
+        updateMenu();
     }
 
     public void checkForHover(Point point)
     {
         activeMenu.checkForHover(point);
-        activeMenu.drawMenu(panel.getG2D());
+        updateMenu();
     }
 
     public void updateMenu()
@@ -49,19 +50,19 @@ public class GameManager
     public void emptyHexes()
     {
         baseMenu.clearHexes();
-        drawMenu();
+        updateMenu();
     }
 
     public void resetHexes()
     {
         baseMenu.resetHexes();
-        drawMenu();
+        updateMenu();
     }
 
     public void resetWithOneHex()
     {
         baseMenu.resetWithOneHex();
-        drawMenu();
+        updateMenu();
     }
 
     public void addHexButton(HexButton button)
@@ -71,7 +72,7 @@ public class GameManager
 
     public void updateHexButtons()
     {
-        baseMenu.updateHexButtons();
+        baseMenu.updateHexButtons(panel.getG2D());
     }
 
 }
