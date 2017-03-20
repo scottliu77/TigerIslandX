@@ -27,6 +27,7 @@ public class TigerIsland
         return;
     }
 
+    // createAndShowGUI assembles and configures the JFrame
     public static void createAndShowGUI()
     {
         JFrame frame = new JFrame();
