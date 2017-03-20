@@ -25,7 +25,7 @@ public class Deck
     {
         rand = new Random();
         tiles = new ArrayList<Tile>();
-        tileCount = 0;
+        tileCount = 1;
         nextTile();
     }
 
@@ -75,5 +75,11 @@ public class Deck
     public int getTileCount()
     {
         return tileCount;
+    }
+
+    public void resetTileCount()
+    {
+        tileCount = 1;
+        nextTile();
     }
 }

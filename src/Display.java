@@ -112,7 +112,6 @@ class DeckDisplay extends Display
         drawBase();
 
         this.deck = deck;
-        nextTile();
         update();
     }
 

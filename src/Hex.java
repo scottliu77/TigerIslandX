@@ -19,7 +19,6 @@ public class Hex
 
     private Hex[] neighbors;
 
-
     private String typeName;
 
     private Point[] posPoints;
@@ -121,7 +120,7 @@ class EmptyHex extends Hex
     public EmptyHex()
     {
         super(Color.WHITE);
-        super.setTypeName("Empty Space");
+        super.setTypeName("Empty");
         this.setLevel(0);
     }
 }

@@ -164,6 +164,7 @@ class BaseMenu extends Menu
     public void clearHexes()
     {
         HashMap<Point, HexButton> buttonMap = board.getButtonMap();
+        board.resetDeck();
         for( HexButton button : buttonMap.values())
         {
             button.resetButton();
