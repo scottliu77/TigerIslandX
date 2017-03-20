@@ -5,6 +5,8 @@ import java.util.HashMap;
 /**
  * Created by Wylie on 3/14/2017.
  */
+
+// A Hex represents a single space on the board.
 public class Hex
 {
     private BufferedImage image;

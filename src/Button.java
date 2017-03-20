@@ -3,10 +3,15 @@ import java.awt.image.*;
 
 import static java.lang.Math.sqrt;
 
+// Buttons are components of Menu with which the user can directly interact using the mouse.
 public class Button
 {
+    // Origin and terminal points determine the hitbox boundaries
     private Point origin;
     private Point terminal;
+
+    // The Button can display one of two images: baseImage or hoverImage
+    // Which images is displayed is based on the value of the hover boolean
     private BufferedImage baseImage;
     private BufferedImage hoverImage;
     private boolean hover;
@@ -153,6 +158,13 @@ class HexButton extends Button
         }
 
         return super.getHover();
+    }
+
+    public void resetButton()
+    {
+        hex = new EmptyHex();
+        super.setBaseImage(hex.getImage());
+        super.setHoverImage(hex.getHoverImage());
     }
 
     public void press()
