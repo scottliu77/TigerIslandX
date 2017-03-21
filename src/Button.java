@@ -28,7 +28,7 @@ public class Button
 
     public void press()
     {
-        System.out.println("Attempted to press TestPackage.Button with undefined behavior");
+        System.out.println("Attempted to press Button with undefined behavior");
         // Contents of press() should be defined by subclasses
     }
 
@@ -41,28 +41,6 @@ public class Button
             img = baseImage;
         g2d.drawImage(img, origin.x, origin.y, null);
     }
-
-    public BufferedImage getBaseImage()
-    {
-        return baseImage;
-    }
-
-    public BufferedImage getHoverImage()
-    {
-        return hoverImage;
-    }
-
-	/*
-	public void drawBase(Graphics2D g2d)
-	{
-		g2d.drawImage(baseImage, origin.x, origin.y, null);
-	}
-
-	public void drawHover(Graphics2D g2d)
-	{
-		g2d.drawImage(hoverImage, origin.x, origin.y, null);
-	}
-	*/
 
     public Point getOrigin()
     {
@@ -100,6 +78,10 @@ public class Button
     {
         return hover;
     }
+
+    public BufferedImage getBaseImage() { return baseImage; }
+
+    public BufferedImage getHoverImage() { return hoverImage; }
 }
 
 class HexButton extends Button
@@ -172,12 +154,40 @@ class HexButton extends Button
 
 class RotateRightButton extends Button
 {
-    Deck deck;
+    private Deck deck;
 
-    public RotateRightButton(Point origin, Deck deck, BufferedImage baseImg, BufferedImage hoverImg)
+    public RotateRightButton(Point origin, Deck deck)
     {
-        super(origin, baseImg, hoverImg);
+        super(origin, new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
+        buildBase();
+        buildHover();
         this.deck = deck;
+    }
+
+    private void buildBase()
+    {
+        BufferedImage baseImg = super.getBaseImage();
+        Graphics2D g2d = baseImg.createGraphics();
+        drawBaseImage(g2d);
+    }
+
+    private void buildHover()
+    {
+        BufferedImage hoverImg = super.getHoverImage();
+        Graphics2D g2d = hoverImg.createGraphics();
+        drawBaseImage(g2d);
+
+        g2d.setColor(Color.BLUE);
+        g2d.fillOval(16, 16, 32, 32);
+    }
+
+    public void drawBaseImage(Graphics2D g2d)
+    {
+        g2d.setColor(Color.RED);
+        g2d.fillRect(0, 0, 64, 64);
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(0, 0, 63, 63);
+        g2d.drawString("Rotate R", 4, 16);
     }
 
     public void press()
@@ -188,13 +198,43 @@ class RotateRightButton extends Button
 
 class RotateLeftButton extends Button
 {
-    Deck deck;
+    private Deck deck;
 
-    public RotateLeftButton(Point origin, Deck deck, BufferedImage baseImg, BufferedImage hoverImg)
+    public RotateLeftButton(Point origin, Deck deck)
     {
-        super(origin, baseImg, hoverImg);
+        super(origin, new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
+        buildBase();
+        buildHover();
         this.deck = deck;
     }
+
+    public void buildBase()
+    {
+        BufferedImage baseImg = super.getBaseImage();
+        Graphics2D g2d = baseImg.createGraphics();
+        drawBaseImage(g2d);
+    }
+
+    public void buildHover()
+    {
+        BufferedImage hoverImg = super.getHoverImage();
+        Graphics2D g2d = hoverImg.createGraphics();
+        drawBaseImage(g2d);
+
+        g2d.setColor(Color.BLUE);
+        g2d.fillOval(16, 16, 32, 32);
+    }
+
+    public void drawBaseImage(Graphics2D g2d)
+    {
+        g2d.setColor(Color.RED);
+        g2d.fillRect(0, 0, 63, 63);
+
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(0, 0, 63, 63);
+        g2d.drawString("Rotate L", 4, 16);
+    }
+
 
     public void press()
     {

@@ -13,8 +13,6 @@ public class TigerIsland
     static private final int WIDTH = 1024;
     static private final int HEIGHT = 768;
 
-    GameManager manager;
-
     public static void main(String[] args)
     {
         SwingUtilities.invokeLater(new Runnable()
@@ -24,18 +22,16 @@ public class TigerIsland
                 createAndShowGUI();
             }
         });
-        return;
     }
 
     // createAndShowGUI assembles and configures the JFrame
     public static void createAndShowGUI()
     {
         JFrame frame = new JFrame();
-        JFrame secondary = new JFrame();
 
         frame.setTitle("Group O - TigerIsland v1 Development Build");
         frame.setSize(WIDTH + 16, HEIGHT + 62);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         TigerPanel panel = new TigerPanel(new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB));
 
@@ -72,6 +68,7 @@ public class TigerIsland
                 panel.resetHexes();
             }
         });
+
         fileMenu.add(reset);
 
         JMenuItem resetWithOneHex = new JMenuItem("Reset with One Hex");
@@ -82,6 +79,7 @@ public class TigerIsland
                 panel.resetWithOneHex();
             }
         });
+
         fileMenu.add(resetWithOneHex);
 
         JMenuBar menuBar = new JMenuBar();
@@ -97,17 +95,16 @@ public class TigerIsland
 }
 
 // TigerPanel displays the output image and detects mouse inputs
-class TigerPanel extends JPanel {
+class TigerPanel extends JPanel
+{
     private BufferedImage image;
     private Graphics2D g2d;
-
-    private Point buttonPoint;
 
     private GameManager manager;
 
     public TigerPanel(BufferedImage image) {
         this.image = image;
-        g2d = (Graphics2D) image.createGraphics();
+        g2d = image.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -140,10 +137,6 @@ class TigerPanel extends JPanel {
             }
         });
 
-
-    }
-
-    public void initializeMenus() {
 
     }
 

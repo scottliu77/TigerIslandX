@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 
 /**
  * Created by Wylie on 3/14/2017.
@@ -11,33 +10,23 @@ public class Hex
 {
     private BufferedImage image;
     private BufferedImage hoverImage;
-    private Color color;
 
-    private Point origin;
     private int level;
     private int tileId;
 
-    private Hex[] neighbors;
-
-    private String typeName;
-
-    private Point[] posPoints;
+    // Hexagon shape definition:
+    private static final int hexagonX[] = {10, 30, 40, 30, 10, 0};
+    private static final int hexagonY[] = {0, 0, 20, 40, 40, 20};
+    private static final Polygon hexagon = new Polygon(hexagonX, hexagonY, 6);
 
     public Hex(Color color)
     {
-        this.color = color;
-
         image = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
         hoverImage = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = (Graphics2D) image.createGraphics();
+        Graphics2D g2d = image.createGraphics();
 
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
-
-        // Define the shape of our hexagon:
-        int hexagonX[] = {10, 30, 40, 30, 10, 0};
-        int hexagonY[] = {0, 0, 20, 40, 40, 20};
-        Polygon hexagon = new Polygon(hexagonX, hexagonY, 6);
 
         // Draw base and hover hex images for buttons:
         g2d.setColor(color);
@@ -45,7 +34,7 @@ public class Hex
         g2d.setColor(Color.BLACK);
         g2d.draw(hexagon);
 
-        g2d = (Graphics2D) hoverImage.createGraphics();
+        g2d = hoverImage.createGraphics();
         g2d.drawImage(image, 0, 0, null);
         g2d.setColor(Color.PINK);
         Stroke stroke = new BasicStroke(2);
@@ -57,13 +46,7 @@ public class Hex
         //g2d.fillOval(5, 5, 32, 32);
 
         // Set default values:
-        typeName = "Default Hex";
         tileId = 0;
-    }
-
-    public Color getColor()
-    {
-        return color;
     }
 
     public BufferedImage getImage()
@@ -78,7 +61,7 @@ public class Hex
 
     public String getTypeName()
     {
-        return typeName;
+        return getTerrainString();
     }
 
 
@@ -92,17 +75,6 @@ public class Hex
         this.level = newLevel;
     }
 
-
-    public void drawHex(Graphics2D g2d)
-    {
-        g2d.drawImage(image, origin.x, origin.y, null);
-    }
-
-    public void setTypeName(String typeName)
-    {
-        this.typeName = typeName;
-    }
-
     public void setTileId(int tileId)
     {
         this.tileId = tileId;
@@ -113,6 +85,18 @@ public class Hex
         return tileId;
     }
 
+    public String getTerrainString()
+    {
+        String terrain = this.getClass().toString();
+        if(terrain.length() > 6)
+        {
+            return terrain.substring(6, terrain.length() - 3);
+        }
+        else
+        {
+            return terrain;
+        }
+    }
 }
 
 class EmptyHex extends Hex
@@ -120,7 +104,6 @@ class EmptyHex extends Hex
     public EmptyHex()
     {
         super(Color.WHITE);
-        super.setTypeName("Empty");
         this.setLevel(0);
     }
 }
@@ -130,7 +113,6 @@ class VolcanoHex extends Hex
     public VolcanoHex()
     {
         super(Color.RED);
-        super.setTypeName("Volcano");
     }
 }
 
@@ -140,7 +122,6 @@ class RockyHex extends Hex
     {
         super(Color.GRAY);
         //super(new Color(0x66, 0x33, 0x00));
-        super.setTypeName("Rocky");
     }
 }
 
@@ -149,7 +130,6 @@ class LakeHex extends Hex
     public LakeHex()
     {
         super(Color.CYAN);
-        super.setTypeName("Lake");
     }
 }
 
@@ -158,7 +138,6 @@ class JungleHex extends Hex
     public JungleHex()
     {
         super(Color.GREEN);
-        super.setTypeName("Jungle");
     }
 }
 
@@ -167,6 +146,5 @@ class GrassHex extends Hex
     public GrassHex()
     {
         super(Color.YELLOW);
-        super.setTypeName("Grass");
     }
 }

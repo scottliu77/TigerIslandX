@@ -1,5 +1,3 @@
-import java.util.Random;
-
 /**
  * Created by Wylie on 3/14/2017.
  */
@@ -13,11 +11,8 @@ public class Tile
     private Orientation orientation;
     private int tileId;
 
-    private static final int MIN = 0;
-    private static final int MAX = 5;
-
     // Orientation = the position of hexA relative to the volcano
-    // The position of hexB relative to the volano is always orientation + 1
+    // The position of hexB relative to the volcano is always orientation + 1
 
     public Tile(Hex hexA, Hex hexB, int tileId, Orientation orientation)
     {
@@ -117,4 +112,4 @@ enum Orientation
     {
         return ordinal();
     }
-};
+}

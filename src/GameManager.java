@@ -64,15 +64,4 @@ public class GameManager
         baseMenu.resetWithOneHex();
         updateMenu();
     }
-
-    public void addHexButton(HexButton button)
-    {
-        baseMenu.addButton(button);
-    }
-
-    public void updateHexButtons()
-    {
-        baseMenu.updateHexButtons(panel.getG2D());
-    }
-
 }

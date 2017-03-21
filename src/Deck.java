@@ -86,11 +86,6 @@ public class Deck
         orientation = orientation.rotRight();
     }
 
-    public int getTileCount()
-    {
-        return tileCount;
-    }
-
     public void resetTileCount()
     {
         tileCount = 1;

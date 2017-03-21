@@ -1,4 +1,3 @@
-import java.awt.image.BufferedImage;
 import java.util.*;
 import java.awt.*;
 
@@ -151,21 +150,27 @@ class BaseMenu extends Menu
 {
     Board board;
 
+    private BackgroundDisplay backgroundDisplay;
+    private BoardDisplay boardDisplay;
+    private DeckDisplay deckDisplay;
+    private HexDetailDisplay hexDetailDisplay;
+
     public BaseMenu()
     {
         super();
 
-        super.addDisplay(new BackgroundDisplay());
+        super.addDisplay(backgroundDisplay = new BackgroundDisplay());
 
         board = new Board();
+        Deck deck = board.getDeck();
 
-        super.addDisplay(new BoardDisplay(board));
-        super.addDisplay(new DeckDisplay(board.getDeck()));
-        super.addDisplay(new HexDetailDisplay(board, this));
+        super.addDisplay(boardDisplay = new BoardDisplay(board));
+        super.addDisplay(deckDisplay = new DeckDisplay(deck));
+        super.addDisplay(hexDetailDisplay = new HexDetailDisplay());
 
         // Note: should hold Board in Menu instead of at Display level...
-        super.addButton(makeRotateLeftButton(new Point(832, 256)));
-        super.addButton(makeRotateRightButton(new Point(896, 256)));
+        super.addButton(new RotateLeftButton((new Point(832, 256)), deck));
+        super.addButton(new RotateRightButton((new Point(896, 256)), deck));
 
         addHexButtons(board.getButtonMap());
     }
@@ -215,6 +220,13 @@ class BaseMenu extends Menu
         }
     }
 
+    public void updateDisplays()
+    {
+        //super.updateDisplays();
+        deckDisplay.update();
+        hexDetailDisplay.update(getHoverHexButton());
+    }
+
     // Presses the button on which the point lies if applicable
     public void checkForPress(Point point)
     {
@@ -227,53 +239,6 @@ class BaseMenu extends Menu
                 return;
             }
         }
-    }
-
-    // To-do: move most of these functions to the RotRightButton and RotLeftButton constructors
-    public RotateRightButton makeRotateRightButton(Point origin)
-    {
-        BufferedImage baseImg = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = (Graphics2D) baseImg.createGraphics();
-        g2d.setColor(Color.RED);
-        g2d.fillRect(0, 0, 64, 64);
-        g2d.setColor(Color.BLACK);
-        g2d.drawRect(0, 0, 63, 63);
-        g2d.drawString("Rotate R", 4, 16);
-
-        BufferedImage hoverImg = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
-        g2d = (Graphics2D) hoverImg.createGraphics();
-        g2d.setColor(Color.RED);
-        g2d.fillRect(0, 0, 64, 64);
-        g2d.setColor(Color.BLUE);
-        g2d.fillRect(16, 16, 32, 32);
-        g2d.setColor(Color.BLACK);
-        g2d.drawRect(0, 0, 63, 63);
-        g2d.drawString("Rotate R", 4, 16);
-
-        return new RotateRightButton(origin, board.getDeck(), baseImg, hoverImg);
-    }
-
-    public RotateLeftButton makeRotateLeftButton(Point origin)
-    {
-        BufferedImage baseImg = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = (Graphics2D) baseImg.createGraphics();
-        g2d.setColor(Color.RED);
-        g2d.fillRect(0, 0, 63, 63);
-        g2d.setColor(Color.BLACK);
-        g2d.drawRect(0, 0, 63, 63);
-        g2d.drawString("Rotate L", 4, 16);
-
-        BufferedImage hoverImg = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
-        g2d = (Graphics2D) hoverImg.createGraphics();
-        g2d.setColor(Color.RED);
-        g2d.fillRect(0, 0, 63, 63);
-        g2d.setColor(Color.BLUE);
-        g2d.fillRect(16, 16, 32, 32);
-        g2d.setColor(Color.BLACK);
-        g2d.drawRect(0, 0, 63, 63);
-        g2d.drawString("Rotate L", 4, 16);
-
-        return new RotateLeftButton(origin, board.getDeck(), baseImg, hoverImg);
     }
 
     public HexButton getHoverHexButton()
