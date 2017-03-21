@@ -33,6 +33,7 @@ public class Board
             new Point(-30, 20),
             new Point(-30, -20)};
 
+    // Constructor:
     public Board()
     {
         hexButtons = new ArrayList<HexButton>();
@@ -56,10 +57,8 @@ public class Board
         resetMapWithCenterHex();
     }
 
-    public HashMap<Point, HexButton> getButtonMap()
-    {
-        return buttonMap;
-    }
+    // ====================================
+    // Resetting and Initialization methods:
 
     public void resetButtonMap()
     {
@@ -109,6 +108,14 @@ public class Board
         resetDeck();
     }
 
+    public void resetDeck()
+    {
+        deck.resetTileCount();
+    }
+
+    // ====================================
+    // Tile Placement methods:
+
     public void placeTile(Point origin)
     {
         Tile tile = deck.getTopTile();
@@ -124,16 +131,7 @@ public class Board
             placeHex(origin, tile.getB(), tile.getOrientationPlus(1));
 
             deck.nextTile();
-
-            //manager.updateMenu();
         }
-    }
-
-    public void resetDeck()
-    {
-        //deck.resetTileCount();
-        deck.resetTileCount();
-        //manager.updateMenu();
     }
 
     public void placeHex(Point center, Hex hex, int orientation)
@@ -151,7 +149,6 @@ public class Board
             buttonMap.put(origin, button);
         }
         placePerimeterHexes(origin);
-        //manager.updateHexButtons();
     }
 
     public void placePerimeterHexes(Point center)
@@ -183,6 +180,14 @@ public class Board
         }
     }
 
+    // ====================================
+    // Accessors for member data:
+
+    public HashMap<Point, HexButton> getButtonMap()
+    {
+        return buttonMap;
+    }
+
     public HexButton getNeighborButton(HexButton base, int index)
     {
         if(index < 0 || index > 5)
@@ -207,38 +212,26 @@ public class Board
         }
     }
 
+    public HexButton getHoverHexButton()
+    {
+        return hoverHexButton;
+    }
+
     public Deck getDeck()
     {
         return deck;
     }
 
-    public void rotDeckTileRight()
-    {
-        deck.getTopTile().rotRight();
-        //manager.updateMenu();
-    }
-
-    public void rotDeckTileLeft()
-    {
-        deck.getTopTile().rotLeft();
-        //manager.updateMenu();
-    }
-
-    public Hex getHoverHex()
-    {
-        return hoverHex;
-    }
 
     public void setHoverHexButton(HexButton button)
     {
         hoverHexButton = button;
-        //manager.updateMenu();
     }
 
-    public HexButton getHoverHexButton()
-    {
-        return hoverHexButton;
-    }
+
+
+    // ==============================================
+    // Tile Placement legality checking functions:
 
     private boolean tilePlacementIsLegal(Tile tile, HexButton targetButton)
     {

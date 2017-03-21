@@ -45,6 +45,7 @@ public class Display
     }
 }
 
+// BackgroundDisplay constructs and displays the static tigerstripe background
 class BackgroundDisplay extends Display
 {
     BackgroundDisplay()
@@ -67,6 +68,7 @@ class BackgroundDisplay extends Display
 
 }
 
+// BoardDisplay is basically just another static background image right now, but might be used later
 class BoardDisplay extends Display
 {
     private Board board;
@@ -87,7 +89,6 @@ class BoardDisplay extends Display
 
 class DeckDisplay extends Display
 {
-
     private Deck deck;
     private Graphics2D g2d;
 
@@ -115,11 +116,6 @@ class DeckDisplay extends Display
         update();
     }
 
-    public void nextTile()
-    {
-        deck.nextTile();
-    }
-
     private void drawBase()
     {
         g2d.setColor(Color.WHITE);
@@ -127,12 +123,6 @@ class DeckDisplay extends Display
         g2d.setColor(Color.BLACK);
         g2d.drawRect(0, 0, 128, 128);
         g2d.drawString("Next:", 4, 16);
-    }
-
-    private void drawHex()
-    {
-        //g2d.drawImage(deck.getHex().getImage(), 44, 44, null);
-        //g2d.drawString(deck.getHex().getTypeName(), 4, 124);
     }
 
     private void drawTile()
@@ -162,14 +152,15 @@ class DeckDisplay extends Display
 
 class HexDetailDisplay extends Display
 {
-    private Hex hex;
-    private HexButton hexButton;
     private Board board;
+    private BaseMenu menu;
     private Graphics2D g2d;
+    private Hex currentHex;
 
-    public HexDetailDisplay(Board board)
+    public HexDetailDisplay(Board board, BaseMenu menu)
     {
         super(new BufferedImage(129, 129, BufferedImage.TYPE_INT_ARGB), new Point(832, 384));
+        this.menu = menu;
         this.board = board;
         g2d = (Graphics2D) super.getImg().createGraphics();
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
@@ -188,12 +179,12 @@ class HexDetailDisplay extends Display
 
     public void update()
     {
-        hexButton = board.getHoverHexButton();
+        HexButton hexButton = menu.getHoverHexButton();
 
         drawBackground();
         if(hexButton != null)
         {
-            hex = hexButton.getHex();
+            Hex hex = hexButton.getHex();
             g2d.drawImage(hex.getImage(), 4, 4, null);
             g2d.setColor(Color.BLACK);
             g2d.drawString("Level: " + hex.getLevel(), 4, 64);

@@ -20,18 +20,20 @@ public class Deck
     private ArrayList<Tile> tiles;
 
     private int tileCount;
+    private Orientation orientation;
 
     public Deck()
     {
         rand = new Random();
         tiles = new ArrayList<Tile>();
         tileCount = 1;
+        orientation = Orientation.N;
         nextTile();
     }
 
     public void nextTile()
     {
-        topTile = new Tile(randomHex(), randomHex(), tileCount);
+        topTile = new Tile(randomHex(), randomHex(), tileCount, orientation);
         tileCount++;
     }
 
@@ -72,6 +74,18 @@ public class Deck
 
     }
 
+    public void rotLeft()
+    {
+        topTile.rotLeft();
+        orientation = orientation.rotLeft();
+    }
+
+    public void rotRight()
+    {
+        topTile.rotRight();
+        orientation = orientation.rotRight();
+    }
+
     public int getTileCount()
     {
         return tileCount;
@@ -80,6 +94,7 @@ public class Deck
     public void resetTileCount()
     {
         tileCount = 1;
+        orientation = Orientation.N;
         nextTile();
     }
 }

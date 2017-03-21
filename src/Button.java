@@ -126,20 +126,15 @@ class HexButton extends Button
 
     public void changeHex(Hex newHex)
     {
-
-        // int previousHexLevel = this.hex.getLevel();
-        // this.hex = newHex;
-        // this.hex.setLevel(previousHexLevel + 1);
-        //Graphics2D g2d = hex.getImage().createGraphics();
-        //g2d.setColor(Color.BLACK);
-        // g2d.drawString("" + hex.getLevel(), 20, 20);
-
         int previousHexLevel = this.hex.getLevel();
+
         this.hex = newHex;
         this.hex.setLevel(previousHexLevel+1);
+
         Graphics2D g2d = hex.getImage().createGraphics();
         g2d.setColor(Color.BLACK);
         g2d.drawString("" + hex.getLevel(), 20, 20);
+
         super.setBaseImage(hex.getImage());
         super.setHoverImage(hex.getHoverImage());
     }
@@ -177,32 +172,32 @@ class HexButton extends Button
 
 class RotateRightButton extends Button
 {
-    Board board;
+    Deck deck;
 
-    public RotateRightButton(Point origin, Board board, BufferedImage baseImg, BufferedImage hoverImg)
+    public RotateRightButton(Point origin, Deck deck, BufferedImage baseImg, BufferedImage hoverImg)
     {
         super(origin, baseImg, hoverImg);
-        this.board = board;
+        this.deck = deck;
     }
 
     public void press()
     {
-        board.rotDeckTileRight();
+        deck.rotRight();
     }
 }
 
 class RotateLeftButton extends Button
 {
-    Board board;
+    Deck deck;
 
-    public RotateLeftButton(Point origin, Board board, BufferedImage baseImg, BufferedImage hoverImg)
+    public RotateLeftButton(Point origin, Deck deck, BufferedImage baseImg, BufferedImage hoverImg)
     {
         super(origin, baseImg, hoverImg);
-        this.board = board;
+        this.deck = deck;
     }
 
     public void press()
     {
-        board.rotDeckTileLeft();
+        deck.rotLeft();
     }
 }

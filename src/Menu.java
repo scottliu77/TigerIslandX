@@ -87,6 +87,8 @@ public class Menu
                 return;
             }
         }
+
+        // hoverButton = null; // Reset hoverButton if no hover is detected
     }
 
     // Presses the button on which the point lies if applicable
@@ -136,14 +138,17 @@ public class Menu
     {
         return buttons;
     }
+
+    public Button getHoverButton()
+    {
+        return hoverButton;
+    }
 }
 
 // The baseMenu holds the board and most game logic.
 // It's currently the only menu, but I might implement some more menus for settings configuration etc.
 class BaseMenu extends Menu
 {
-    BoardDisplay boardDisplay;
-
     Board board;
 
     public BaseMenu()
@@ -154,10 +159,9 @@ class BaseMenu extends Menu
 
         board = new Board();
 
-        boardDisplay = new BoardDisplay(board);
-        super.addDisplay(boardDisplay);
+        super.addDisplay(new BoardDisplay(board));
         super.addDisplay(new DeckDisplay(board.getDeck()));
-        super.addDisplay(new HexDetailDisplay(board));
+        super.addDisplay(new HexDetailDisplay(board, this));
 
         // Note: should hold Board in Menu instead of at Display level...
         super.addButton(makeRotateLeftButton(new Point(832, 256)));
@@ -246,7 +250,7 @@ class BaseMenu extends Menu
         g2d.drawRect(0, 0, 63, 63);
         g2d.drawString("Rotate R", 4, 16);
 
-        return new RotateRightButton(origin, board, baseImg, hoverImg);
+        return new RotateRightButton(origin, board.getDeck(), baseImg, hoverImg);
     }
 
     public RotateLeftButton makeRotateLeftButton(Point origin)
@@ -269,6 +273,17 @@ class BaseMenu extends Menu
         g2d.drawRect(0, 0, 63, 63);
         g2d.drawString("Rotate L", 4, 16);
 
-        return new RotateLeftButton(origin, board, baseImg, hoverImg);
+        return new RotateLeftButton(origin, board.getDeck(), baseImg, hoverImg);
+    }
+
+    public HexButton getHoverHexButton()
+    {
+        HexButton hexButton = null;
+        Button hoverButton = super.getHoverButton();
+        if(hoverButton instanceof HexButton)
+        {
+            hexButton = (HexButton) hoverButton;
+        }
+        return hexButton;
     }
 }

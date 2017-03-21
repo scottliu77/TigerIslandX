@@ -10,13 +10,16 @@ public class Tile
     private VolcanoHex volcano;
     private Hex hexA;
     private Hex hexB;
-    private int orientation;
+    private Orientation orientation;
     private int tileId;
+
+    private static final int MIN = 0;
+    private static final int MAX = 5;
 
     // Orientation = the position of hexA relative to the volcano
     // The position of hexB relative to the volano is always orientation + 1
 
-    public Tile(Hex hexA, Hex hexB, int tileId)
+    public Tile(Hex hexA, Hex hexB, int tileId, Orientation orientation)
     {
         this.tileId = tileId;
         volcano = new VolcanoHex();
@@ -25,24 +28,22 @@ public class Tile
         hexA.setTileId(tileId);
         this.hexB = hexB;
         hexB.setTileId(tileId);
-        orientation = 0;
+        this.orientation = orientation;
     }
 
     public void rotRight()
     {
-        orientation++;
-        if (orientation > 5) orientation = 0;
+        orientation = orientation.rotRight();
     }
 
     public void rotLeft()
     {
-        orientation--;
-        if (orientation < 0) orientation = 5;
+        orientation = orientation.rotLeft();
     }
 
     public int getOrientation()
     {
-        return orientation;
+        return orientation.getAsNum();
     }
 
     // NEVER MODIFY ORIENTATION OUTSIDE THE TILE CLASS!
@@ -50,7 +51,7 @@ public class Tile
     // If you try to just use getOrientation() then modify that, it opens the door to a lot of errors
     public int getOrientationPlus(int number)
     {
-        return (orientation + number) % 6;
+        return orientation.getPlus(number).getAsNum();
     }
 
     public Hex getVolcano()
@@ -73,45 +74,47 @@ public class Tile
         return tileId;
     }
 
-    // I began working on this Orientation class to prevent errors from doing math on the current state and forgetting to mod
-    // Currently unused, so make sure you use getOrientationPlus() whenever you want to get a modified state
-
-
-    private class Orientation
-    {
-        int state;
-
-        private static final int MIN = 0;
-        private static final int MAX = 5;
-
-        public Orientation()
-        {
-            state = 0;
-        }
-
-        public int getState()
-        {
-            return state;
-        }
-
-        public void nextState()
-        {
-            state++;
-            if(state > MAX) state = MIN;
-        }
-
-        public void prevState()
-        {
-            state--;
-            if(state < MIN) state = MAX;
-        }
-
-        public void modifyState(int modifier)
-        {
-            state += modifier;
-            state %= MAX - 1;
-        }
-
-    }
 }
 
+
+// A Tile's Orientation is the position where Hex A will be placed relative to the Tile's Volcano.
+// Hex B is placed at the position immediately after Hex A.
+enum Orientation
+{
+    N, NE, SE, S, SW, NW;
+
+    public Orientation rotRight()
+    {
+        int index = ordinal() + 1;
+        return values()[wrapAround(index)];
+    }
+
+    public Orientation rotLeft()
+    {
+        int index = ordinal() - 1;
+        return values()[wrapAround(index)];
+    }
+
+    public Orientation getPlus(int number)
+    {
+        int index = ordinal();
+        int increment = (number < 0 ? -1 : 1);
+        for(int i = 0; i < Math.abs(number); i++)
+        {
+            index = wrapAround(index + increment);
+        }
+        return values()[index];
+    }
+
+    public int wrapAround(int index)
+    {
+        if (index < 0) index = values().length - 1;
+        if (index >= values().length) index = 0;
+        return index;
+    }
+
+    public int getAsNum()
+    {
+        return ordinal();
+    }
+};
