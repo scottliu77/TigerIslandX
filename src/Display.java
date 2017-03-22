@@ -200,7 +200,7 @@ class HexDetailDisplay extends Display
             g2d.drawString("Level: " + hex.getLevel(), 4, 64);
             g2d.drawString("Origin: (" + hexButton.getOrigin().x + ", " + hexButton.getOrigin().y + ")", 4, 84);
             g2d.drawString("TileId: " + hex.getTileId(), 4, 104);
-            g2d.drawString("Terrain: " + hex.getTerrainString(), 4, 124);
+            g2d.drawString("Terrain: " + hex.getTypeName(), 4, 124);
         }
     }
 }

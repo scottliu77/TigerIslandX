@@ -47,6 +47,10 @@ public class Deck
         Hex nextHex;
         int number = rand.nextInt(4);
 
+        nextHex = new Hex(Terrain.values()[number]);
+
+
+        /*
         switch(number)
         {
             case ROCKY:
@@ -69,6 +73,7 @@ public class Deck
                 nextHex = new EmptyHex();
                 break;
         }
+        */
 
         return nextHex;
 

@@ -212,7 +212,7 @@ class BaseMenu extends Menu
         addHexButtons(board.getButtonMap());
     }
 
-    public void addHexButtons(HashMap<Point, HexButton> buttonMap)
+    private void addHexButtons(HashMap<Point, HexButton> buttonMap)
     {
         for (HexButton button : buttonMap.values())
         {
@@ -241,7 +241,7 @@ class BaseMenu extends Menu
         }
     }
 
-    public HexButton getHoverHexButton()
+    private HexButton getHoverHexButton()
     {
         HexButton hexButton = null;
         Button hoverButton = super.getHoverButton();

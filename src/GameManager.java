@@ -4,24 +4,24 @@ import java.awt.*;
 // GameManager is an intermediary class between the TigerPanel and the game Menu.
 public class GameManager
 {
-    private TigerPanel panel;
+    private Graphics2D panelG2D;
     private ArrayList<Menu> menus;
     private Menu activeMenu;
     private BaseMenu baseMenu;
 
-    GameManager(TigerPanel panel)
+    GameManager(Graphics2D panelG2D)
     {
-        this.panel = panel;
+        this.panelG2D = panelG2D;
         initializeMenus();
     }
 
-    public void initializeMenus()
+    private void initializeMenus()
     {
         menus = new ArrayList<Menu>();
         baseMenu = new BaseMenu();
         menus.add(baseMenu);
         activeMenu = menus.get(0);
-        activeMenu.drawMenu(panel.getG2D());
+        activeMenu.drawMenu(panelG2D);
     }
 
     public void checkForPress(Point point)
@@ -42,9 +42,9 @@ public class GameManager
         drawMenu();
     }
 
-    public void drawMenu()
+    private void drawMenu()
     {
-        activeMenu.drawMenu(panel.getG2D());
+        activeMenu.drawMenu(panelG2D);
     }
 
     public void emptyHexes()

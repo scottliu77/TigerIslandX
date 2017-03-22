@@ -108,7 +108,7 @@ class TigerPanel extends JPanel
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        manager = new GameManager(this);
+        manager = new GameManager(g2d);
 
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent event) {

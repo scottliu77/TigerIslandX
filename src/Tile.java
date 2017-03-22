@@ -5,7 +5,7 @@
 // A Tile is a group of 3 adjacent Hexes: one Volcano and two non-Volcanos
 public class Tile
 {
-    private VolcanoHex volcano;
+    private Hex volcano;
     private Hex hexA;
     private Hex hexB;
     private Orientation orientation;
@@ -17,7 +17,7 @@ public class Tile
     public Tile(Hex hexA, Hex hexB, int tileId, Orientation orientation)
     {
         this.tileId = tileId;
-        volcano = new VolcanoHex();
+        volcano = new Hex(Terrain.VOLCANO);
         volcano.setTileId(tileId);
         this.hexA = hexA;
         hexA.setTileId(tileId);
@@ -38,7 +38,7 @@ public class Tile
 
     public int getOrientation()
     {
-        return orientation.getAsNum();
+        return orientation.ordinal();
     }
 
     // NEVER MODIFY ORIENTATION OUTSIDE THE TILE CLASS!
@@ -46,7 +46,7 @@ public class Tile
     // If you try to just use getOrientation() then modify that, it opens the door to a lot of errors
     public int getOrientationPlus(int number)
     {
-        return orientation.getPlus(number).getAsNum();
+        return orientation.getPlus(number).ordinal();
     }
 
     public Hex getVolcano()
@@ -70,7 +70,6 @@ public class Tile
     }
 
 }
-
 
 // A Tile's Orientation is the position where Hex A will be placed relative to the Tile's Volcano.
 // Hex B is placed at the position immediately after Hex A.
@@ -108,8 +107,4 @@ enum Orientation
         return index;
     }
 
-    public int getAsNum()
-    {
-        return ordinal();
-    }
 }

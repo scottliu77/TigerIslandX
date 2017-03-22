@@ -139,7 +139,7 @@ class HexButton extends Button
 
     public void resetButton()
     {
-        hex = new EmptyHex();
+        hex = new Hex(Terrain.EMPTY);
         super.setBaseImage(hex.getImage());
         super.setHoverImage(hex.getHoverImage());
     }
@@ -181,7 +181,7 @@ class RotateRightButton extends Button
         g2d.fillOval(16, 16, 32, 32);
     }
 
-    public void drawBaseImage(Graphics2D g2d)
+    private void drawBaseImage(Graphics2D g2d)
     {
         g2d.setColor(Color.RED);
         g2d.fillRect(0, 0, 64, 64);
@@ -208,14 +208,14 @@ class RotateLeftButton extends Button
         this.deck = deck;
     }
 
-    public void buildBase()
+    private void buildBase()
     {
         BufferedImage baseImg = super.getBaseImage();
         Graphics2D g2d = baseImg.createGraphics();
         drawBaseImage(g2d);
     }
 
-    public void buildHover()
+    private void buildHover()
     {
         BufferedImage hoverImg = super.getHoverImage();
         Graphics2D g2d = hoverImg.createGraphics();
@@ -225,7 +225,7 @@ class RotateLeftButton extends Button
         g2d.fillOval(16, 16, 32, 32);
     }
 
-    public void drawBaseImage(Graphics2D g2d)
+    private void drawBaseImage(Graphics2D g2d)
     {
         g2d.setColor(Color.RED);
         g2d.fillRect(0, 0, 63, 63);

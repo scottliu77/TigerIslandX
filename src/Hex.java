@@ -14,12 +14,15 @@ public class Hex
     private int level;
     private int tileId;
 
+    private final String typeName;
+    private final Terrain terrain;
+
     // Hexagon shape definition:
     private static final int hexagonX[] = {10, 30, 40, 30, 10, 0};
     private static final int hexagonY[] = {0, 0, 20, 40, 40, 20};
     private static final Polygon hexagon = new Polygon(hexagonX, hexagonY, 6);
 
-    public Hex(Color color)
+    public Hex(Terrain terrain)
     {
         image = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
         hoverImage = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
@@ -28,8 +31,10 @@ public class Hex
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
 
+        this.terrain = terrain;
+
         // Draw base and hover hex images for buttons:
-        g2d.setColor(color);
+        g2d.setColor(terrain.getColor());
         g2d.fill(hexagon);
         g2d.setColor(Color.BLACK);
         g2d.draw(hexagon);
@@ -47,6 +52,8 @@ public class Hex
 
         // Set default values:
         tileId = 0;
+        level = 0;
+        typeName = terrain.toString();
     }
 
     public BufferedImage getImage()
@@ -61,14 +68,24 @@ public class Hex
 
     public String getTypeName()
     {
-        return getTerrainString();
+        return typeName;
     }
-
 
     public int getLevel()
     {
         return level;
     }
+
+    public int getTileId()
+    {
+        return tileId;
+    }
+
+    public Terrain getTerrain()
+    {
+        return terrain;
+    }
+
 
     public void setLevel(int newLevel)
     {
@@ -79,72 +96,18 @@ public class Hex
     {
         this.tileId = tileId;
     }
-
-    public int getTileId()
-    {
-        return tileId;
-    }
-
-    public String getTerrainString()
-    {
-        String terrain = this.getClass().toString();
-        if(terrain.length() > 6)
-        {
-            return terrain.substring(6, terrain.length() - 3);
-        }
-        else
-        {
-            return terrain;
-        }
-    }
 }
 
-class EmptyHex extends Hex
+enum Terrain
 {
-    public EmptyHex()
-    {
-        super(Color.WHITE);
-        this.setLevel(0);
-    }
-}
+    ROCKY(Color.GRAY), LAKE(Color.CYAN), JUNGLE(Color.GREEN), GRASS(Color.YELLOW), VOLCANO(Color.RED), EMPTY(Color.WHITE);
 
-class VolcanoHex extends Hex
-{
-    public VolcanoHex()
-    {
-        super(Color.RED);
-    }
-}
+    private Color color;
 
-class RockyHex extends Hex
-{
-    public RockyHex()
+    Terrain(Color color)
     {
-        super(Color.GRAY);
-        //super(new Color(0x66, 0x33, 0x00));
+        this.color = color;
     }
-}
 
-class LakeHex extends Hex
-{
-    public LakeHex()
-    {
-        super(Color.CYAN);
-    }
-}
-
-class JungleHex extends Hex
-{
-    public JungleHex()
-    {
-        super(Color.GREEN);
-    }
-}
-
-class GrassHex extends Hex
-{
-    public GrassHex()
-    {
-        super(Color.YELLOW);
-    }
+    public Color getColor(){return color;}
 }

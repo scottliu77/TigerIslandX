@@ -68,7 +68,7 @@ public class Board
             for(int j = 128 + yOffset; j <= 128 + HEIGHT - 40; j += 40)
             {
                 Point point = new Point(i, j);
-                Hex hex = new EmptyHex();
+                Hex hex = new Hex(Terrain.EMPTY);
                 HexButton hexButton = new HexButton(point, hex, this);
                 buttonMap.put(point, hexButton);
                 //System.out.println(point.toString());
@@ -82,7 +82,7 @@ public class Board
             for (int j = 128 + 20 + yOffset; j <= 128 + HEIGHT - 40; j += 40)
             {
                 Point point = new Point(i, j);
-                Hex hex = new EmptyHex();
+                Hex hex = new Hex(Terrain.EMPTY);
                 HexButton hexButton = new HexButton(point, hex, this);
                 buttonMap.put(point, hexButton);
                 //System.out.println(point.toString());
@@ -93,12 +93,12 @@ public class Board
         resetDeck();
     }
 
-    public void resetMapWithCenterHex()
+    private void resetMapWithCenterHex()
     {
         buttonMap = new HashMap<Point, HexButton>();
 
         Point point = new Point(256 + 236, 128 + 236);
-        buttonMap.put(point, new HexButton(point, new EmptyHex(), this));
+        buttonMap.put(point, new HexButton(point, new Hex(Terrain.EMPTY), this));
     }
 
     public void resetWithOneHex()
@@ -132,7 +132,7 @@ public class Board
         }
     }
 
-    public void placeHex(Point center, Hex hex, int orientation)
+    private void placeHex(Point center, Hex hex, int orientation)
     {
         Point delta = neighborPts[orientation];
         Point origin = new Point(center.x + delta.x, center.y + delta.y);
@@ -174,7 +174,7 @@ public class Board
     {
         if(!buttonMap.containsKey(buttonPoint))
         {
-            HexButton button = new HexButton(buttonPoint, new EmptyHex(), this);
+            HexButton button = new HexButton(buttonPoint, new Hex(Terrain.EMPTY), this);
             buttonMap.put(buttonPoint, button);
         }
     }
@@ -187,7 +187,7 @@ public class Board
         return buttonMap;
     }
 
-    public HexButton getNeighborButton(HexButton base, int index)
+    private HexButton getNeighborButton(HexButton base, int index)
     {
         if(index < 0 || index > 5)
         {
@@ -200,7 +200,7 @@ public class Board
             Point neighborPt = new Point(base.getOrigin().x + delta.x, base.getOrigin().y + delta.y);
             if(!buttonMap.containsKey(neighborPt))
             {
-                return new HexButton(neighborPt, new EmptyHex(), this);
+                return new HexButton(neighborPt, new Hex(Terrain.EMPTY), this);
             }
             else
             {
@@ -237,7 +237,7 @@ public class Board
             System.out.println("Illegal move: target neither volcano nor empty");
             return false;
         }
-        if (targetButton.getHex().getTypeName().equals("Volcano"))
+        if (targetButton.getHex().getTerrain() == Terrain.VOLCANO)
         {
             if (hexesShareTile(tile, targetButton))
             {
@@ -250,7 +250,7 @@ public class Board
                 return false;
             }
         }
-        else if (targetButton.getHex().getTypeName().equals("Empty") && tile.getTileId() != 1)
+        else if (targetButton.getHex().getTerrain() == Terrain.EMPTY && tile.getTileId() != 1)
         {
             if (!allHexesEmpty(tile, targetButton))
             {
@@ -287,7 +287,8 @@ public class Board
         {
             HexButton neighborButton = getNeighborButton(targetButton, i);
             // If neighborButton's hex is not Empty, return true
-            if (!(neighborButton.getHex() instanceof EmptyHex)) return true;
+            Terrain terrain = neighborButton.getHex().getTerrain();
+            if (!(terrain.equals(Terrain.EMPTY))) return true;
         }
         // When all neighborButtons have been checked and none were Empty, return false
         return false;
@@ -306,7 +307,7 @@ public class Board
         Hex hexA = buttonA.getHex();
         Hex hexB = buttonB.getHex();
 
-        return hexV instanceof EmptyHex && hexA instanceof EmptyHex && hexB instanceof EmptyHex;
+        return hexV.getTerrain() == Terrain.EMPTY && hexA.getTerrain() == Terrain.EMPTY && hexB.getTerrain() == Terrain.EMPTY;
     }
 
     // hexesShareLevel returns true if you are attempting to place a Tile on three hexes of the same level
@@ -346,6 +347,6 @@ public class Board
     {
         Hex hex = targetButton.getHex();
 
-        return hex instanceof EmptyHex || hex instanceof VolcanoHex;
+        return hex.getTerrain() == Terrain.EMPTY || hex.getTerrain() == Terrain.VOLCANO;
     }
 }
