@@ -86,14 +86,14 @@ public class Button
 
 class HexButton extends Button
 {
-    private Board board;
+    private GameManager manager;
     private Hex hex;
 
-    public HexButton(Point origin, Hex hex, Board board)
+    public HexButton(Point origin, Hex hex, GameManager manager)
     {
         super(origin, hex.getImage(), hex.getHoverImage());
         this.hex = hex;
-        this.board = board;
+        this.manager = manager;
     }
 
     public boolean pointIsOn(Point point)
@@ -126,17 +126,6 @@ class HexButton extends Button
         return hex;
     }
 
-    public boolean hoverCheck(Point point)
-    {
-        super.setHover(pointIsOn(point));
-        if(super.getHover())
-        {
-            board.setHoverHexButton(this);
-        }
-
-        return super.getHover();
-    }
-
     public void resetButton()
     {
         hex = new Hex(Terrain.EMPTY);
@@ -146,7 +135,7 @@ class HexButton extends Button
 
     public void press()
     {
-        board.placeTile(super.getOrigin());
+        manager.processTurn(super.getOrigin());
     }
 
 }

@@ -87,6 +87,9 @@ public class Menu
             }
         }
 
+        updateDisplays();
+
+
         // hoverButton = null; // Reset hoverButton if no hover is detected
     }
 
@@ -148,12 +151,16 @@ public class Menu
 // It's currently the only menu, but I might implement some more menus for settings configuration etc.
 class BaseMenu extends Menu
 {
-    Board board;
+    //Board board;
 
     private BackgroundDisplay backgroundDisplay;
     private BoardDisplay boardDisplay;
     private DeckDisplay deckDisplay;
     private HexDetailDisplay hexDetailDisplay;
+
+    private GameManager gameManager;
+
+    private HexButton hoverHex;
 
     public BaseMenu()
     {
@@ -161,7 +168,9 @@ class BaseMenu extends Menu
 
         super.addDisplay(backgroundDisplay = new BackgroundDisplay());
 
-        board = new Board();
+        gameManager = new GameManager();
+
+        Board board = gameManager.getBoard();
         Deck deck = board.getDeck();
 
         super.addDisplay(boardDisplay = new BoardDisplay(board));
@@ -177,12 +186,13 @@ class BaseMenu extends Menu
 
     public void clearHexes()
     {
-        HashMap<Point, HexButton> buttonMap = board.getButtonMap();
-        board.resetDeck();
+        HashMap<Point, HexButton> buttonMap = gameManager.getButtonMap();
+        gameManager.resetDeck();
         for( HexButton button : buttonMap.values())
         {
             button.resetButton();
         }
+        updateDisplays();
         /*
         super.clearButtons();
         addHexButtons(board.getButtonMap());
@@ -192,24 +202,26 @@ class BaseMenu extends Menu
 
     public void updateHexButtons(Graphics2D G2D)
     {
-        HashMap<Point, HexButton> buttonMap = board.getButtonMap();
-        addHexButtons(board.getButtonMap());
+        HashMap<Point, HexButton> buttonMap = gameManager.getButtonMap();
+        addHexButtons(gameManager.getButtonMap());
         //updateDisplays();
         //drawMenu(G2D);
     }
 
     public void resetHexes()
     {
-        super.removeHexButtons(board.getButtonMap().values());
-        board.resetButtonMap();
-        addHexButtons(board.getButtonMap());
+        super.removeHexButtons(gameManager.getButtonMap().values());
+        gameManager.resetHexes();
+        addHexButtons(gameManager.getButtonMap());
+        updateDisplays();
     }
 
     public void resetWithOneHex()
     {
-        super.removeHexButtons(board.getButtonMap().values());
-        board.resetWithOneHex();
-        addHexButtons(board.getButtonMap());
+        super.removeHexButtons(gameManager.getButtonMap().values());
+        gameManager.resetWithOneHex();
+        addHexButtons(gameManager.getButtonMap());
+        updateDisplays();
     }
 
     private void addHexButtons(HashMap<Point, HexButton> buttonMap)
@@ -235,7 +247,7 @@ class BaseMenu extends Menu
             if (button.pointIsOn(point))
             {
                 button.press();
-                addHexButtons(board.getButtonMap());
+                addHexButtons(gameManager.getButtonMap());
                 return;
             }
         }

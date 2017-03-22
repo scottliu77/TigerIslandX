@@ -17,12 +17,11 @@ public class Tile
     public Tile(Hex hexA, Hex hexB, int tileId, Orientation orientation)
     {
         this.tileId = tileId;
-        volcano = new Hex(Terrain.VOLCANO);
-        volcano.setTileId(tileId);
+        volcano = new Hex(Terrain.VOLCANO, tileId);
+
         this.hexA = hexA;
-        hexA.setTileId(tileId);
+
         this.hexB = hexB;
-        hexB.setTileId(tileId);
         this.orientation = orientation;
     }
 
@@ -35,6 +34,8 @@ public class Tile
     {
         orientation = orientation.rotLeft();
     }
+
+    public void setOrientaton(Orientation orientation) {this.orientation = orientation;}
 
     public int getOrientation()
     {
@@ -75,6 +76,7 @@ public class Tile
 // Hex B is placed at the position immediately after Hex A.
 enum Orientation
 {
+    //0 = N, 1 = NE, etc...
     N, NE, SE, S, SW, NW;
 
     public Orientation rotRight()

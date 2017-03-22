@@ -8,8 +8,11 @@ import java.util.HashMap;
  */
 public class Board
 {
+    private GameManager manager;
+
     Player player1;
     Player player2;
+    Player players[];
 
     private ArrayList<HexButton> hexButtons;
     private HashMap<Point, HexButton> buttonMap;
@@ -22,22 +25,31 @@ public class Board
 
     private Deck deck;
 
-    private HexButton hoverHexButton;
+    private boolean tilePlaced;
+    private boolean playerTracker;
 
-    private static final Point[] neighborPts = {
-            new Point(0, -40),
-            new Point(30, -20),
-            new Point(30, 20),
-            new Point(0, 40),
-            new Point(-30, 20),
-            new Point(-30, -20)};
+    private static final Point[] neighborPts =
+            {
+                new Point(0, -40),
+                new Point(30, -20),
+                new Point(30, 20),
+                new Point(0, 40),
+                new Point(-30, 20),
+                new Point(-30, -20)
+            };
 
     // Constructor:
-    public Board()
+    public Board(GameManager manager)
     {
+        this.manager = manager;
+
         hexButtons = new ArrayList<HexButton>();
 
         deck = new Deck();
+
+        players = new Player[2];
+        players[0] = new Player(Color.WHITE);
+        players[1] = new Player(Color.BLACK);
 
         int hexagonX[] = {10, 30, 40, 30, 10, 0};
         int hexagonY[] = {0, 0, 20, 40, 40, 20};
@@ -59,17 +71,25 @@ public class Board
     // ====================================
     // Resetting and Initialization methods:
 
+
+
     public void resetButtonMap()
     {
         buttonMap = new HashMap<Point, HexButton>();
 
-        for(int i = 256 + xOffset; i <= 256 + WIDTH - 40; i += 60)
+        int startX = 256;
+        int startY = 128;
+        int hexBoxSize = 40;
+        int hexVertOffset = 20;
+        int hexHoriOffset = 30;
+
+        for(int i = startX + xOffset; i <= startX + WIDTH - hexBoxSize; i += hexHoriOffset * 2)
         {
-            for(int j = 128 + yOffset; j <= 128 + HEIGHT - 40; j += 40)
+            for(int j = startY + yOffset; j <= startY + HEIGHT - hexBoxSize; j += hexVertOffset * 2)
             {
                 Point point = new Point(i, j);
                 Hex hex = new Hex(Terrain.EMPTY);
-                HexButton hexButton = new HexButton(point, hex, this);
+                HexButton hexButton = new HexButton(point, hex, manager);
                 buttonMap.put(point, hexButton);
                 //System.out.println(point.toString());
                 //g2d.drawImage(hexTemplate, i, j, null);
@@ -77,13 +97,13 @@ public class Board
             }
         }
 
-        for(int i = 256 + 30 + xOffset; i <= 256 + WIDTH - 40; i += 60)
+        for(int i = startX + hexHoriOffset + xOffset; i <= startX + WIDTH - hexBoxSize; i += hexHoriOffset * 2)
         {
-            for (int j = 128 + 20 + yOffset; j <= 128 + HEIGHT - 40; j += 40)
+            for (int j = startY + hexVertOffset + yOffset; j <= startY + HEIGHT - hexBoxSize; j += hexVertOffset * 2)
             {
                 Point point = new Point(i, j);
                 Hex hex = new Hex(Terrain.EMPTY);
-                HexButton hexButton = new HexButton(point, hex, this);
+                HexButton hexButton = new HexButton(point, hex, manager);
                 buttonMap.put(point, hexButton);
                 //System.out.println(point.toString());
                 //g2d.drawImage(hexTemplate, i, j, null);
@@ -93,12 +113,21 @@ public class Board
         resetDeck();
     }
 
+    public void clearHexes()
+    {
+        resetDeck();
+        for(HexButton button : buttonMap.values())
+        {
+            button.resetButton();
+        }
+    }
+
     private void resetMapWithCenterHex()
     {
         buttonMap = new HashMap<Point, HexButton>();
 
         Point point = new Point(256 + 236, 128 + 236);
-        buttonMap.put(point, new HexButton(point, new Hex(Terrain.EMPTY), this));
+        buttonMap.put(point, new HexButton(point, new Hex(Terrain.EMPTY), manager));
     }
 
     public void resetWithOneHex()
@@ -110,6 +139,15 @@ public class Board
     public void resetDeck()
     {
         deck.resetTileCount();
+    }
+
+    // ====================================
+    // Game state management methods:
+
+    public void processTurn(Point origin)
+    {
+        int playerIndex = playerTracker ? 1 : 0;
+        placeTile(origin);
     }
 
     // ====================================
@@ -143,7 +181,7 @@ public class Board
         }
         else
         {
-            HexButton button = new HexButton(origin, hex, this);
+            HexButton button = new HexButton(origin, hex, manager);
             buttonMap.put(origin, button);
         }
         placePerimeterHexes(origin);
@@ -155,7 +193,7 @@ public class Board
         {
             Point neighborPoint = neighborPts[i];
             Point buttonPoint = new Point(center.x + neighborPoint.x, center.y + neighborPoint.y);
-            placeNewNeighbor(buttonPoint);
+            placeIfUnmapped(buttonPoint);
             place2ndLayerPerimeter(buttonPoint);
         }
     }
@@ -166,15 +204,15 @@ public class Board
         {
             Point neighborPoint = neighborPts[i];
             Point buttonPoint = new Point(center.x + neighborPoint.x, center.y + neighborPoint.y);
-            placeNewNeighbor(buttonPoint);
+            placeIfUnmapped(buttonPoint);
         }
     }
 
-    private void placeNewNeighbor(Point buttonPoint)
+    private void placeIfUnmapped(Point buttonPoint)
     {
         if(!buttonMap.containsKey(buttonPoint))
         {
-            HexButton button = new HexButton(buttonPoint, new Hex(Terrain.EMPTY), this);
+            HexButton button = new HexButton(buttonPoint, new Hex(Terrain.EMPTY), manager);
             buttonMap.put(buttonPoint, button);
         }
     }
@@ -200,7 +238,7 @@ public class Board
             Point neighborPt = new Point(base.getOrigin().x + delta.x, base.getOrigin().y + delta.y);
             if(!buttonMap.containsKey(neighborPt))
             {
-                return new HexButton(neighborPt, new Hex(Terrain.EMPTY), this);
+                return new HexButton(neighborPt, new Hex(Terrain.EMPTY), manager);
             }
             else
             {
@@ -209,22 +247,16 @@ public class Board
         }
     }
 
-    public HexButton getHoverHexButton()
-    {
-        return hoverHexButton;
-    }
-
     public Deck getDeck()
     {
         return deck;
     }
 
+    public HexButton getHexButton(Point point){return buttonMap.get(point);}
 
-    public void setHoverHexButton(HexButton button)
-    {
-        hoverHexButton = button;
-    }
+    public boolean getTilePlaced() { return tilePlaced; }
 
+    public boolean getPlayerTracker() { return playerTracker; }
 
 
     // ==============================================
@@ -288,7 +320,10 @@ public class Board
             HexButton neighborButton = getNeighborButton(targetButton, i);
             // If neighborButton's hex is not Empty, return true
             Terrain terrain = neighborButton.getHex().getTerrain();
-            if (!(terrain.equals(Terrain.EMPTY))) return true;
+            if (terrain != Terrain.EMPTY)
+            {
+                return true;
+            }
         }
         // When all neighborButtons have been checked and none were Empty, return false
         return false;

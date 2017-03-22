@@ -11,11 +11,15 @@ public class Hex
     private BufferedImage image;
     private BufferedImage hoverImage;
 
+    private boolean occupied;
+
     private int level;
     private int tileId;
 
     private final String typeName;
     private final Terrain terrain;
+
+    private Building building;
 
     // Hexagon shape definition:
     private static final int hexagonX[] = {10, 30, 40, 30, 10, 0};
@@ -23,6 +27,11 @@ public class Hex
     private static final Polygon hexagon = new Polygon(hexagonX, hexagonY, 6);
 
     public Hex(Terrain terrain)
+    {
+        this(terrain, 0);
+    }
+
+    public Hex(Terrain terrain, int tileId)
     {
         image = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
         hoverImage = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
@@ -51,9 +60,10 @@ public class Hex
         //g2d.fillOval(5, 5, 32, 32);
 
         // Set default values:
-        tileId = 0;
+        this.tileId = tileId;
         level = 0;
         typeName = terrain.toString();
+        building = Building.NONE;
     }
 
     public BufferedImage getImage()
@@ -86,28 +96,47 @@ public class Hex
         return terrain;
     }
 
+    private boolean isOccupied() {return building.occupiesHex();}
 
     public void setLevel(int newLevel)
     {
         this.level = newLevel;
     }
 
-    public void setTileId(int tileId)
-    {
-        this.tileId = tileId;
-    }
+    public Building getBuilding() {return building;}
 }
 
 enum Terrain
 {
-    ROCKY(Color.GRAY), LAKE(Color.CYAN), JUNGLE(Color.GREEN), GRASS(Color.YELLOW), VOLCANO(Color.RED), EMPTY(Color.WHITE);
+    ROCKY(Color.GRAY, true), LAKE(Color.CYAN, true), JUNGLE(Color.GREEN, true), GRASS(Color.YELLOW, true), VOLCANO(Color.RED, false), EMPTY(Color.WHITE, false);
 
-    private Color color;
+    private final Color color;
+    private final boolean buildable;
 
-    Terrain(Color color)
+    Terrain(Color color, boolean buildable)
     {
         this.color = color;
+        this.buildable = buildable;
     }
 
     public Color getColor(){return color;}
+
+    public boolean isBuildable(){return buildable;}
+}
+
+enum Building
+{
+    NONE(false), VILLAGE(true), TIGER(true), TOTORO(true);
+
+    private final boolean occupiesHex;
+
+    Building(boolean occupiesHex)
+    {
+        this.occupiesHex = occupiesHex;
+    }
+
+    public boolean occupiesHex()
+    {
+        return occupiesHex;
+    }
 }

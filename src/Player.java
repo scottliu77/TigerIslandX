@@ -5,9 +5,11 @@ import java.awt.*;
  */
 public class Player
 {
+    private Board board;
     private Color color;
     private int score;
     private int villagers;
+    private int tigers;
     private int totoros;
 
     public Player(Color color)
@@ -30,6 +32,7 @@ public class Player
     public void resetResources()
     {
         villagers = 20;
+        tigers = 2;
         totoros = 3;
     }
 
@@ -43,6 +46,8 @@ public class Player
         villagers -= decrement;
     }
 
+    private void decreaseTigers() {tigers--;}
+
     public void increaseScore(int points)
     {
         score += points;
@@ -55,7 +60,17 @@ public class Player
 
     public boolean outOfResources()
     {
-        return (totoros == 0 && villagers == 0);
+        return (totoros == 0 && villagers == 0 && tigers == 0);
+    }
+
+    public int getScore()
+    {
+        return score;
+    }
+
+    public void placeTile(Point point)
+    {
+
     }
 
 }

@@ -99,12 +99,21 @@ class DeckDisplay extends Display
     private Deck deck;
     private Graphics2D g2d;
 
-    private Point[] posPoints;
-    private Point center;
-
     private static final int BOX_SIZE = 40;
     private static final int X_OFFSET = BOX_SIZE * 3 / 4;
     private static final int Y_OFFSET = BOX_SIZE / 2;
+
+    private static final Point center = new Point(44, 44);
+
+    private static final Point[] posPoints =
+            {
+                new Point(center.x, center.y - BOX_SIZE),
+                new Point(center.x + X_OFFSET, center.y - Y_OFFSET),
+                new Point(center.x + X_OFFSET, center.y + Y_OFFSET),
+                new Point(center.x, center.y + BOX_SIZE),
+                new Point(center.x - X_OFFSET, center.y + Y_OFFSET),
+                new Point(center.x - X_OFFSET, center.y - Y_OFFSET)
+            };
 
     public DeckDisplay(Deck deck)
     {
@@ -113,15 +122,6 @@ class DeckDisplay extends Display
 
         this.deck = deck;
 
-        center = new Point(44, 44);
-
-        posPoints = new Point[6];
-        posPoints[0] = new Point(center.x, center.y - BOX_SIZE);
-        posPoints[1] = new Point(center.x + X_OFFSET, center.y - Y_OFFSET);
-        posPoints[2] = new Point(center.x + X_OFFSET, center.y + Y_OFFSET);
-        posPoints[3] = new Point(center.x, center.y + BOX_SIZE);
-        posPoints[4] = new Point(center.x - X_OFFSET, center.y + Y_OFFSET);
-        posPoints[5] = new Point(center.x - X_OFFSET, center.y - Y_OFFSET);
 
         update();
     }
@@ -185,8 +185,6 @@ class HexDetailDisplay extends Display
 
     public void update(HexButton hoverButton)
     {
-        //HexButton hoverButton = menu.getHoverHexButton();
-
         drawBackground();
         if(hoverButton != null)
         {
@@ -195,12 +193,15 @@ class HexDetailDisplay extends Display
         if(hexButton != null)
         {
             Hex hex = hexButton.getHex();
-            g2d.drawImage(hex.getImage(), 4, 4, null);
+            Point point = hexButton.getOrigin();
+            g2d.drawImage(hex.getImage(), 84, 4, null);
             g2d.setColor(Color.BLACK);
-            g2d.drawString("Level: " + hex.getLevel(), 4, 64);
-            g2d.drawString("Origin: (" + hexButton.getOrigin().x + ", " + hexButton.getOrigin().y + ")", 4, 84);
-            g2d.drawString("TileId: " + hex.getTileId(), 4, 104);
-            g2d.drawString("Terrain: " + hex.getTypeName(), 4, 124);
+            g2d.drawString("TileId: " + hex.getTileId(), 4, 20);
+            g2d.drawString("Level: " + hex.getLevel(), 4, 40);
+            g2d.drawString("Building: " + hex.getBuilding().toString(), 4, 60);
+            g2d.drawString("Origin: (" + point.x + ", " + point.y + ")", 4, 80);
+            g2d.drawString("Terrain: " + hex.getTypeName(), 4, 100);
+            g2d.drawString("SettlementId: " + "", 4, 120);
         }
     }
 }

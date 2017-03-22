@@ -4,64 +4,45 @@ import java.awt.*;
 // GameManager is an intermediary class between the TigerPanel and the game Menu.
 public class GameManager
 {
-    private Graphics2D panelG2D;
-    private ArrayList<Menu> menus;
-    private Menu activeMenu;
-    private BaseMenu baseMenu;
+    private Board board;
 
-    GameManager(Graphics2D panelG2D)
+    GameManager()
     {
-        this.panelG2D = panelG2D;
-        initializeMenus();
+        board = new Board(this);
     }
 
-    private void initializeMenus()
+    public void processTurn(Point target)
     {
-        menus = new ArrayList<Menu>();
-        baseMenu = new BaseMenu();
-        menus.add(baseMenu);
-        activeMenu = menus.get(0);
-        activeMenu.drawMenu(panelG2D);
-    }
-
-    public void checkForPress(Point point)
-    {
-        activeMenu.checkForPress(point);
-        updateMenu();
-    }
-
-    public void checkForHover(Point point)
-    {
-        activeMenu.checkForHover(point);
-        updateMenu();
-    }
-
-    public void updateMenu()
-    {
-        activeMenu.updateDisplays();
-        drawMenu();
-    }
-
-    private void drawMenu()
-    {
-        activeMenu.drawMenu(panelG2D);
+        board.processTurn(target);
     }
 
     public void emptyHexes()
     {
-        baseMenu.clearHexes();
-        updateMenu();
+        board.clearHexes();
     }
 
     public void resetHexes()
     {
-        baseMenu.resetHexes();
-        updateMenu();
+        board.resetButtonMap();
     }
 
     public void resetWithOneHex()
     {
-        baseMenu.resetWithOneHex();
-        updateMenu();
+        board.resetWithOneHex();
+    }
+
+    public Board getBoard()
+    {
+        return board;
+    }
+
+    public HashMap<Point, HexButton> getButtonMap()
+    {
+        return board.getButtonMap();
+    }
+
+    public void resetDeck()
+    {
+        board.resetDeck();
     }
 }

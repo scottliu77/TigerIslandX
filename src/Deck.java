@@ -47,33 +47,8 @@ public class Deck
         Hex nextHex;
         int number = rand.nextInt(4);
 
-        nextHex = new Hex(Terrain.values()[number]);
+        nextHex = new Hex(Terrain.values()[number], tileCount);
 
-
-        /*
-        switch(number)
-        {
-            case ROCKY:
-                nextHex = new RockyHex();
-                break;
-
-            case LAKE:
-                nextHex = new LakeHex();
-                break;
-
-            case JUNGLE:
-                nextHex = new JungleHex();
-                break;
-
-            case GRASS:
-                nextHex = new GrassHex();
-                break;
-
-            default:
-                nextHex = new EmptyHex();
-                break;
-        }
-        */
 
         return nextHex;
 

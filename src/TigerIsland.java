@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * Created by Wylie on 3/19/2017.
@@ -95,12 +96,17 @@ public class TigerIsland
 }
 
 // TigerPanel displays the output image and detects mouse inputs
+// Used for human user input/output
 class TigerPanel extends JPanel
 {
     private BufferedImage image;
     private Graphics2D g2d;
 
-    private GameManager manager;
+    //private GameManager manager;
+
+    private ArrayList<Menu> menus;
+    private BaseMenu baseMenu;
+    private Menu activeMenu;
 
     public TigerPanel(BufferedImage image) {
         this.image = image;
@@ -108,11 +114,15 @@ class TigerPanel extends JPanel
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        manager = new GameManager(g2d);
+        //manager = new GameManager(g2d);
+
+        initializeMenus();
 
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent event) {
-                manager.checkForPress(event.getPoint());
+                activeMenu.checkForPress(event.getPoint());
+                activeMenu.updateDisplays();
+                activeMenu.drawMenu(g2d);
                 repaint();
             }
 
@@ -127,12 +137,16 @@ class TigerPanel extends JPanel
 
         addMouseMotionListener(new MouseMotionListener() {
             public void mouseMoved(MouseEvent event) {
-                manager.checkForHover(event.getPoint());
+                activeMenu.checkForHover(event.getPoint());
+                activeMenu.updateDisplays();
+                activeMenu.drawMenu(g2d);
                 repaint();
             }
 
             public void mouseDragged(MouseEvent event) {
-                manager.checkForHover(event.getPoint());
+                activeMenu.checkForHover(event.getPoint());
+                activeMenu.updateDisplays();
+                activeMenu.drawMenu(g2d);
                 repaint();
             }
         });
@@ -140,18 +154,30 @@ class TigerPanel extends JPanel
 
     }
 
+    private void initializeMenus()
+    {
+        menus = new ArrayList<Menu>();
+        baseMenu = new BaseMenu();
+        menus.add(baseMenu);
+        activeMenu = menus.get(0);
+        activeMenu.drawMenu(g2d);
+    }
+
     public void emptyHexes() {
-        manager.emptyHexes();
+        baseMenu.clearHexes();
+        baseMenu.drawMenu(g2d);
         repaint();
     }
 
     public void resetHexes() {
-        manager.resetHexes();
+        baseMenu.resetHexes();
+        baseMenu.drawMenu(g2d);
         repaint();
     }
 
     public void resetWithOneHex() {
-        manager.resetWithOneHex();
+        baseMenu.resetWithOneHex();
+        baseMenu.drawMenu(g2d);
         repaint();
     }
 
