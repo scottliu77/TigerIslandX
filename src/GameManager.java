@@ -5,10 +5,12 @@ import java.awt.*;
 public class GameManager
 {
     private Board board;
+    private Building activeBuilding;
 
     GameManager()
     {
         board = new Board(this);
+        activeBuilding = Building.VILLAGER;
     }
 
     public PlayerMove generateMove(Point targetPoint)
@@ -19,7 +21,20 @@ public class GameManager
         }
         else
         {
-            return new BuildingPlacementMove(board.getActivePlayer(), targetPoint, Building.VILLAGE);
+            return new BuildingPlacementMove(board.getActivePlayer(), targetPoint, Building.VILLAGER);
+        }
+    }
+
+    public boolean moveIsLegal(Point targetPoint)
+    {
+        if(!board.getTilePlaced())
+        {
+            Tile tile = board.getDeck().getTopTile();
+            return board.tilePlacementIsLegal(tile, board.getHexButton(targetPoint));
+        }
+        else
+        {
+            return true;
         }
     }
 

@@ -152,7 +152,14 @@ class HexButton extends Button
     public void press()
     {
         //manager.processTurn(super.getOrigin());
-        manager.processTurn(manager.generateMove(super.getOrigin()));
+        if(manager.moveIsLegal(super.getOrigin()))
+        {
+            manager.processTurn(manager.generateMove(super.getOrigin()));
+        }
+        else
+        {
+            System.out.println("Move illegal, failed to generate");
+        }
     }
 
 }
@@ -247,3 +254,31 @@ class RotateLeftButton extends Button
         deck.rotLeft();
     }
 }
+
+
+/*
+class MeepleSelectButton extends Button
+{
+    private GameManager manager;
+    private Building building;
+
+    public MeepleSelectButton(Point origin, GameManager manager, Building building)
+    {
+        super(origin, new BufferedImage, );
+        this.manager = manager;
+        this.building = building;
+    }
+
+    public void buildBase()
+    {
+
+    }
+
+    public void buildHover()
+    {
+
+    }
+
+ }
+ */
+

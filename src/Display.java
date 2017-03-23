@@ -93,6 +93,46 @@ class BoardDisplay extends Display
     }
 }
 
+
+class TurnStatusDisplay extends Display
+{
+    private static final int WIDTH = 128;
+    private static final int HEIGHT = 64;
+
+    private Board board;
+    private Graphics g2d;
+
+    TurnStatusDisplay(Board board)
+    {
+        super(new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB), new Point(832, 32));
+        this.board = board;
+        g2d = super.createGraphics();
+        drawBase();
+        drawStrings();
+    }
+
+    private void drawBase()
+    {
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, WIDTH, HEIGHT);
+        g2d.setColor(Color.GRAY);
+        g2d.drawRect(0, 0, WIDTH - 1, HEIGHT - 1);
+    }
+
+    private void drawStrings()
+    {
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("Placement Type: " + (board.getTilePlaced() ? "Build" : "Tile"), 4, 20);
+    }
+
+    public void update()
+    {
+        drawBase();
+        drawStrings();
+    }
+}
+
+
 // DeckDisplay shows the Tile that is currently on top of the Deck
 class DeckDisplay extends Display
 {

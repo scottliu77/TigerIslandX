@@ -288,7 +288,7 @@ public class Board
     // ==============================================
     // Tile Placement legality checking functions:
 
-    private boolean tilePlacementIsLegal(Tile tile, HexButton targetButton)
+    public boolean tilePlacementIsLegal(Tile tile, HexButton targetButton)
     {
         if(!targetIsEmptyOrVolcano(targetButton))
         {

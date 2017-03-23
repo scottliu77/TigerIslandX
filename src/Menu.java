@@ -157,6 +157,7 @@ class BaseMenu extends Menu
     private BoardDisplay boardDisplay;
     private DeckDisplay deckDisplay;
     private HexDetailDisplay hexDetailDisplay;
+    private TurnStatusDisplay turnStatusDisplay;
 
     private GameManager gameManager;
 
@@ -174,6 +175,7 @@ class BaseMenu extends Menu
         super.addDisplay(boardDisplay = new BoardDisplay(board));
         super.addDisplay(deckDisplay = new DeckDisplay(deck));
         super.addDisplay(hexDetailDisplay = new HexDetailDisplay());
+        super.addDisplay(turnStatusDisplay = new TurnStatusDisplay(board));
 
         // Note: should hold Board in Menu instead of at Display level...
         super.addButton(new RotateLeftButton((new Point(832, 256)), deck));
@@ -235,6 +237,7 @@ class BaseMenu extends Menu
         //super.updateDisplays();
         deckDisplay.update();
         hexDetailDisplay.update(getHoverHexButton());
+        turnStatusDisplay.update();
     }
 
     // Presses the button on which the point lies if applicable

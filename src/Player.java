@@ -19,7 +19,7 @@ public class Player
 
     public int getVillagers()
     {
-        return meeples[Building.VILLAGE.ordinal()];
+        return meeples[Building.VILLAGER.ordinal()];
     }
 
     public int getTotoros()
@@ -30,7 +30,7 @@ public class Player
     public void resetResources()
     {
         meeples = new int[3];
-        meeples[Building.VILLAGE.ordinal()] = 20;
+        meeples[Building.VILLAGER.ordinal()] = 20;
         meeples[Building.TIGER.ordinal()] = 2;
         meeples[Building.TOTORO.ordinal()] = 3;
     }
@@ -42,7 +42,7 @@ public class Player
 
     public void decreaseVillagers(int decrement)
     {
-        meeples[Building.VILLAGE.ordinal()] -= decrement;
+        meeples[Building.VILLAGER.ordinal()] -= decrement;
     }
 
     public void decreaseTigers() {meeples[Building.TIGER.ordinal()]--;}
@@ -64,7 +64,7 @@ public class Player
 
     public boolean outOfResources()
     {
-        return (meeples[Building.TOTORO.ordinal()] == 0 && meeples[Building.VILLAGE.ordinal()] == 0 && meeples[Building.TIGER.ordinal()] == 0);
+        return (meeples[Building.TOTORO.ordinal()] == 0 && meeples[Building.VILLAGER.ordinal()] == 0 && meeples[Building.TIGER.ordinal()] == 0);
     }
 
     public int getScore()

@@ -135,7 +135,7 @@ enum Terrain
 
 enum Building
 {
-    VILLAGE(true), TIGER(true), TOTORO(true), NONE(false);
+    VILLAGER(true), TIGER(true), TOTORO(true), NONE(false);
 
     private final boolean occupiesHex;
 
