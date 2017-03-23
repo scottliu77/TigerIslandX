@@ -126,7 +126,7 @@ class HexButton extends Button
         return hex;
     }
 
-    public void placeBuilding(Building building)
+    public void placeBuilding(Building building, Player activePlayer)
     {
         hex.placeBuilding(building);
         Graphics2D g2d = hex.getImage().createGraphics();
@@ -134,11 +134,14 @@ class HexButton extends Button
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
 
-        g2d.setColor(Color.WHITE);
+        Color baseColor = activePlayer.getColor1();
+        Color textColor = activePlayer.getColor2();
+
+        g2d.setColor(baseColor);
         g2d.fillOval(7, 13, 20, 20);
         g2d.setColor(Color.GRAY);
         g2d.drawOval(7, 13, 20, 20);
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(textColor);
         g2d.drawString(building.toString().substring(0, 2), 12, 28);
     }
 
@@ -256,29 +259,80 @@ class RotateLeftButton extends Button
 }
 
 
-/*
+
 class MeepleSelectButton extends Button
 {
     private GameManager manager;
     private Building building;
+    private BufferedImage pressedImage;
+    private boolean pressed;
 
     public MeepleSelectButton(Point origin, GameManager manager, Building building)
     {
-        super(origin, new BufferedImage, );
+        super(origin, new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB) );
         this.manager = manager;
         this.building = building;
+        pressedImage = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+        buildBase();
+        buildHover();
+        buildPressed();
+        pressed = false;
     }
 
     public void buildBase()
     {
+        Graphics2D g2d = super.getBaseImage().createGraphics();
 
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, 64, 64);
+        g2d.setColor(Color.GRAY);
+        g2d.drawRect(0, 0, 63, 63);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(building.toString(), 4, 32);
     }
 
     public void buildHover()
     {
+        Graphics2D g2d = super.getHoverImage().createGraphics();
 
+        g2d.setColor(Color.GRAY);
+        g2d.fillRect(0, 0, 64, 64);
+        g2d.setColor(Color.GRAY);
+        g2d.drawRect(0, 0, 63, 63);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(building.toString(), 4, 32);
+    }
+
+    public void buildPressed()
+    {
+        Graphics2D g2d = pressedImage.createGraphics();
+
+        g2d.setColor(Color.BLACK);
+        g2d.fillRect(0, 0, 64, 64);
+        g2d.setColor(Color.GRAY);
+        g2d.drawRect(0, 0, 63, 63);
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(building.toString(), 4, 32);
+    }
+
+    public void press()
+    {
+        pressed = true;
+        manager.setActiveBuilding(building);
+    }
+
+    public void drawButton(Graphics2D g2d)
+    {
+        BufferedImage img;
+        //if (pressed)
+        //    img = pressedImage;
+        if (super.getHover())
+            img = super.getHoverImage();
+        else
+            img = super.getBaseImage();
+        g2d.drawImage(img, super.getOrigin().x, super.getOrigin().y, null);
     }
 
  }
- */
+
 

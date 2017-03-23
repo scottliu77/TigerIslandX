@@ -48,8 +48,8 @@ public class Board
 
         deck = new Deck();
 
-        player1 = new Player(Color.WHITE);
-        player2 = new Player(Color.BLACK);
+        player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
+        player2 = new Player("Player 2", Color.BLACK, Color.WHITE);
         activePlayer = player1;
 
         int hexagonX[] = {10, 30, 40, 30, 10, 0};
@@ -159,10 +159,9 @@ public class Board
         {
             playerMove.execute(this);
             tilePlaced = false;
+            if (activePlayer == player1) activePlayer = player2;
+            else if (activePlayer == player2) activePlayer = player1;
         }
-
-        if (activePlayer == player1) activePlayer = player2;
-        else if (activePlayer == player2) activePlayer = player1;
     }
 
     // ====================================
@@ -235,7 +234,7 @@ public class Board
     public void placeBuilding(Point buttonPoint, Building building)
     {
         HexButton hexButton = buttonMap.get(buttonPoint);
-        hexButton.placeBuilding(building);
+        hexButton.placeBuilding(building, activePlayer);
     }
 
     // ====================================
@@ -279,9 +278,24 @@ public class Board
 
     public boolean getPlayerTracker() { return playerTracker; }
 
+    public boolean activePlayerIs1()
+    {
+        return activePlayer == player1;
+    }
+
     public Player getActivePlayer()
     {
         return activePlayer;
+    }
+
+    public Player getPlayer1()
+    {
+        return player1;
+    }
+
+    public Player getPlayer2()
+    {
+        return player2;
     }
 
 

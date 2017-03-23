@@ -109,7 +109,7 @@ public class Hex
     {
         if(this.building.occupiesHex())
         {
-            System.out.println("Error, attempted to build on existing building");
+            System.out.println("Error, build target has existing building");
         }
         this.building = building;
     }

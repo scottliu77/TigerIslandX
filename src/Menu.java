@@ -158,6 +158,8 @@ class BaseMenu extends Menu
     private DeckDisplay deckDisplay;
     private HexDetailDisplay hexDetailDisplay;
     private TurnStatusDisplay turnStatusDisplay;
+    private PlayerStatusDisplay player1StatusDisplay;
+    private PlayerStatusDisplay player2StatusDisplay;
 
     private GameManager gameManager;
 
@@ -176,10 +178,17 @@ class BaseMenu extends Menu
         super.addDisplay(deckDisplay = new DeckDisplay(deck));
         super.addDisplay(hexDetailDisplay = new HexDetailDisplay());
         super.addDisplay(turnStatusDisplay = new TurnStatusDisplay(board));
+        super.addDisplay(player1StatusDisplay = new PlayerStatusDisplay(board.getPlayer1(), new Point(256, 32)));
+        super.addDisplay(player2StatusDisplay = new PlayerStatusDisplay(board.getPlayer2(), new Point(544, 32)));
+
 
         // Note: should hold Board in Menu instead of at Display level...
         super.addButton(new RotateLeftButton((new Point(832, 256)), deck));
         super.addButton(new RotateRightButton((new Point(896, 256)), deck));
+
+        super.addButton(new MeepleSelectButton(new Point(832, 512), gameManager, Building.VILLAGER));
+        super.addButton(new MeepleSelectButton(new Point(896, 512), gameManager, Building.TIGER));
+        super.addButton(new MeepleSelectButton(new Point(896, 576), gameManager, Building.TOTORO));
 
         addHexButtons(board.getButtonMap());
     }
@@ -238,6 +247,8 @@ class BaseMenu extends Menu
         deckDisplay.update();
         hexDetailDisplay.update(getHoverHexButton());
         turnStatusDisplay.update();
+        player1StatusDisplay.update();
+        player2StatusDisplay.update();
     }
 
     // Presses the button on which the point lies if applicable

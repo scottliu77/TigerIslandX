@@ -5,14 +5,18 @@ import java.awt.*;
  */
 public class Player
 {
+    private String name;
     private Board board;
-    private Color color;
+    private Color color1;
+    private Color color2;
     private int score;
     private int[] meeples;
 
-    public Player(Color color)
+    public Player(String name, Color color1, Color color2)
     {
-        this.color = color;
+        this.name = name;
+        this.color1 = color1;
+        this.color2 = color2;
         resetScore();
         resetResources();
     }
@@ -25,6 +29,11 @@ public class Player
     public int getTotoros()
     {
         return meeples[Building.TOTORO.ordinal()];
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     public void resetResources()
@@ -72,9 +81,19 @@ public class Player
         return score;
     }
 
-    public void placeTile(Point point)
+    public int[] getMeeples()
     {
+        return meeples;
+    }
 
+    public Color getColor1()
+    {
+        return color1;
+    }
+
+    public Color getColor2()
+    {
+        return color2;
     }
 
 }

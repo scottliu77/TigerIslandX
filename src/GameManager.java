@@ -21,7 +21,7 @@ public class GameManager
         }
         else
         {
-            return new BuildingPlacementMove(board.getActivePlayer(), targetPoint, Building.VILLAGER);
+            return new BuildingPlacementMove(board.getActivePlayer(), targetPoint, activeBuilding);
         }
     }
 
@@ -61,6 +61,16 @@ public class GameManager
     public Board getBoard()
     {
         return board;
+    }
+
+    public Building getActiveBuilding()
+    {
+        return activeBuilding;
+    }
+
+    public void setActiveBuilding(Building building)
+    {
+        activeBuilding = building;
     }
 
     public HashMap<Point, HexButton> getButtonMap()

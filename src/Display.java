@@ -93,6 +93,80 @@ class BoardDisplay extends Display
     }
 }
 
+class PlayerStatusDisplay extends Display
+{
+    private static final int WIDTH = 224;
+    private static final int HEIGHT = 64;
+
+    private Player player;
+    private Graphics2D g2d;
+
+    PlayerStatusDisplay(Player player, Point origin)
+    {
+        super(new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB), origin);
+        this.player = player;
+        g2d = super.createGraphics();
+
+        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON );
+
+        drawBase();
+        drawStats();
+    }
+
+    private void drawBase()
+    {
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, WIDTH, HEIGHT);
+        g2d.setColor(Color.GRAY);
+        g2d.drawRect(0, 0, WIDTH - 1, HEIGHT - 1);
+    }
+
+    private void drawStats()
+    {
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(player.getName(), 4, 16);
+
+        int[] meeples = player.getMeeples();
+        Color color1 = player.getColor1();
+        Color color2 = player.getColor2();
+
+        g2d.setColor(color1);
+        g2d.fillOval(64, 8, 32, 32);
+        g2d.setColor(Color.GRAY);
+        g2d.drawOval(64, 8, 32 - 1, 32 - 1);
+        g2d.setColor(color2);
+        g2d.drawString(Building.VILLAGER.toString().substring(0, 2), 64 + 8, 8 + 23);
+
+        g2d.setColor(color1);
+        g2d.fillOval(112, 8, 32, 32);
+        g2d.setColor(Color.GRAY);
+        g2d.drawOval(112, 8, 32 - 1, 32 - 1);
+        g2d.setColor(color2);
+        g2d.drawString(Building.TIGER.toString().substring(0, 2), 112 + 8, 8 + 23);
+
+        g2d.setColor(color1);
+        g2d.fillOval(160, 8, 32, 32);
+        g2d.setColor(Color.GRAY);
+        g2d.drawOval(160, 8, 32 - 1, 32 - 1);
+        g2d.setColor(color2);
+        g2d.drawString(Building.TOTORO.toString().substring(0, 2), 160 + 8, 8 + 23);
+
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("" + meeples[Building.VILLAGER.ordinal()], 64 + 8, 54);
+        g2d.drawString("" + meeples[Building.TIGER.ordinal()], 112 + 8, 54);
+        g2d.drawString("" + meeples[Building.TOTORO.ordinal()], 160 + 8, 54);
+
+
+    }
+
+    public void update()
+    {
+        drawBase();
+        drawStats();
+    }
+}
+
 
 class TurnStatusDisplay extends Display
 {
@@ -100,7 +174,7 @@ class TurnStatusDisplay extends Display
     private static final int HEIGHT = 64;
 
     private Board board;
-    private Graphics g2d;
+    private Graphics2D g2d;
 
     TurnStatusDisplay(Board board)
     {
@@ -123,6 +197,7 @@ class TurnStatusDisplay extends Display
     {
         g2d.setColor(Color.BLACK);
         g2d.drawString("Placement Type: " + (board.getTilePlaced() ? "Build" : "Tile"), 4, 20);
+        g2d.drawString("ActivePlayer: " + (board.getActivePlayer().getName()), 4, 40);
     }
 
     public void update()
@@ -207,7 +282,7 @@ class HexDetailDisplay extends Display
 
     public HexDetailDisplay()
     {
-        super(new BufferedImage(129, 129, BufferedImage.TYPE_INT_ARGB), new Point(832, 384));
+        super(new BufferedImage(129, 129, BufferedImage.TYPE_INT_ARGB), new Point(832, 352));
         g2d = super.createGraphics();
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
