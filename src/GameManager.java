@@ -11,9 +11,21 @@ public class GameManager
         board = new Board(this);
     }
 
-    public void processTurn(Point target)
+    public PlayerMove generateMove(Point targetPoint)
     {
-        board.processTurn(target);
+        if(!board.getTilePlaced())
+        {
+            return new TilePlacementMove(board.getActivePlayer(), targetPoint);
+        }
+        else
+        {
+            return new BuildingPlacementMove(board.getActivePlayer(), targetPoint, Building.VILLAGE);
+        }
+    }
+
+    public void processTurn(PlayerMove playerMove)
+    {
+        board.processTurn(playerMove);
     }
 
     public void emptyHexes()

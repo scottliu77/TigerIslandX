@@ -10,6 +10,7 @@ public class Board
 {
     private GameManager manager;
 
+    Player activePlayer;
     Player player1;
     Player player2;
     Player players[];
@@ -47,9 +48,9 @@ public class Board
 
         deck = new Deck();
 
-        players = new Player[2];
-        players[0] = new Player(Color.WHITE);
-        players[1] = new Player(Color.BLACK);
+        player1 = new Player(Color.WHITE);
+        player2 = new Player(Color.BLACK);
+        activePlayer = player1;
 
         int hexagonX[] = {10, 30, 40, 30, 10, 0};
         int hexagonY[] = {0, 0, 20, 40, 40, 20};
@@ -110,6 +111,7 @@ public class Board
             }
         }
 
+        tilePlaced = false;
         resetDeck();
     }
 
@@ -120,6 +122,7 @@ public class Board
         {
             button.resetButton();
         }
+        tilePlaced = false;
     }
 
     private void resetMapWithCenterHex()
@@ -128,6 +131,7 @@ public class Board
 
         Point point = new Point(256 + 236, 128 + 236);
         buttonMap.put(point, new HexButton(point, new Hex(Terrain.EMPTY), manager));
+        tilePlaced = false;
     }
 
     public void resetWithOneHex()
@@ -144,10 +148,21 @@ public class Board
     // ====================================
     // Game state management methods:
 
-    public void processTurn(Point origin)
+    public void processTurn(PlayerMove playerMove)
     {
-        int playerIndex = playerTracker ? 1 : 0;
-        placeTile(origin);
+        if(tilePlaced == false)
+        {
+            playerMove.execute(this);
+            tilePlaced = true;
+        }
+        else
+        {
+            playerMove.execute(this);
+            tilePlaced = false;
+        }
+
+        if (activePlayer == player1) activePlayer = player2;
+        else if (activePlayer == player2) activePlayer = player1;
     }
 
     // ====================================
@@ -217,6 +232,12 @@ public class Board
         }
     }
 
+    public void placeBuilding(Point buttonPoint, Building building)
+    {
+        HexButton hexButton = buttonMap.get(buttonPoint);
+        hexButton.placeBuilding(building);
+    }
+
     // ====================================
     // Accessors for member data:
 
@@ -257,6 +278,11 @@ public class Board
     public boolean getTilePlaced() { return tilePlaced; }
 
     public boolean getPlayerTracker() { return playerTracker; }
+
+    public Player getActivePlayer()
+    {
+        return activePlayer;
+    }
 
 
     // ==============================================

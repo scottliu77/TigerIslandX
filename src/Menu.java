@@ -166,13 +166,11 @@ class BaseMenu extends Menu
     {
         super();
 
-        super.addDisplay(backgroundDisplay = new BackgroundDisplay());
-
         gameManager = new GameManager();
-
         Board board = gameManager.getBoard();
         Deck deck = board.getDeck();
 
+        super.addDisplay(backgroundDisplay = new BackgroundDisplay());
         super.addDisplay(boardDisplay = new BoardDisplay(board));
         super.addDisplay(deckDisplay = new DeckDisplay(deck));
         super.addDisplay(hexDetailDisplay = new HexDetailDisplay());

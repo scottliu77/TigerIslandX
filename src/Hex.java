@@ -104,6 +104,15 @@ public class Hex
     }
 
     public Building getBuilding() {return building;}
+
+    public void placeBuilding(Building building)
+    {
+        if(this.building.occupiesHex())
+        {
+            System.out.println("Error, attempted to build on existing building");
+        }
+        this.building = building;
+    }
 }
 
 enum Terrain
@@ -126,7 +135,7 @@ enum Terrain
 
 enum Building
 {
-    NONE(false), VILLAGE(true), TIGER(true), TOTORO(true);
+    VILLAGE(true), TIGER(true), TOTORO(true), NONE(false);
 
     private final boolean occupiesHex;
 

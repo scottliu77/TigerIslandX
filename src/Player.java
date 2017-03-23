@@ -8,9 +8,7 @@ public class Player
     private Board board;
     private Color color;
     private int score;
-    private int villagers;
-    private int tigers;
-    private int totoros;
+    private int[] meeples;
 
     public Player(Color color)
     {
@@ -21,32 +19,38 @@ public class Player
 
     public int getVillagers()
     {
-        return villagers;
+        return meeples[Building.VILLAGE.ordinal()];
     }
 
     public int getTotoros()
     {
-        return totoros;
+        return meeples[Building.TOTORO.ordinal()];
     }
 
     public void resetResources()
     {
-        villagers = 20;
-        tigers = 2;
-        totoros = 3;
+        meeples = new int[3];
+        meeples[Building.VILLAGE.ordinal()] = 20;
+        meeples[Building.TIGER.ordinal()] = 2;
+        meeples[Building.TOTORO.ordinal()] = 3;
     }
 
     public void decreaseTotoros()
     {
-        totoros--;
+        meeples[Building.TOTORO.ordinal()]--;
     }
 
     public void decreaseVillagers(int decrement)
     {
-        villagers -= decrement;
+        meeples[Building.VILLAGE.ordinal()] -= decrement;
     }
 
-    private void decreaseTigers() {tigers--;}
+    public void decreaseTigers() {meeples[Building.TIGER.ordinal()]--;}
+
+    public void consumeMeeples(Building building, int number)
+    {
+        meeples[building.ordinal()] -= number;
+    }
 
     public void increaseScore(int points)
     {
@@ -60,7 +64,7 @@ public class Player
 
     public boolean outOfResources()
     {
-        return (totoros == 0 && villagers == 0 && tigers == 0);
+        return (meeples[Building.TOTORO.ordinal()] == 0 && meeples[Building.VILLAGE.ordinal()] == 0 && meeples[Building.TIGER.ordinal()] == 0);
     }
 
     public int getScore()
