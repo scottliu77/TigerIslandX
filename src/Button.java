@@ -142,7 +142,7 @@ class HexButton extends Button
         g2d.setColor(Color.GRAY);
         g2d.drawOval(7, 13, 20, 20);
         g2d.setColor(textColor);
-        g2d.drawString(building.toString().substring(0, 2), 12, 28);
+        g2d.drawString(building.toString().substring(0, 2), 11, 28);
     }
 
     public void resetButton()

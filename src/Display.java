@@ -156,8 +156,6 @@ class PlayerStatusDisplay extends Display
         g2d.drawString("" + meeples[Building.VILLAGER.ordinal()], 64 + 8, 54);
         g2d.drawString("" + meeples[Building.TIGER.ordinal()], 112 + 8, 54);
         g2d.drawString("" + meeples[Building.TOTORO.ordinal()], 160 + 8, 54);
-
-
     }
 
     public void update()
@@ -196,8 +194,9 @@ class TurnStatusDisplay extends Display
     private void drawStrings()
     {
         g2d.setColor(Color.BLACK);
-        g2d.drawString("Placement Type: " + (board.getTilePlaced() ? "Build" : "Tile"), 4, 20);
-        g2d.drawString("ActivePlayer: " + (board.getActivePlayer().getName()), 4, 40);
+        g2d.drawString("Placement Type: " + (board.getTilePlaced() ? "Build" : "Tile"), 4, 16);
+        g2d.drawString("ActvPlayer: " + (board.getActivePlayer().getName()), 4, 32);
+        g2d.drawString("ActvBldng: " + board.getActiveBuilding().toString(), 4, 48);
     }
 
     public void update()

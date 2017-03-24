@@ -61,7 +61,7 @@ public class TigerIsland
 
         fileMenu.add(clear);
 
-        JMenuItem reset = new JMenuItem("Reset Board");
+        JMenuItem reset = new JMenuItem("Reset to Large Board");
         reset.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent event)

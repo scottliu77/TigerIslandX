@@ -111,18 +111,16 @@ public class Board
             }
         }
 
-        tilePlaced = false;
-        resetDeck();
+        resetBoard();
     }
 
     public void clearHexes()
     {
-        resetDeck();
         for(HexButton button : buttonMap.values())
         {
             button.resetButton();
         }
-        tilePlaced = false;
+        resetBoard();
     }
 
     private void resetMapWithCenterHex()
@@ -131,13 +129,12 @@ public class Board
 
         Point point = new Point(256 + 236, 128 + 236);
         buttonMap.put(point, new HexButton(point, new Hex(Terrain.EMPTY), manager));
-        tilePlaced = false;
     }
 
     public void resetWithOneHex()
     {
         resetMapWithCenterHex();
-        resetDeck();
+        resetBoard();
     }
 
     public void resetDeck()
@@ -145,22 +142,33 @@ public class Board
         deck.resetTileCount();
     }
 
+    public void resetBoard()
+    {
+        resetDeck();
+        tilePlaced = false;
+        player1.resetResources();
+        player1.resetScore();
+        player2.resetResources();
+        player2.resetScore();
+    }
+
     // ====================================
     // Game state management methods:
 
     public void processTurn(PlayerMove playerMove)
     {
-        if(tilePlaced == false)
+        if(!tilePlaced) // if tilePlaced is false, Board expects a Tile Placement
         {
             playerMove.execute(this);
             tilePlaced = true;
         }
-        else
+        else // if tilePlaced is true, Board expects a Build Action
         {
             playerMove.execute(this);
             tilePlaced = false;
-            if (activePlayer == player1) activePlayer = player2;
-            else if (activePlayer == player2) activePlayer = player1;
+
+            // activePlayer is then switched from player1 to player2 or vice-versa:
+            activePlayer = (activePlayer == player1 ? player2 : player1);
         }
     }
 
@@ -296,6 +304,11 @@ public class Board
     public Player getPlayer2()
     {
         return player2;
+    }
+
+    public Building getActiveBuilding()
+    {
+        return manager.getActiveBuilding();
     }
 
 
