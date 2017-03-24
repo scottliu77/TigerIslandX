@@ -2,7 +2,7 @@ import java.util.*;
 import java.awt.*;
 
 // A menu manages its button and display objects.
-public class Menu
+class Menu
 {
     // Member data:
 

@@ -192,6 +192,20 @@ public class Board
         }
     }
 
+    public void placeTile(Tile tile, Point origin)
+    {
+        HexButton centerButton = buttonMap.get(origin);
+
+        if(tilePlacementIsLegal(tile, centerButton))
+        {
+            centerButton.changeHex(tile.getVolcano());
+            placePerimeterHexes(origin);
+
+            placeHex(origin, tile.getA(), tile.getOrientation());
+            placeHex(origin, tile.getB(), tile.getOrientationPlus(1));
+        }
+    }
+
     private void placeHex(Point center, Hex hex, int orientation)
     {
         Point delta = neighborPts[orientation];
