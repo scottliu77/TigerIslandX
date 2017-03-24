@@ -31,6 +31,11 @@ public class Player
         return meeples[Building.TOTORO.ordinal()];
     }
 
+    public int getTigers()
+    {
+        return meeples[Building.TIGER.ordinal()];
+    }
+    
     public String getName()
     {
         return name;
