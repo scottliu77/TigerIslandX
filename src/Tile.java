@@ -35,7 +35,7 @@ public class Tile
         orientation = orientation.rotLeft();
     }
 
-    public void setOrientaton(Orientation orientation) {this.orientation = orientation;}
+    public void setOrientation(Orientation orientation) {this.orientation = orientation;}
 
     public int getOrientation()
     {
@@ -69,7 +69,6 @@ public class Tile
     {
         return tileId;
     }
-
 }
 
 // A Tile's Orientation is the position where Hex A will be placed relative to the Tile's Volcano.
