@@ -96,7 +96,7 @@ public class Hex
         return terrain;
     }
 
-    private boolean isOccupied() {return building.occupiesHex();}
+    public boolean isOccupied() {return building.occupiesHex();}
 
     public void setLevel(int newLevel)
     {
