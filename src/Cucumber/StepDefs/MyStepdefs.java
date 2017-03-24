@@ -55,22 +55,18 @@ public class MyStepdefs {
         HashMap<Point, HexButton> buttonMap = board.getButtonMap();
         ArrayList<Point> pointList = new ArrayList<Point>(buttonMap.keySet());
         targetButton = buttonMap.get(pointList.get(0));
-
-        throw new PendingException();
     }
 
     @When("^Player selects a target Hex$")
     public void playerSelectsATargetHex() throws Throwable
     {
         board.placeTile(targetButton.getOrigin());
-        throw new PendingException();
     }
 
     @Then("^Volcano placed at target Hex$")
     public void volcanoPlacedAtTargetHex() throws Throwable
     {
         assertEquals(targetButton.getHex(), tile.getVolcano());
-        throw new PendingException();
     }
 
     @And("^Tile's Hex A placed at Volcano's neighbor (\\d+)$")
@@ -80,7 +76,6 @@ public class MyStepdefs {
         Point pointA = new Point(targetPoint.x + posPoints[0].x, targetPoint.y + posPoints[0].y);
         neighbor0Button = board.getHexButton(pointA);
         assertEquals(tile.getA(), neighbor0Button.getHex());
-        throw new PendingException();
     }
 
     @And("^Tile's Hex B placed at Volcano's neighbor (\\d+)$")
@@ -90,6 +85,5 @@ public class MyStepdefs {
         Point pointB = new Point(targetPoint.x + posPoints[1].x, targetPoint.y + posPoints[1].y);
         neighbor1Button = board.getHexButton(pointB);
         assertEquals(tile.getB(), neighbor1Button.getHex());
-        throw new PendingException();
     }
 }

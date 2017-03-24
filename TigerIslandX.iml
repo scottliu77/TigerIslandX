@@ -4,7 +4,10 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testing" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/TigerIsland/Test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Cucumber" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/JUnit" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Cucumber/StepDefs" type="java-test-resource" />
     </content>
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
