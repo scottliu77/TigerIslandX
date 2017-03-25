@@ -447,6 +447,10 @@ public class Board
         return manager.getActiveBuilding();
     }
 
+    public Terrain getActiveTerrain() { return manager.getActiveTerrain(); }
+
+    public boolean getExpandNext() { return manager.getExpandNext(); }
+
     public CopyOnWriteArrayList<Settlement> getSettlements()
     {
         return settlementManager.getSettlements();
@@ -612,5 +616,39 @@ public class Board
 
     public SettlementManager getSettlementManager() {
         return settlementManager;
+    }
+
+    public void expandSettlement(Point targetPoint, Terrain terrain)
+    {
+        HexButton hexButton = buttonMap.get(targetPoint);
+        Settlement settlement = settlementManager.getSettlement(hexButton);
+        Expansion expansion = settlementManager.getExpansion(settlement, terrain);
+        if (settlementExpansionIsLegal(expansion))
+        {
+            for(HexButton button : expansion.getHexes())
+            {
+                button.placeBuilding(Building.VILLAGER, activePlayer);
+                int level = button.getHex().getLevel();
+                activePlayer.increaseScore(level * level);
+            }
+            activePlayer.decreaseVillagers(expansion.getCost());
+        }
+    }
+
+    public boolean settlementExpansionIsLegal(Expansion expansion)
+    {
+        if(expansion.getHexes().isEmpty())
+        {
+            System.out.println("Illegal move: no expandable hexes");
+            return false;
+        }
+
+        if(activePlayer.getVillagers() < expansion.getCost())
+        {
+            System.out.println("Illegal move: insufficient resources");
+            return false;
+        }
+
+        return true;
     }
 }

@@ -94,5 +94,5 @@ public class Settlement
         return owner;
     }
 
-
 }
+

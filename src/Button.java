@@ -279,7 +279,47 @@ class RotateLeftButton extends Button
     }
 }
 
+class ExpansionSelectButton extends Button
+{
+    private GameManager manager;
 
+    public ExpansionSelectButton(Point origin, GameManager manager)
+    {
+        super(origin, new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
+        this.manager = manager;
+        buildBase();
+        buildHover();
+    }
+
+    public void buildBase()
+    {
+        Graphics2D g2d = super.getBaseImage().createGraphics();
+
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, 64, 64);
+        g2d.setColor(Color.GRAY);
+        g2d.drawRect(0, 0, 63, 63);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("EXPAND", 4, 32);
+    }
+
+    public void buildHover()
+    {
+        Graphics2D g2d = super.getHoverImage().createGraphics();
+
+        g2d.setColor(Color.GRAY);
+        g2d.fillRect(0, 0, 64, 64);
+        g2d.setColor(Color.GRAY);
+        g2d.drawRect(0, 0, 63, 63);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("EXPAND", 4, 32);
+    }
+
+    public void press()
+    {
+        manager.setExpandNext(true);
+    }
+}
 
 class MeepleSelectButton extends Button
 {
@@ -328,11 +368,11 @@ class MeepleSelectButton extends Button
     {
         Graphics2D g2d = pressedImage.createGraphics();
 
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(Color.GRAY);
         g2d.fillRect(0, 0, 64, 64);
         g2d.setColor(Color.GRAY);
         g2d.drawRect(0, 0, 63, 63);
-        g2d.setColor(Color.WHITE);
+        g2d.setColor(Color.BLACK);
         g2d.drawString(building.toString(), 4, 32);
     }
 
@@ -342,6 +382,7 @@ class MeepleSelectButton extends Button
         manager.setActiveBuilding(building);
     }
 
+    /*
     public void drawButton(Graphics2D g2d)
     {
         BufferedImage img;
@@ -353,6 +394,52 @@ class MeepleSelectButton extends Button
             img = super.getBaseImage();
         g2d.drawImage(img, super.getOrigin().x, super.getOrigin().y, null);
     }
+    */
+
+ }
+
+ class TerrainSelectButton extends Button
+ {
+     private Terrain terrain;
+     private GameManager manager;
+
+     public TerrainSelectButton(Point origin, GameManager manager, Terrain terrain)
+     {
+         super(origin, new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
+         this.manager = manager;
+         this.terrain = terrain;
+         buildBase();
+         buildHover();
+     }
+
+     public void buildBase()
+     {
+         Graphics2D g2d = super.getBaseImage().createGraphics();
+
+         g2d.setColor(Color.WHITE);
+         g2d.fillRect(0, 0, 64, 64);
+         g2d.setColor(Color.GRAY);
+         g2d.drawRect(0, 0, 63, 63);
+         g2d.setColor(Color.BLACK);
+         g2d.drawString(terrain.toString(), 4, 32);
+     }
+
+     public void buildHover()
+     {
+         Graphics2D g2d = super.getHoverImage().createGraphics();
+
+         g2d.setColor(Color.GRAY);
+         g2d.fillRect(0, 0, 64, 64);
+         g2d.setColor(Color.GRAY);
+         g2d.drawRect(0, 0, 63, 63);
+         g2d.setColor(Color.BLACK);
+         g2d.drawString(terrain.toString(), 4, 32);
+     }
+
+     public void press()
+     {
+         manager.setActiveTerrain(terrain);
+     }
 
  }
 

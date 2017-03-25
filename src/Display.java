@@ -51,6 +51,7 @@ class BackgroundDisplay extends Display
 {
     private static final int WIDTH = 1024;
     private static final int HEIGHT = 768;
+
     private static final int W_BLACK = 32;
     private static final int W_ORANGE = 32;
     private static final int W_TOTAL = W_BLACK + W_ORANGE;
@@ -172,14 +173,14 @@ class PlayerStatusDisplay extends Display
 class TurnStatusDisplay extends Display
 {
     private static final int WIDTH = 128;
-    private static final int HEIGHT = 64;
+    private static final int HEIGHT = 96;
 
     private Board board;
     private Graphics2D g2d;
 
     TurnStatusDisplay(Board board)
     {
-        super(new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB), new Point(832, 32));
+        super(new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB), new Point(832, 16));
         this.board = board;
         g2d = super.createGraphics();
         drawBase();
@@ -200,6 +201,8 @@ class TurnStatusDisplay extends Display
         g2d.drawString("Placement: " + (board.getTilePlaced() ? "Build" : "Tile"), 4, 16);
         g2d.drawString("ActvPlayer: " + (board.getActivePlayer().getName()), 4, 32);
         g2d.drawString("ActvBldng: " + board.getActiveBuilding().toString(), 4, 48);
+        g2d.drawString("ActvTerrn: " + board.getActiveTerrain().toString(), 4, 64);
+        g2d.drawString("ExpandNext: " + board.getExpandNext(), 4, 80);
     }
 
     public void update()
