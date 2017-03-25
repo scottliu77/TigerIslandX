@@ -1,14 +1,13 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Wylie on 3/24/2017.
  */
 public class Settlement
 {
-    private CopyOnWriteArrayList<HexButton> hexes;
+    private ArrayList<HexButton> hexes;
     private Player owner;
 
     private boolean hasTiger;
@@ -18,13 +17,13 @@ public class Settlement
 
     public Settlement(HexButton firstHex, int settlementId)
     {
-        hexes = new CopyOnWriteArrayList<HexButton>();
+        hexes = new ArrayList<HexButton>();
         hexes.add(firstHex);
         owner = firstHex.getHex().getOwner();
         this.settlementId = settlementId;
         firstHex.getHex().setSettlementId(settlementId);
         hasTiger = false;
-        hasTotoro = true;
+        hasTotoro = false;
     }
 
     public void checkNeighbors(HexButton startHex, Board board)
@@ -61,7 +60,7 @@ public class Settlement
         return settlementId;
     }
 
-    public CopyOnWriteArrayList<HexButton> getHexes()
+    public ArrayList<HexButton> getHexes()
     {
         return hexes;
     }
@@ -80,11 +79,13 @@ public class Settlement
 
     public boolean hasTotoro()
     {
+        checkForTotoro();
         return hasTotoro;
     }
 
     public boolean hasTiger()
     {
+        checkForTiger();
         return hasTiger;
     }
 
@@ -92,4 +93,6 @@ public class Settlement
     {
         return owner;
     }
+
+
 }

@@ -265,7 +265,11 @@ public class Board
     public void placeBuilding(Point buttonPoint, Building building)
     {
         HexButton hexButton = buttonMap.get(buttonPoint);
-        hexButton.placeBuilding(building, activePlayer);
+        if (buildingPlacementIsLegal(building, hexButton))
+        {
+            hexButton.placeBuilding(building, activePlayer);
+            activePlayer.consumeMeeples(building, 1);
+        }
         /*
         if(building == Building.VILLAGER)
         {
@@ -275,6 +279,107 @@ public class Board
         */
     }
 
+    // Need to convert most of these if-conditions to separate methods for readability
+    public boolean buildingPlacementIsLegal(Building building, HexButton hexButton)
+    {
+        if(!hexButton.getHex().getTerrain().isBuildable())
+        {
+            System.out.println("Illegal move: unbuildable terrain type");
+            return false;
+        }
+
+        if(hexButton.getHex().getBuilding().occupiesHex())
+        {
+            System.out.println("Illegal move: hex is already occupied");
+            return false;
+        }
+
+        if(activePlayer.getMeeples()[building.ordinal()] < 1)
+        {
+            System.out.println("Illegal move: " + activePlayer.getName() + " has insufficient " + building.toString() + "s");
+            return false;
+        }
+
+        if(building == Building.VILLAGER)
+        {
+            if(hexButton.getHex().getLevel() != 1)
+            {
+                System.out.println("Illegal move: villager placement requires level = 1");
+                return false;
+            }
+        }
+
+        if(building == Building.TIGER)
+        {
+            if(hexButton.getHex().getLevel() < 3)
+            {
+                System.out.println("Illegal move: tiger placement requires level >= 3");
+                return false;
+            }
+
+            if(!isTigerlessSettlementAdjacent(hexButton))
+            {
+                System.out.println("Illegal move: tiger placement requires adjacent settlement");
+                return false;
+            }
+        }
+
+        if(building == Building.TOTORO)
+        {
+            if(!isTotorolessSize5SettlementAdjacent(hexButton))
+            {
+                System.out.println("Illegal move: totoro placement requires adjacent settlement size 5+ with no totoro");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isTotorolessSize5SettlementAdjacent(HexButton hexButton)
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            HexButton neighbor = getNeighborButton(hexButton, i);
+                Settlement settlement = settlementManager.getSettlement(neighbor);
+                if(settlement != null && settlement.getOwner() == activePlayer)
+                {
+                    if(!settlement.hasTotoro())
+                    {
+                        if(settlement.getSize() >= 5)
+                        {
+                            return true;
+                        }
+                    }
+                }
+        }
+
+        return false;
+    }
+
+    public boolean isTigerlessSettlementAdjacent(HexButton hexButton)
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            HexButton neighbor = getNeighborButton(hexButton, i);
+            //if (settlementManager.isInSettlement(hexButton))
+            //{
+                //System.out.println("Neighbor " + i + " is a settlement member");
+                Settlement settlement = settlementManager.getSettlement(neighbor);
+                if(settlement != null && settlement.getOwner() == activePlayer)
+                {
+                    //System.out.println("Neighbor's settlement is owned by activePlayer " + activePlayer.getName());
+                    if(!settlement.hasTiger())
+                    {
+                        //System.out.println("Settlement has no tiger, returning true");
+                        return true;
+                    }
+                }
+           // }
+        }
+
+        return false;
+    }
     // ====================================
     // Accessors for member data:
 
@@ -346,48 +451,6 @@ public class Board
         return settlementManager.getSettlements();
     }
 
-        /*
-    public void updateSettlements()
-    {
-        for(Settlement settlement : settlements)
-        {
-            System.out.println("updating settlement " + settlement.getSettlementId());
-            settlement.updateSettlement(this);
-        }
-
-        for(Settlement settlement1 : settlements)
-        {
-            for(Settlement settlement2 : settlements)
-            {
-                if(settlement1 != settlement2 && settlements.contains(settlement1))
-                {
-                    System.out.println("Checking settlements: " + settlement1.getSettlementId() + " + " + settlement2.getSettlementId());
-                    CopyOnWriteArrayList<HexButton> hexes1 = settlement1.getHexes();
-                    CopyOnWriteArrayList<HexButton> hexes2 = settlement2.getHexes();
-                    if(hexes1.containsAll(hexes2) && hexes2.containsAll(hexes1))
-                    {
-                        settlements.remove(settlement2);
-                    }
-                }
-            }
-            if(settlements.contains(settlement1))
-            {
-                if(settlement1.getSize() < 1)
-                {
-                    settlements.remove(settlement1);
-                }
-                else
-                {
-                    for (HexButton hex : settlement1.getHexes())
-                    {
-                        hex.getHex().setSettlementId(settlement1.getSettlementId());
-                    }
-                }
-            }
-        }
-    }
-    */
-
     // ==============================================
     // Tile Placement legality checking functions:
 
@@ -400,6 +463,16 @@ public class Board
         }
         if (targetButton.getHex().getTerrain() == Terrain.VOLCANO)
         {
+            if (destroysWholeSettlement(tile, targetButton))
+            {
+                System.out.println("Illegal move: destroys at least one settlement");
+                return false;
+            }
+            if (destroysPermanentBuilding(tile, targetButton))
+            {
+                System.out.println("Illegal move: destroys tiger or totoro");
+                return false;
+            }
             if (hexesShareTile(tile, targetButton))
             {
                 System.out.println("Illegal move: hexes share tile");
@@ -426,6 +499,28 @@ public class Board
         }
 
         return true;
+    }
+
+    private boolean destroysWholeSettlement(Tile tile, HexButton targetButton)
+    {
+        int positionA = tile.getOrientation();
+        int positionB = tile.getOrientationPlus(1);
+
+        HexButton buttonA = getNeighborButton(targetButton, positionA);
+        HexButton buttonB = getNeighborButton(targetButton, positionB);
+
+        return(settlementManager.nukeWillDestroySettlement(buttonA, buttonB));
+    }
+
+    public boolean destroysPermanentBuilding(Tile tile, HexButton targetButton)
+    {
+        int positionA = tile.getOrientation();
+        int positionB = tile.getOrientationPlus(1);
+
+        HexButton buttonA = getNeighborButton(targetButton, positionA);
+        HexButton buttonB = getNeighborButton(targetButton, positionB);
+
+        return(buttonA.getHex().getBuilding().isPermanent() || buttonB.getHex().getBuilding().isPermanent());
     }
 
     // adjacentToNonEmptyHex returns true if any Fex of the Tile will be adjacent to a non-Empty Hex

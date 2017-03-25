@@ -51,4 +51,53 @@ public class SettlementManager
     {
         return settlements;
     }
+
+    public Settlement getSettlement(HexButton hexButton)
+    {
+        for (Settlement settlement : settlements)
+        {
+            if(settlement.getHexes().contains(hexButton))
+            {
+                return settlement;
+            }
+        }
+        return null;
+    }
+
+    public boolean isInSettlement(HexButton hexButton)
+    {
+        for (Settlement settlement : settlements)
+        {
+            if(settlement.getHexes().contains(hexButton))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean nukeWillDestroySettlement(HexButton buttonA, HexButton buttonB)
+    {
+        Settlement settlementA = null;
+        Settlement settlementB = null;
+
+        if(isInSettlement(buttonA))
+        {
+            settlementA = getSettlement(buttonA);
+            if(settlementA.getSize() == 1) return true;
+        }
+        if(isInSettlement(buttonB))
+        {
+            settlementB = getSettlement(buttonB);
+            if(settlementB.getSize() == 1) return true;
+        }
+        if(settlementA != null && settlementB != null)
+        {
+            if(settlementA == settlementB && settlementA.getSize() == 2) return true;
+        }
+
+        return false;
+
+       // return(settlementA.getSize() == 1 || settlementB.getSize() == 1 || (settlementA == settlementB && settlementA.getSize() == 2));
+    }
 }

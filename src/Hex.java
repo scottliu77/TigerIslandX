@@ -149,17 +149,21 @@ enum Terrain
 
 enum Building
 {
-    VILLAGER(true), TIGER(true), TOTORO(true), NONE(false);
+    VILLAGER(true, false), TIGER(true, true), TOTORO(true, true), NONE(false, false);
 
     private final boolean occupiesHex;
+    private final boolean permanent;
 
-    Building(boolean occupiesHex)
+    Building(boolean occupiesHex, boolean permanent)
     {
         this.occupiesHex = occupiesHex;
+        this.permanent = permanent;
     }
 
     public boolean occupiesHex()
     {
         return occupiesHex;
     }
+
+    public boolean isPermanent() {return permanent;}
 }

@@ -27,14 +27,15 @@ public class GameManager
 
     public boolean moveIsLegal(Point targetPoint)
     {
+        HexButton hexButton = board.getHexButton(targetPoint);
         if(!board.getTilePlaced())
         {
             Tile tile = board.getDeck().getTopTile();
-            return board.tilePlacementIsLegal(tile, board.getHexButton(targetPoint));
+            return board.tilePlacementIsLegal(tile, hexButton);
         }
         else
         {
-            return true;
+            return board.buildingPlacementIsLegal(activeBuilding, hexButton);
         }
     }
 

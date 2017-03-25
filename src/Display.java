@@ -196,7 +196,7 @@ class TurnStatusDisplay extends Display
     private void drawStrings()
     {
         g2d.setColor(Color.BLACK);
-        g2d.drawString("Placement Type: " + (board.getTilePlaced() ? "Build" : "Tile"), 4, 16);
+        g2d.drawString("Placement: " + (board.getTilePlaced() ? "Build" : "Tile"), 4, 16);
         g2d.drawString("ActvPlayer: " + (board.getActivePlayer().getName()), 4, 32);
         g2d.drawString("ActvBldng: " + board.getActiveBuilding().toString(), 4, 48);
     }

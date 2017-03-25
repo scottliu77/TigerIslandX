@@ -27,13 +27,11 @@ class TilePlacementMove implements PlayerMove
 
 class BuildingPlacementMove implements PlayerMove
 {
-    private Player player;
     private Point targetPoint;
     private Building building;
 
     public BuildingPlacementMove(Player player, Point targetPoint, Building building)
     {
-        this.player = player;
         this.targetPoint = targetPoint;
         this.building = building;
     }
@@ -41,11 +39,5 @@ class BuildingPlacementMove implements PlayerMove
     public void execute(Board board)
     {
         board.placeBuilding(targetPoint, building);
-        int meepleCost = 1;
-        if(building == Building.VILLAGER)
-        {
-            meepleCost = board.getHexButton(targetPoint).getHex().getLevel();
-        }
-        player.consumeMeeples(building, meepleCost);
     }
 }
