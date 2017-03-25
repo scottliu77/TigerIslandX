@@ -115,6 +115,14 @@ class HexButton extends Button
         this.hex.setLevel(previousHexLevel+1);
 
         Graphics2D g2d = hex.getImage().createGraphics();
+        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON );
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("" + hex.getLevel(), 25, 15);
+
+        g2d = hex.getHoverImage().createGraphics();
+        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON );
         g2d.setColor(Color.BLACK);
         g2d.drawString("" + hex.getLevel(), 25, 15);
 
@@ -137,6 +145,18 @@ class HexButton extends Button
 
         Color baseColor = activePlayer.getColor1();
         Color textColor = activePlayer.getColor2();
+
+        g2d.setColor(baseColor);
+        g2d.fillOval(7, 13, 20, 20);
+        g2d.setColor(Color.GRAY);
+        g2d.drawOval(7, 13, 20, 20);
+        g2d.setColor(textColor);
+        g2d.drawString(building.toString().substring(0, 2), 11, 28);
+
+        g2d = hex.getHoverImage().createGraphics();
+
+        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON );
 
         g2d.setColor(baseColor);
         g2d.fillOval(7, 13, 20, 20);

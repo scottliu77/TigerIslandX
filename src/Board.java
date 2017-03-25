@@ -51,7 +51,6 @@ public class Board
 
         hexButtons = new ArrayList<HexButton>();
 
-
         deck = new Deck();
 
         player1 = new Player("Player 1", Color.WHITE, Color.BLACK);

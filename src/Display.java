@@ -357,13 +357,20 @@ class SettlementsDisplay extends Display
     public void drawSettlements()
     {
         g2d.setColor(Color.BLACK);
-        g2d.drawString("Settlements:", 4, 24);
-        int y = 44;
+        g2d.drawString("Settlements:", 28, 16);
+        int y = 32;
         for(Settlement settlement : settlementManager.getSettlements())
         {
+            Color color1 = settlement.getOwner().getColor1();
+            Color color2 = settlement.getOwner().getColor2();
+            g2d.setColor(color1);
+            g2d.fillRect(1, y-12, 126, 16);
+            g2d.setColor(color2);
             String string = "Settlement " +  settlement.getSettlementId() + " Size: " + settlement.getSize();
             g2d.drawString(string, 4, y);
-            y += 20;
+            g2d.setColor(Color.GRAY);
+            g2d.drawRect(0, y-12, 127, 16);
+            y += 16;
         }
     }
 
