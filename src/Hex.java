@@ -15,10 +15,12 @@ public class Hex
 
     private int level;
     private int tileId;
+    private int settlementId;
 
     private final String typeName;
     private final Terrain terrain;
 
+    private Player owner;
     private Building building;
 
     // Hexagon shape definition:
@@ -64,6 +66,8 @@ public class Hex
         level = 0;
         typeName = terrain.toString();
         building = Building.NONE;
+        owner = null;
+        settlementId = -1;
     }
 
     public BufferedImage getImage()
@@ -91,6 +95,8 @@ public class Hex
         return tileId;
     }
 
+    public int getSettlementId() { return settlementId; }
+
     public Terrain getTerrain()
     {
         return terrain;
@@ -103,15 +109,23 @@ public class Hex
         this.level = newLevel;
     }
 
+    public void setSettlementId(int settlementId) { this.settlementId = settlementId; }
+
     public Building getBuilding() {return building;}
 
-    public void placeBuilding(Building building)
+    public void placeBuilding(Building building, Player player)
     {
         if(this.building.occupiesHex())
         {
             System.out.println("Error, build target has existing building");
         }
         this.building = building;
+        owner = player;
+    }
+
+    public Player getOwner()
+    {
+        return owner;
     }
 }
 

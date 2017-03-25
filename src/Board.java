@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Wylie on 3/14/2017.
@@ -18,6 +19,8 @@ public class Board
     private ArrayList<HexButton> hexButtons;
     private HashMap<Point, HexButton> buttonMap;
 
+    private SettlementManager settlementManager;
+
     private static final int WIDTH = 512;
     private static final int HEIGHT = 512;
 
@@ -28,6 +31,8 @@ public class Board
 
     private boolean tilePlaced;
     private boolean playerTracker;
+
+    private int settlementCount;
 
     private static final Point[] neighborPts =
             {
@@ -45,6 +50,7 @@ public class Board
         this.manager = manager;
 
         hexButtons = new ArrayList<HexButton>();
+
 
         deck = new Deck();
 
@@ -67,6 +73,8 @@ public class Board
         //resetButtonMap();
 
         resetMapWithCenterHex();
+
+        settlementManager = new SettlementManager(this);
     }
 
     // ====================================
@@ -146,6 +154,7 @@ public class Board
     {
         resetDeck();
         tilePlaced = false;
+        settlementCount = 0;
         player1.resetResources();
         player1.resetScore();
         player2.resetResources();
@@ -170,6 +179,7 @@ public class Board
             // activePlayer is then switched from player1 to player2 or vice-versa:
             activePlayer = (activePlayer == player1 ? player2 : player1);
         }
+        settlementManager.updateSettlements();
     }
 
     // ====================================
@@ -257,6 +267,13 @@ public class Board
     {
         HexButton hexButton = buttonMap.get(buttonPoint);
         hexButton.placeBuilding(building, activePlayer);
+        /*
+        if(building == Building.VILLAGER)
+        {
+            settlements.add(new Settlement(hexButton, settlementCount));
+            settlementCount++;
+        }
+        */
     }
 
     // ====================================
@@ -267,7 +284,7 @@ public class Board
         return buttonMap;
     }
 
-    private HexButton getNeighborButton(HexButton base, int index)
+    public HexButton getNeighborButton(HexButton base, int index)
     {
         if(index < 0 || index > 5)
         {
@@ -325,6 +342,52 @@ public class Board
         return manager.getActiveBuilding();
     }
 
+    public CopyOnWriteArrayList<Settlement> getSettlements()
+    {
+        return settlementManager.getSettlements();
+    }
+
+        /*
+    public void updateSettlements()
+    {
+        for(Settlement settlement : settlements)
+        {
+            System.out.println("updating settlement " + settlement.getSettlementId());
+            settlement.updateSettlement(this);
+        }
+
+        for(Settlement settlement1 : settlements)
+        {
+            for(Settlement settlement2 : settlements)
+            {
+                if(settlement1 != settlement2 && settlements.contains(settlement1))
+                {
+                    System.out.println("Checking settlements: " + settlement1.getSettlementId() + " + " + settlement2.getSettlementId());
+                    CopyOnWriteArrayList<HexButton> hexes1 = settlement1.getHexes();
+                    CopyOnWriteArrayList<HexButton> hexes2 = settlement2.getHexes();
+                    if(hexes1.containsAll(hexes2) && hexes2.containsAll(hexes1))
+                    {
+                        settlements.remove(settlement2);
+                    }
+                }
+            }
+            if(settlements.contains(settlement1))
+            {
+                if(settlement1.getSize() < 1)
+                {
+                    settlements.remove(settlement1);
+                }
+                else
+                {
+                    for (HexButton hex : settlement1.getHexes())
+                    {
+                        hex.getHex().setSettlementId(settlement1.getSettlementId());
+                    }
+                }
+            }
+        }
+    }
+    */
 
     // ==============================================
     // Tile Placement legality checking functions:
@@ -450,5 +513,9 @@ public class Board
         Hex hex = targetButton.getHex();
 
         return hex.getTerrain() == Terrain.EMPTY || hex.getTerrain() == Terrain.VOLCANO;
+    }
+
+    public SettlementManager getSettlementManager() {
+        return settlementManager;
     }
 }

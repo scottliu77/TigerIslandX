@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Display
 {
@@ -281,7 +283,7 @@ class HexDetailDisplay extends Display
 
     public HexDetailDisplay()
     {
-        super(new BufferedImage(129, 129, BufferedImage.TYPE_INT_ARGB), new Point(832, 352));
+        super(new BufferedImage(128, 148, BufferedImage.TYPE_INT_ARGB), new Point(832, 352));
         g2d = super.createGraphics();
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
@@ -292,9 +294,9 @@ class HexDetailDisplay extends Display
     public void drawBackground()
     {
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, 128, 128);
+        g2d.fillRect(0, 0, 128, 148);
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(0, 0, 128, 128);
+        g2d.drawRect(0, 0, 127, 147);
     }
 
     public void update(HexButton hoverButton)
@@ -315,7 +317,60 @@ class HexDetailDisplay extends Display
             g2d.drawString("Building: " + hex.getBuilding().toString(), 4, 60);
             g2d.drawString("Origin: (" + point.x + ", " + point.y + ")", 4, 80);
             g2d.drawString("Terrain: " + hex.getTypeName(), 4, 100);
-            g2d.drawString("SettlementId: " + "", 4, 120);
+            String playerName;
+            if(hex.getOwner() == null)
+            {
+                playerName = "None";
+            }
+            else
+            {
+                playerName = hex.getOwner().getName();
+            }
+            g2d.drawString("Owner: " + playerName, 4, 120);
+            g2d.drawString("SettlementId: " + hex.getSettlementId(), 4, 140);
         }
     }
+}
+
+class SettlementsDisplay extends Display
+{
+    SettlementManager settlementManager;
+    Graphics2D g2d;
+
+    public SettlementsDisplay(SettlementManager settlementManager)
+    {
+        super(new BufferedImage(128, 512, BufferedImage.TYPE_INT_ARGB), new Point(64, 128));
+        this.settlementManager = settlementManager;
+        g2d = super.createGraphics();
+        drawBase();
+        drawSettlements();
+    }
+
+    public void drawBase()
+    {
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, 128, 512);
+        g2d.setColor(Color.GRAY);
+        g2d.drawRect(0, 0, 127, 511);
+    }
+
+    public void drawSettlements()
+    {
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("Settlements:", 4, 24);
+        int y = 44;
+        for(Settlement settlement : settlementManager.getSettlements())
+        {
+            String string = "Settlement " +  settlement.getSettlementId() + " Size: " + settlement.getSize();
+            g2d.drawString(string, 4, y);
+            y += 20;
+        }
+    }
+
+    public void update()
+    {
+        drawBase();
+        drawSettlements();
+    }
+
 }

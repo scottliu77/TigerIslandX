@@ -41,6 +41,7 @@ public class TilePlacementTest
         assert(tile.getA() == rockyHex && tile.getB() == lakeHex && tile.getVolcano().getTerrain() == Terrain.VOLCANO && tile.getTileId() == tileId);
     }
 
+    // This one's way too complicated for a unit test so I moved most of it to the acceptance test scenarios
     @Test
     public void testTilePlacement() throws Exception
     {

@@ -16,6 +16,7 @@ public class Button
     private BufferedImage hoverImage;
     private boolean hover;
 
+
     public Button(Point origin, BufferedImage baseImage, BufferedImage hoverImage)
     {
         this.origin = origin;
@@ -128,7 +129,7 @@ class HexButton extends Button
 
     public void placeBuilding(Building building, Player activePlayer)
     {
-        hex.placeBuilding(building);
+        hex.placeBuilding(building, activePlayer);
         Graphics2D g2d = hex.getImage().createGraphics();
 
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
