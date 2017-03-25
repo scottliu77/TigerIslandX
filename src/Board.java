@@ -269,6 +269,7 @@ public class Board
         {
             hexButton.placeBuilding(building, activePlayer);
             activePlayer.consumeMeeples(building, 1);
+            activePlayer.increaseScore(building);
         }
         /*
         if(building == Building.VILLAGER)

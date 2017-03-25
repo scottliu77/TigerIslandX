@@ -71,6 +71,11 @@ public class Player
         score += points;
     }
 
+    public void increaseScore(Building building)
+    {
+        increaseScore(building.getPlaceScore());
+    }
+
     public void resetScore()
     {
         score = 0;

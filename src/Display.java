@@ -158,6 +158,7 @@ class PlayerStatusDisplay extends Display
         g2d.drawString("" + meeples[Building.VILLAGER.ordinal()], 64 + 8, 54);
         g2d.drawString("" + meeples[Building.TIGER.ordinal()], 112 + 8, 54);
         g2d.drawString("" + meeples[Building.TOTORO.ordinal()], 160 + 8, 54);
+        g2d.drawString("Score: " + player.getScore(), 4, 60);
     }
 
     public void update()
