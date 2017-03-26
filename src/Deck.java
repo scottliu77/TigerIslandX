@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * Created by Wylie on 3/15/2017.
@@ -17,24 +18,56 @@ public class Deck
     private Random rand;
 
     private Tile topTile;
-    private ArrayList<Tile> tiles;
-
+    private ArrayList<Tile> tiles = new ArrayList<Tile>();
+    private Stack<Tile> randomizedDeck = new Stack();
     private int tileCount;
     private Orientation orientation;
 
     public Deck()
     {
+        resetTileCount();
+        /*
+        rand = new Random();
+        tileCount = 0;
+        orientation = Orientation.N;
+        for (int hexAVariation = 0; hexAVariation < 4; hexAVariation++){
+            for (int hexBVariation = 0; hexBVariation < 4; hexBVariation++){
+                for (int numberOfRepeatedTiles = 0; numberOfRepeatedTiles < 3; numberOfRepeatedTiles++){
+                    Hex hexAtemp = new Hex(Terrain.values()[hexAVariation],tileCount);
+                    Hex hexBtemp = new Hex(Terrain.values()[hexBVariation],tileCount);
+                    orientation = Orientation.N;
+                    Tile generatedTile = new Tile(hexAtemp, hexBtemp, tileCount, orientation);
+                    //System.out.println(""+hexAVariation+hexBVariation+numberOfRepeatedTiles);
+                    tiles.add(generatedTile);
+                    tileCount++;
+                }
+            }
+        }
+
+
+        for (int totalNumberOfTiles = 47; totalNumberOfTiles >= 0; totalNumberOfTiles--){
+            System.out.println(rand.nextInt(totalNumberOfTiles));
+            int selectedTileIndex = rand.nextInt(totalNumberOfTiles);
+            randomizedDeck.push(tiles.get(selectedTileIndex));
+            tiles.remove(selectedTileIndex);
+        }
+        topTile = randomizedDeck.peek();
+        */
+/*
+
         rand = new Random();
         tiles = new ArrayList<Tile>();
         tileCount = 1;
         orientation = Orientation.N;
-        nextTile();
+        nextTile();*/
     }
 
     public void nextTile()
     {
-        topTile = new Tile(randomHex(), randomHex(), tileCount, orientation);
-        tileCount++;
+        //topTile = new Tile(randomHex(), randomHex(), tileCount, orientation);
+        //tileCount++;
+        randomizedDeck.pop();
+        topTile = randomizedDeck.peek();
     }
 
     public Tile getTopTile()
@@ -56,20 +89,47 @@ public class Deck
 
     public void rotLeft()
     {
-        topTile.rotLeft();
-        orientation = orientation.rotLeft();
+        Tile temp = randomizedDeck.pop();
+        temp.rotLeft();
+        randomizedDeck.push(temp);
+        //orientation = orientation.rotLeft();
     }
 
     public void rotRight()
     {
-        topTile.rotRight();
-        orientation = orientation.rotRight();
+        Tile temp = randomizedDeck.pop();
+        temp.rotRight();
+        randomizedDeck.push(temp);
+        //orientation = orientation.rotRight();
     }
 
     public void resetTileCount()
     {
-        tileCount = 1;
+        rand = new Random();
+        tileCount = 0;
         orientation = Orientation.N;
-        nextTile();
+        for (int hexAVariation = 0; hexAVariation < 4; hexAVariation++){
+            for (int hexBVariation = 0; hexBVariation < 4; hexBVariation++){
+                for (int numberOfRepeatedTiles = 0; numberOfRepeatedTiles < 3; numberOfRepeatedTiles++){
+                    Hex hexAtemp = new Hex(Terrain.values()[hexAVariation],tileCount);
+                    Hex hexBtemp = new Hex(Terrain.values()[hexBVariation],tileCount);
+                    orientation = Orientation.N;
+                    Tile generatedTile = new Tile(hexAtemp, hexBtemp, tileCount, orientation);
+                    //System.out.println(""+hexAVariation+hexBVariation+numberOfRepeatedTiles);
+                    tiles.add(generatedTile);
+                    tileCount++;
+                }
+            }
+        }
+
+
+        for (int totalNumberOfTiles = 47; totalNumberOfTiles >= 1; totalNumberOfTiles--){
+            System.out.println(totalNumberOfTiles);
+            int selectedTileIndex = rand.nextInt(totalNumberOfTiles);
+            System.out.println(selectedTileIndex);
+            randomizedDeck.push(tiles.get(selectedTileIndex));
+            tiles.remove(selectedTileIndex);
+        }
+        topTile = randomizedDeck.peek();
     }
 }
