@@ -65,7 +65,7 @@ public class TilePlacementTest
         Point pointA = new Point(initialPoint.x + posPoints[randomOrientation.ordinal()].x, initialPoint.y + posPoints[randomOrientation.ordinal()].y);
         Point pointB = new Point(initialPoint.x + posPoints[(randomOrientation.ordinal() + 1) % 6].x, initialPoint.y + posPoints[(randomOrientation.ordinal() + 1) % 6].y);
 
-        board.placeTile(initialPoint);
+        board.placeTile(initialPoint, randomOrientation);
 
         HexButton targetButton = buttonMap.get(initialPoint);
         HexButton buttonA = buttonMap.get(pointA);

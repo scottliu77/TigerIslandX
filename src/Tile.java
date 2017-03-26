@@ -37,17 +37,17 @@ public class Tile
 
     public void setOrientation(Orientation orientation) {this.orientation = orientation;}
 
-    public int getOrientation()
+    public Orientation getOrientation()
     {
-        return orientation.ordinal();
+        return orientation;
     }
 
     // NEVER MODIFY ORIENTATION OUTSIDE THE TILE CLASS!
     // If you need to modify a state by n places, ALWAYS use getOrientationPlus(n) or call rotLeft/rotRight in a loop
     // If you try to just use getOrientation() then modify that, it opens the door to a lot of errors
-    public int getOrientationPlus(int number)
+    public Orientation getOrientationPlus(int number)
     {
-        return orientation.getPlus(number).ordinal();
+        return orientation.getPlus(number);
     }
 
     public Hex getVolcano()

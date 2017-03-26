@@ -78,7 +78,7 @@ public class HexAndTileTest {
         Orientation genericOrientation = Orientation.SW;
         Tile genericTile = new Tile(genericHexA, genericHexB, genericTileID, genericOrientation);
         genericTile.rotRight();
-        assert (genericTile.getOrientation()==5);
+        assert (genericTile.getOrientation()==Orientation.values()[5]);
     }
     @Test
     public void testTileRotLeft() throws Exception {
@@ -88,7 +88,7 @@ public class HexAndTileTest {
         Orientation genericOrientation = Orientation.SW;
         Tile genericTile = new Tile(genericHexA, genericHexB, genericTileID, genericOrientation);
         genericTile.rotLeft();
-        assert (genericTile.getOrientation()==3);
+        assert (genericTile.getOrientation()==Orientation.values()[3]);
     }
     @Test
     public void testTileSetOrientation() throws Exception {
@@ -98,7 +98,7 @@ public class HexAndTileTest {
         Orientation genericOrientation = Orientation.SW;
         Tile genericTile = new Tile(genericHexA, genericHexB, genericTileID, genericOrientation);
         genericTile.setOrientation(Orientation.NE);
-        assert (genericTile.getOrientation()==1);
+        assert (genericTile.getOrientation()==Orientation.values()[1]);
     }
     @Test
     public void testTileOrientationPlus() throws Exception {

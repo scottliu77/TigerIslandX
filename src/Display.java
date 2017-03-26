@@ -260,10 +260,10 @@ class DeckDisplay extends Display
         Tile tile = deck.getTopTile();
         g2d.drawImage(tile.getVolcano().getImage(), center.x, center.y, null);
 
-        int orientation = tile.getOrientation();
+        int orientation = tile.getOrientation().ordinal();
         g2d.drawImage(tile.getA().getImage(), posPoints[orientation].x, posPoints[orientation].y, null);
 
-        orientation = tile.getOrientationPlus(1);
+        orientation = tile.getOrientationPlus(1).ordinal();
         g2d.drawImage(tile.getB().getImage(), posPoints[orientation].x, posPoints[orientation].y, null);
 
         g2d.setColor(Color.BLACK);
@@ -343,7 +343,7 @@ class SettlementsDisplay extends Display
 
     public SettlementsDisplay(SettlementManager settlementManager)
     {
-        super(new BufferedImage(128, 512, BufferedImage.TYPE_INT_ARGB), new Point(64, 128));
+        super(new BufferedImage(128, 512, BufferedImage.TYPE_INT_ARGB), new Point(64, 32));
         this.settlementManager = settlementManager;
         g2d = super.createGraphics();
         drawBase();

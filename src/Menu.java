@@ -201,17 +201,16 @@ class BaseMenu extends Menu
     public void clearHexes()
     {
         HashMap<Point, HexButton> buttonMap = gameManager.getButtonMap();
-        gameManager.resetDeck();
         for( HexButton button : buttonMap.values())
         {
             button.resetButton();
         }
+        gameManager.resetDeck();
         updateDisplays();
         /*
         super.clearButtons();
         addHexButtons(board.getButtonMap());
         */
-
     }
 
     public void updateHexButtons(Graphics2D G2D)

@@ -72,4 +72,9 @@ public class Deck
         orientation = Orientation.N;
         nextTile();
     }
+
+    public Orientation getOrientation()
+    {
+        return orientation;
+    }
 }

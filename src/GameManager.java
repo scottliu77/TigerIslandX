@@ -21,7 +21,7 @@ public class GameManager
     {
         if(!board.getTilePlaced())
         {
-            return new TilePlacementMove(board.getActivePlayer(), targetPoint);
+            return new TilePlacementMove(board.getActivePlayer(), targetPoint, board.getDeck().getOrientation());
         }
         else if (!expandNext)
         {

@@ -158,6 +158,7 @@ public class Board
         player1.resetScore();
         player2.resetResources();
         player2.resetScore();
+        settlementManager.updateSettlements();
     }
 
     // ====================================
@@ -184,9 +185,10 @@ public class Board
     // ====================================
     // Tile Placement methods:
 
-    public void placeTile(Point origin)
+    public void placeTile(Point origin, Orientation orientation)
     {
         Tile tile = deck.getTopTile();
+        tile.setOrientation(orientation);
         HexButton centerButton = buttonMap.get(origin);
 
         if(tilePlacementIsLegal(tile, centerButton))
@@ -194,8 +196,8 @@ public class Board
             centerButton.changeHex(tile.getVolcano());
             placePerimeterHexes(origin);
 
-            placeHex(origin, tile.getA(), tile.getOrientation());
-            placeHex(origin, tile.getB(), tile.getOrientationPlus(1));
+            placeHex(origin, tile.getA(), tile.getOrientation().ordinal());
+            placeHex(origin, tile.getB(), tile.getOrientationPlus(1).ordinal());
 
             deck.nextTile();
         }
@@ -210,8 +212,8 @@ public class Board
             centerButton.changeHex(tile.getVolcano());
             placePerimeterHexes(origin);
 
-            placeHex(origin, tile.getA(), tile.getOrientation());
-            placeHex(origin, tile.getB(), tile.getOrientationPlus(1));
+            placeHex(origin, tile.getA(), tile.getOrientation().ordinal());
+            placeHex(origin, tile.getB(), tile.getOrientationPlus(1).ordinal());
         }
     }
 
@@ -508,8 +510,8 @@ public class Board
 
     private boolean destroysWholeSettlement(Tile tile, HexButton targetButton)
     {
-        int positionA = tile.getOrientation();
-        int positionB = tile.getOrientationPlus(1);
+        int positionA = tile.getOrientation().ordinal();
+        int positionB = tile.getOrientationPlus(1).ordinal();
 
         HexButton buttonA = getNeighborButton(targetButton, positionA);
         HexButton buttonB = getNeighborButton(targetButton, positionB);
@@ -519,8 +521,8 @@ public class Board
 
     public boolean destroysPermanentBuilding(Tile tile, HexButton targetButton)
     {
-        int positionA = tile.getOrientation();
-        int positionB = tile.getOrientationPlus(1);
+        int positionA = tile.getOrientation().ordinal();
+        int positionB = tile.getOrientationPlus(1).ordinal();
 
         HexButton buttonA = getNeighborButton(targetButton, positionA);
         HexButton buttonB = getNeighborButton(targetButton, positionB);
@@ -531,8 +533,8 @@ public class Board
     // adjacentToNonEmptyHex returns true if any Fex of the Tile will be adjacent to a non-Empty Hex
     public boolean adjacentToNonEmptyHex(Tile tile, HexButton targetButton)
     {
-        int positionA = tile.getOrientation();
-        int positionB = tile.getOrientationPlus(1);
+        int positionA = tile.getOrientation().ordinal();
+        int positionB = tile.getOrientationPlus(1).ordinal();
 
         HexButton buttonA = getNeighborButton(targetButton, positionA);
         HexButton buttonB = getNeighborButton(targetButton, positionB);
@@ -561,8 +563,8 @@ public class Board
     // allHexesEmpty returns true if you are attempting to place a Tile on three Empty hexes
     public boolean allHexesEmpty(Tile tile, HexButton targetButton)
     {
-        int positionA = tile.getOrientation();
-        int positionB = tile.getOrientationPlus(1);
+        int positionA = tile.getOrientation().ordinal();
+        int positionB = tile.getOrientationPlus(1).ordinal();
 
         HexButton buttonA = getNeighborButton(targetButton, positionA);
         HexButton buttonB = getNeighborButton(targetButton, positionB);
@@ -577,8 +579,8 @@ public class Board
     // hexesShareLevel returns true if you are attempting to place a Tile on three hexes of the same level
     public boolean hexesShareLevel(Tile tile, HexButton targetButton)
     {
-        int positionA = tile.getOrientation();
-        int positionB = tile.getOrientationPlus(1);
+        int positionA = tile.getOrientation().ordinal();
+        int positionB = tile.getOrientationPlus(1).ordinal();
 
         HexButton buttonA = getNeighborButton(targetButton, positionA);
         HexButton buttonB = getNeighborButton(targetButton, positionB);
@@ -593,8 +595,8 @@ public class Board
     // hexesShareTile returns true if you are attempting to place a Tile directly over another
     public boolean hexesShareTile(Tile tile, HexButton targetButton)
     {
-        int positionA = tile.getOrientation();
-        int positionB = tile.getOrientationPlus(1);
+        int positionA = tile.getOrientation().ordinal();
+        int positionB = tile.getOrientationPlus(1).ordinal();
 
         HexButton buttonA = getNeighborButton(targetButton, positionA);
         HexButton buttonB = getNeighborButton(targetButton, positionB);

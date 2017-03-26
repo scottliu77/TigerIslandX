@@ -61,7 +61,7 @@ public class MyStepdefs {
     @When("^Player selects a target Hex$")
     public void playerSelectsATargetHex() throws Throwable
     {
-        board.placeTile(targetButton.getOrigin());
+        board.placeTile(targetButton.getOrigin(), tile.getOrientation());
     }
 
     @Then("^Volcano placed at target Hex$")
@@ -114,13 +114,13 @@ public class MyStepdefs {
 
     @And("^target Hex and neighbors share a tile$")
     public void targetHexAndNeighborsShareATile() throws Throwable {
-        board.placeTile(targetButton.getOrigin());
+        board.placeTile(targetButton.getOrigin(), tile.getOrientation());
         target = targetButton.getHex();
     }
 
     @And("^initial tile placed$")
     public void initialTilePlaced() throws Throwable {
-        board.placeTile(targetButton.getOrigin());
+        board.placeTile(targetButton.getOrigin(), tile.getOrientation());
     }
 
     @When("^Player selects a distant Hex$")
@@ -129,7 +129,7 @@ public class MyStepdefs {
         Point distantPoint = new Point(initialPoint.x + 3*posPoints[0].x, initialPoint.y + 3*posPoints[0].y);
         distantButton = board.getButtonMap().get(distantPoint);
         distant = distantButton.getHex();
-        board.placeTile(distantPoint);
+        board.placeTile(distantPoint, tile.getOrientation());
     }
 
     @Then("^distant Hex retains original Hex$")

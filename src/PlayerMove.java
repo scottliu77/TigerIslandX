@@ -12,16 +12,18 @@ class TilePlacementMove implements PlayerMove
 {
     private Player player;
     private Point targetPoint;
+    private Orientation orientation;
 
-    public TilePlacementMove(Player player, Point targetPoint)
+    public TilePlacementMove(Player player, Point targetPoint, Orientation orientation)
     {
         this.player = player;
         this.targetPoint = targetPoint;
+        this.orientation = orientation;
     }
 
     public void execute(Board board)
     {
-        board.placeTile(targetPoint);
+        board.placeTile(targetPoint, orientation);
     }
 }
 
