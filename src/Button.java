@@ -285,7 +285,7 @@ class ExpansionSelectButton extends Button
 
     public ExpansionSelectButton(Point origin, GameManager manager)
     {
-        super(origin, new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
+        super(origin, new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB));
         this.manager = manager;
         buildBase();
         buildHover();
@@ -296,11 +296,11 @@ class ExpansionSelectButton extends Button
         Graphics2D g2d = super.getBaseImage().createGraphics();
 
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, 64, 64);
+        g2d.fillRect(0, 0, 64, 32);
         g2d.setColor(Color.GRAY);
-        g2d.drawRect(0, 0, 63, 63);
+        g2d.drawRect(0, 0, 63, 31);
         g2d.setColor(Color.BLACK);
-        g2d.drawString("EXPAND", 4, 32);
+        g2d.drawString("EXPAND", 4, 16);
     }
 
     public void buildHover()
@@ -308,11 +308,11 @@ class ExpansionSelectButton extends Button
         Graphics2D g2d = super.getHoverImage().createGraphics();
 
         g2d.setColor(Color.GRAY);
-        g2d.fillRect(0, 0, 64, 64);
+        g2d.fillRect(0, 0, 64, 32);
         g2d.setColor(Color.GRAY);
-        g2d.drawRect(0, 0, 63, 63);
+        g2d.drawRect(0, 0, 63, 31);
         g2d.setColor(Color.BLACK);
-        g2d.drawString("EXPAND", 4, 32);
+        g2d.drawString("EXPAND", 4, 16);
     }
 
     public void press()
@@ -330,10 +330,10 @@ class MeepleSelectButton extends Button
 
     public MeepleSelectButton(Point origin, GameManager manager, Building building)
     {
-        super(origin, new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB) );
+        super(origin, new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB) );
         this.manager = manager;
         this.building = building;
-        pressedImage = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+        pressedImage = new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB);
         buildBase();
         buildHover();
         buildPressed();
@@ -345,11 +345,11 @@ class MeepleSelectButton extends Button
         Graphics2D g2d = super.getBaseImage().createGraphics();
 
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, 64, 64);
+        g2d.fillRect(0, 0, 64, 32);
         g2d.setColor(Color.GRAY);
-        g2d.drawRect(0, 0, 63, 63);
+        g2d.drawRect(0, 0, 63, 31);
         g2d.setColor(Color.BLACK);
-        g2d.drawString(building.toString(), 4, 32);
+        g2d.drawString(building.toString(), 4, 16);
     }
 
     public void buildHover()
@@ -357,11 +357,11 @@ class MeepleSelectButton extends Button
         Graphics2D g2d = super.getHoverImage().createGraphics();
 
         g2d.setColor(Color.GRAY);
-        g2d.fillRect(0, 0, 64, 64);
+        g2d.fillRect(0, 0, 64, 32);
         g2d.setColor(Color.GRAY);
-        g2d.drawRect(0, 0, 63, 63);
+        g2d.drawRect(0, 0, 63, 31);
         g2d.setColor(Color.BLACK);
-        g2d.drawString(building.toString(), 4, 32);
+        g2d.drawString(building.toString(), 4, 16);
     }
 
     public void buildPressed()
@@ -369,11 +369,11 @@ class MeepleSelectButton extends Button
         Graphics2D g2d = pressedImage.createGraphics();
 
         g2d.setColor(Color.GRAY);
-        g2d.fillRect(0, 0, 64, 64);
+        g2d.fillRect(0, 0, 64, 32);
         g2d.setColor(Color.GRAY);
-        g2d.drawRect(0, 0, 63, 63);
+        g2d.drawRect(0, 0, 63, 31);
         g2d.setColor(Color.BLACK);
-        g2d.drawString(building.toString(), 4, 32);
+        g2d.drawString(building.toString(), 4, 16);
     }
 
     public void press()
@@ -405,7 +405,7 @@ class MeepleSelectButton extends Button
 
      public TerrainSelectButton(Point origin, GameManager manager, Terrain terrain)
      {
-         super(origin, new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
+         super(origin, new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB));
          this.manager = manager;
          this.terrain = terrain;
          buildBase();
@@ -417,11 +417,11 @@ class MeepleSelectButton extends Button
          Graphics2D g2d = super.getBaseImage().createGraphics();
 
          g2d.setColor(Color.WHITE);
-         g2d.fillRect(0, 0, 64, 64);
+         g2d.fillRect(0, 0, 64, 32);
          g2d.setColor(Color.GRAY);
-         g2d.drawRect(0, 0, 63, 63);
+         g2d.drawRect(0, 0, 63, 31);
          g2d.setColor(Color.BLACK);
-         g2d.drawString(terrain.toString(), 4, 32);
+         g2d.drawString(terrain.toString(), 4, 16);
      }
 
      public void buildHover()
@@ -429,11 +429,11 @@ class MeepleSelectButton extends Button
          Graphics2D g2d = super.getHoverImage().createGraphics();
 
          g2d.setColor(Color.GRAY);
-         g2d.fillRect(0, 0, 64, 64);
+         g2d.fillRect(0, 0, 64, 32);
          g2d.setColor(Color.GRAY);
-         g2d.drawRect(0, 0, 63, 63);
+         g2d.drawRect(0, 0, 63, 31);
          g2d.setColor(Color.BLACK);
-         g2d.drawString(terrain.toString(), 4, 32);
+         g2d.drawString(terrain.toString(), 4, 16);
      }
 
      public void press()

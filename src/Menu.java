@@ -187,13 +187,13 @@ class BaseMenu extends Menu
 
         super.addButton(new MeepleSelectButton(new Point(832, 512), gameManager, Building.VILLAGER));
         super.addButton(new MeepleSelectButton(new Point(896, 512), gameManager, Building.TIGER));
-        super.addButton(new MeepleSelectButton(new Point(896, 576), gameManager, Building.TOTORO));
-        super.addButton(new ExpansionSelectButton(new Point(832, 576), gameManager));
+        super.addButton(new MeepleSelectButton(new Point(896, 544), gameManager, Building.TOTORO));
+        super.addButton(new ExpansionSelectButton(new Point(832, 544), gameManager));
 
-        super.addButton(new TerrainSelectButton(new Point(832, 640), gameManager, Terrain.LAKE));
-        super.addButton(new TerrainSelectButton(new Point(896, 640), gameManager, Terrain.ROCKY));
-        super.addButton(new TerrainSelectButton(new Point(832, 704), gameManager, Terrain.GRASS));
-        super.addButton(new TerrainSelectButton(new Point(896, 704), gameManager, Terrain.JUNGLE));
+        super.addButton(new TerrainSelectButton(new Point(832, 576), gameManager, Terrain.LAKE));
+        super.addButton(new TerrainSelectButton(new Point(896, 576), gameManager, Terrain.ROCKY));
+        super.addButton(new TerrainSelectButton(new Point(832, 608), gameManager, Terrain.GRASS));
+        super.addButton(new TerrainSelectButton(new Point(896, 608), gameManager, Terrain.JUNGLE));
 
         addHexButtons(board.getButtonMap());
     }
