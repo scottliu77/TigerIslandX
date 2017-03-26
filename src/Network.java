@@ -1,10 +1,9 @@
 /**
  * Created by mike on 3/21/17.
  */
-import java.awt.BorderLayout;
-import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 public class Network {
     public String fromServer;
@@ -32,25 +31,20 @@ public class Network {
         Thread receiveMessage = new Thread(new ReceiveChat(in, stdIn, out));
         receiveMessage.start();
 
-        tfield.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent ae)
-            {
-                // Here you will send it to the server side too, put that code here
-                fromUser = tfield.getText() + "\n";
-                if (fromUser != null)
-                {
-                    System.out.println("Client: " + fromUser);
-                    tarea.append(fromUser);
-                    out.println(fromUser);
-                    tfield.setText("");
-                }
-            }
-        });
-        //out.close();
-        //in.close();
-        //stdIn.close();
-        //kkSocket.close();
+        Scanner console = new Scanner(System.in);
+        String message;
+
+        while (true) {
+            message = console.nextLine();
+            out.println( message );
+            if (message.equals("exit"))
+                break;
+        }
+
+        out.close();
+        in.close();
+        stdIn.close();
+        kkSocket.close();
     }
 
     private class ReceiveChat implements Runnable {
@@ -82,16 +76,18 @@ public class Network {
     }
 
     public static void main(String... args) {
-        SwingUtilities.invokeLater(new Runnable() {
+
+       Thread alien = new Thread(new Runnable() {
             public void run() {
-                KnockKnockClient client = new KnockKnockClient();
+                Network net = new Network();
                 try {
-                    client.Client();
+                    net.Client();
                 }
                 catch(Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+       alien.start();
     }
 }

@@ -10,6 +10,7 @@ public class Server {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(4444);
+            System.out.println("Awaiting connections...");
         } catch (IOException e) {
             System.err.println("Could not listen on port: 4444.");
             System.exit(1);
@@ -36,7 +37,7 @@ public class Server {
         while ((inputLine = in.readLine()) != null) {
             outputLine = inputLine;
             out.println( outputLine );
-            if (outputLine.equals("Bye."))
+            if (outputLine.equals("exit"))
                 break;
         }
         out.close();
