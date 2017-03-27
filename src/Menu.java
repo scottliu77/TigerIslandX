@@ -108,6 +108,11 @@ class Menu
         }
     }
 
+    public void setHoverButton(Button button)
+    {
+        this.hoverButton = button;
+    }
+
     public void addDisplays(Collection<Display> newDisplays)
     {
         displays.addAll(newDisplays);
@@ -261,6 +266,34 @@ class BaseMenu extends Menu
         player2StatusDisplay.update();
         settlementsDisplay.update();
         moveAnalyzerDisplay.update();
+    }
+
+    // This override has marginally better performance on a large board than default Menu.checkForHover:
+    public void checkForHover(Point point)
+    {
+        // Most likely case is that the button previously hovered over is still being hovered over, so check that first:
+        Button hoverButton = super.getHoverButton();
+
+        if(hoverButton != null)
+        {
+            if(hoverButton.hoverCheck(point))
+            {
+                return;
+            }
+        }
+
+        // If the previous button isn't still hovered over, check all the other buttons
+        for(Button button : super.getButtons())
+        {
+            if (button.hoverCheck(point))
+            {
+                super.setHoverButton(button);
+                return;
+            }
+        }
+
+        // Update only displays that are dependent on the currently hovered button:
+        hexDetailDisplay.update(getHoverHexButton());
     }
 
     // Presses the button on which the point lies if applicable

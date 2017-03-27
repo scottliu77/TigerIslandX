@@ -3,5 +3,5 @@
  */
 public enum GameResult
 {
-    SCORE, TIEBREAK, DEFAULT;
+    SCORE, TIEBREAK, DEFAULT
 }

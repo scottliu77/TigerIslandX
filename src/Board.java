@@ -17,7 +17,6 @@ public class Board
     Player players[];
     Player winner;
 
-    private ArrayList<HexButton> hexButtons;
     private HashMap<Point, HexButton> buttonMap;
 
     private SettlementManager settlementManager;
@@ -52,8 +51,6 @@ public class Board
     public Board(GameManager manager)
     {
         this.manager = manager;
-
-        hexButtons = new ArrayList<HexButton>();
 
         deck = new Deck();
 

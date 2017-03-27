@@ -5,7 +5,7 @@ import java.awt.*;
  */
 interface PlayerMove
 {
-    public void execute(Board board);
+    void execute(Board board);
 }
 
 class TilePlacementMove implements PlayerMove
