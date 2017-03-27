@@ -199,11 +199,20 @@ class TurnStatusDisplay extends Display
     private void drawStrings()
     {
         g2d.setColor(Color.BLACK);
-        g2d.drawString("Placement: " + (board.getTilePlaced() ? "Build" : "Tile"), 4, 16);
-        g2d.drawString("ActvPlayer: " + (board.getActivePlayer().getName()), 4, 32);
-        g2d.drawString("ActvBldng: " + board.getActiveBuilding().toString(), 4, 48);
-        g2d.drawString("ActvTerrn: " + board.getActiveTerrain().toString(), 4, 64);
-        g2d.drawString("ExpandNext: " + board.getExpandNext(), 4, 80);
+        if(board.getGameResult() == null)
+        {
+            g2d.drawString("Placement: " + (board.getTilePlaced() ? "Build" : "Tile"), 4, 16);
+            g2d.drawString("ActvPlayer: " + (board.getActivePlayer().getName()), 4, 32);
+            g2d.drawString("ActvBldng: " + board.getActiveBuilding().toString(), 4, 48);
+            g2d.drawString("ActvTerrn: " + board.getActiveTerrain().toString(), 4, 64);
+            g2d.drawString("ExpandNext: " + board.getExpandNext(), 4, 80);
+        }
+        else
+        {
+            g2d.drawString("Game Over!", 4, 16);
+            g2d.drawString("Winner: " + board.getWinner().getName(), 4, 32);
+            g2d.drawString("End Condn: " + board.getGameResult(), 4, 48);
+        }
     }
 
     public void update()
@@ -412,6 +421,10 @@ class MoveAnalyzerDisplay extends Display
     {
         g2d.setColor(Color.BLACK);
         g2d.drawString("Possible tile placements: " + moveAnalyzer.getTilePlacements().size(), 4, 16);
+        g2d.drawString("Possible villager placements: " + moveAnalyzer.getLegalVillagerPlacements().size(), 4, 32);
+        g2d.drawString("Possible tiger placements: " + moveAnalyzer.getLegalTigerPlacements().size(), 4, 48);
+        g2d.drawString("Possible totoro placements: " + moveAnalyzer.getLegalTotoroPlacements().size(), 4, 64);
+        g2d.drawString("Possible settlement expands: " + moveAnalyzer.getLegalSettlementExpansions().size(), 4, 80);
     }
 
     public void update()

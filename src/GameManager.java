@@ -65,6 +65,16 @@ public class GameManager
         }
     }
 
+    public void sendForfeitSignal(Player loser)
+    {
+
+    }
+
+    public void sendVictorySignal(Player winner)
+    {
+
+    }
+
     public void processTurn(PlayerMove playerMove)
     {
         board.processTurn(playerMove);

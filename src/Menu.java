@@ -53,6 +53,10 @@ class Menu
         for(Button button : buttons)
         {
             button.drawButton(g2d);
+            if(hoverButton != null)
+            {
+                hoverButton.drawButton(g2d);
+            }
         }
     }
 

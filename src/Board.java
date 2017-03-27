@@ -15,6 +15,7 @@ public class Board
     Player player1;
     Player player2;
     Player players[];
+    Player winner;
 
     private ArrayList<HexButton> hexButtons;
     private HashMap<Point, HexButton> buttonMap;
@@ -34,6 +35,8 @@ public class Board
     private boolean playerTracker;
 
     private int settlementCount;
+
+    private GameResult gameResult;
 
     private static final Point[] neighborPts =
             {
@@ -161,6 +164,7 @@ public class Board
         player2.resetResources();
         player2.resetScore();
         settlementManager.updateSettlements();
+        moveAnalyzer.analyze();
     }
 
     // ====================================
@@ -172,6 +176,14 @@ public class Board
         {
             playerMove.execute(this);
             tilePlaced = true;
+            settlementManager.updateSettlements();
+            moveAnalyzer.analyze();
+
+            if(moveAnalyzer.noPossibleBuildActions())
+            {
+                forfeitGame(activePlayer);
+            }
+
         }
         else // if tilePlaced is true, Board expects a Build Action
         {
@@ -180,10 +192,52 @@ public class Board
 
             // activePlayer is then switched from player1 to player2 or vice-versa:
             activePlayer = (activePlayer == player1 ? player2 : player1);
+            settlementManager.updateSettlements();
+            moveAnalyzer.analyze();
+
+            if(activePlayer.outOfResources())
+            {
+                endGame(activePlayer);
+            }
         }
-        settlementManager.updateSettlements();
-        moveAnalyzer.updateMoveset();
-        moveAnalyzer.updateTilePlacements();
+
+
+    }
+
+    public void forfeitGame(Player loser)
+    {
+        manager.sendForfeitSignal(loser);
+        if(loser == player1)
+        {
+            winner = player2;
+        }
+        else
+        {
+            winner = player1;
+        }
+        gameResult = GameResult.DEFAULT;
+    }
+
+    public void endGame(Player tieVictor)
+    {
+        int score1 = player1.getScore();
+        int score2 = player2.getScore();
+        if(score1 > score2)
+        {
+            winner = player1;
+            gameResult = GameResult.SCORE;
+        }
+        else if(score2 > score1)
+        {
+            winner = player2;
+            gameResult = GameResult.SCORE;
+        }
+        else
+        {
+            winner = tieVictor;
+            gameResult = GameResult.TIEBREAK;
+        }
+        manager.sendVictorySignal(winner);
     }
 
     // ====================================
@@ -463,6 +517,10 @@ public class Board
     {
         return settlementManager.getSettlements();
     }
+
+    public GameResult getGameResult() { return gameResult; }
+
+    public Player getWinner() { return winner; }
 
     // ==============================================
     // Tile Placement legality checking functions:
