@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -384,4 +385,38 @@ class SettlementsDisplay extends Display
         drawSettlements();
     }
 
+}
+
+class MoveAnalyzerDisplay extends Display
+{
+    private MoveAnalyzer moveAnalyzer;
+    private Graphics2D g2d;
+
+    public MoveAnalyzerDisplay(MoveAnalyzer moveAnalyzer)
+    {
+        super(new BufferedImage(192, 128, BufferedImage.TYPE_INT_ARGB), new Point(32, 608));
+        g2d = super.getImg().createGraphics();
+        this.moveAnalyzer = moveAnalyzer;
+        update();
+    }
+
+    public void drawBase()
+    {
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, 192, 128);
+        g2d.setColor(Color.GRAY);
+        g2d.drawRect(0, 0, 191, 127);
+    }
+
+    public void drawStrings()
+    {
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("Possible tile placements: " + moveAnalyzer.getTilePlacements().size(), 4, 16);
+    }
+
+    public void update()
+    {
+        drawBase();
+        drawStrings();
+    }
 }

@@ -20,6 +20,7 @@ public class Board
     private HashMap<Point, HexButton> buttonMap;
 
     private SettlementManager settlementManager;
+    private MoveAnalyzer moveAnalyzer;
 
     private static final int WIDTH = 512;
     private static final int HEIGHT = 512;
@@ -74,6 +75,7 @@ public class Board
         resetMapWithCenterHex();
 
         settlementManager = new SettlementManager(this);
+        moveAnalyzer = new MoveAnalyzer(this);
     }
 
     // ====================================
@@ -180,6 +182,8 @@ public class Board
             activePlayer = (activePlayer == player1 ? player2 : player1);
         }
         settlementManager.updateSettlements();
+        moveAnalyzer.updateMoveset();
+        moveAnalyzer.updateTilePlacements();
     }
 
     // ====================================
@@ -452,6 +456,8 @@ public class Board
     public Terrain getActiveTerrain() { return manager.getActiveTerrain(); }
 
     public boolean getExpandNext() { return manager.getExpandNext(); }
+
+    public MoveAnalyzer getMoveAnalyzer() { return moveAnalyzer; }
 
     public CopyOnWriteArrayList<Settlement> getSettlements()
     {

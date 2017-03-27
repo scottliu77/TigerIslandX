@@ -159,6 +159,7 @@ class BaseMenu extends Menu
     private PlayerStatusDisplay player1StatusDisplay;
     private PlayerStatusDisplay player2StatusDisplay;
     private SettlementsDisplay settlementsDisplay;
+    private MoveAnalyzerDisplay moveAnalyzerDisplay;
 
     private GameManager gameManager;
 
@@ -180,6 +181,7 @@ class BaseMenu extends Menu
         super.addDisplay(player1StatusDisplay = new PlayerStatusDisplay(board.getPlayer1(), new Point(256, 32)));
         super.addDisplay(player2StatusDisplay = new PlayerStatusDisplay(board.getPlayer2(), new Point(544, 32)));
         super.addDisplay(settlementsDisplay = new SettlementsDisplay(board.getSettlementManager()));
+        super.addDisplay(moveAnalyzerDisplay = new MoveAnalyzerDisplay(board.getMoveAnalyzer()));
 
         // Note: should hold Board in Menu instead of at Display level...
         super.addButton(new RotateLeftButton((new Point(832, 256)), deck));
@@ -254,6 +256,7 @@ class BaseMenu extends Menu
         player1StatusDisplay.update();
         player2StatusDisplay.update();
         settlementsDisplay.update();
+        moveAnalyzerDisplay.update();
     }
 
     // Presses the button on which the point lies if applicable
