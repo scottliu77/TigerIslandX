@@ -108,7 +108,6 @@ public class GameManager
     public void setActiveBuilding(Building building)
     {
         activeBuilding = building;
-        expandNext = false;
     }
 
     public void setActiveTerrain(Terrain terrain)
