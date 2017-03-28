@@ -297,7 +297,7 @@ class HexDetailDisplay extends Display
 
     public HexDetailDisplay()
     {
-        super(new BufferedImage(128, 144, BufferedImage.TYPE_INT_ARGB), new Point(832, 336));
+        super(new BufferedImage(128, 148, BufferedImage.TYPE_INT_ARGB), new Point(832, 352));
         g2d = super.createGraphics();
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
@@ -308,9 +308,9 @@ class HexDetailDisplay extends Display
     public void drawBackground()
     {
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, 128, 144);
+        g2d.fillRect(0, 0, 128, 148);
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(0, 0, 127, 143);
+        g2d.drawRect(0, 0, 127, 147);
     }
 
     public void update(HexButton hoverButton)
@@ -326,11 +326,11 @@ class HexDetailDisplay extends Display
             Point point = hexButton.getOrigin();
             g2d.drawImage(hex.getImage(), 84, 4, null);
             g2d.setColor(Color.BLACK);
-            g2d.drawString("TileId: " + hex.getTileId(), 4, 19);
-            g2d.drawString("Level: " + hex.getLevel(), 4, 39);
-            g2d.drawString("Building: " + hex.getBuilding().toString(), 4, 59);
-            g2d.drawString("Origin: (" + point.x + ", " + point.y + ")", 4, 79);
-            g2d.drawString("Terrain: " + hex.getTypeName(), 4, 99);
+            g2d.drawString("TileId: " + hex.getTileId(), 4, 20);
+            g2d.drawString("Level: " + hex.getLevel(), 4, 40);
+            g2d.drawString("Building: " + hex.getBuilding().toString(), 4, 60);
+            g2d.drawString("Origin: (" + point.x + ", " + point.y + ")", 4, 80);
+            g2d.drawString("Terrain: " + hex.getTypeName(), 4, 100);
             String playerName;
             if(hex.getOwner() == null)
             {
@@ -340,8 +340,8 @@ class HexDetailDisplay extends Display
             {
                 playerName = hex.getOwner().getName();
             }
-            g2d.drawString("Owner: " + playerName, 4, 119);
-            g2d.drawString("SettlementId: " + hex.getSettlementId(), 4, 139);
+            g2d.drawString("Owner: " + playerName, 4, 120);
+            g2d.drawString("SettlementId: " + hex.getSettlementId(), 4, 140);
         }
     }
 }
@@ -353,7 +353,7 @@ class SettlementsDisplay extends Display
 
     public SettlementsDisplay(SettlementManager settlementManager)
     {
-        super(new BufferedImage(128, 512, BufferedImage.TYPE_INT_ARGB), new Point(64, 16));
+        super(new BufferedImage(128, 512, BufferedImage.TYPE_INT_ARGB), new Point(64, 32));
         this.settlementManager = settlementManager;
         g2d = super.createGraphics();
         drawBase();
@@ -403,7 +403,7 @@ class MoveAnalyzerDisplay extends Display
 
     public MoveAnalyzerDisplay(MoveAnalyzer moveAnalyzer)
     {
-        super(new BufferedImage(192, 128, BufferedImage.TYPE_INT_ARGB), new Point(32, 544));
+        super(new BufferedImage(192, 128, BufferedImage.TYPE_INT_ARGB), new Point(32, 576));
         g2d = super.getImg().createGraphics();
         this.moveAnalyzer = moveAnalyzer;
         update();

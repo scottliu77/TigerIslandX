@@ -279,58 +279,16 @@ class RotateLeftButton extends Button
     }
 }
 
-class RadialButton extends Button
-{
-    BufferedImage pressImage;
-
-    boolean depressed;
-
-    public RadialButton(Point origin, BufferedImage base, BufferedImage hover, BufferedImage press)
-    {
-        super(origin, base, hover);
-        this.pressImage = press;
-        depressed = false;
-    }
-
-    public void drawButton(Graphics2D g2d)
-    {
-        BufferedImage img;
-        if (depressed)
-            img = pressImage;
-        else if (super.getHover())
-            img = super.getHoverImage();
-        else
-            img = super.getBaseImage();
-        g2d.drawImage(img, super.getOrigin().x, super.getOrigin().y, null);
-    }
-
-    public void setDepressed(boolean nextState)
-    {
-        this.depressed = nextState;
-    }
-
-    public void setPressImage(BufferedImage pressImage)
-    {
-        this.pressImage = pressImage;
-    }
-
-    public BufferedImage getPressImage()
-    {
-        return pressImage;
-    }
-}
-
-class ExpansionSelectButton extends RadialButton
+class ExpansionSelectButton extends Button
 {
     private GameManager manager;
 
     public ExpansionSelectButton(Point origin, GameManager manager)
     {
-        super(origin, new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB));
+        super(origin, new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB));
         this.manager = manager;
         buildBase();
         buildHover();
-        buildPressed();
     }
 
     public void buildBase()
@@ -354,18 +312,6 @@ class ExpansionSelectButton extends RadialButton
         g2d.setColor(Color.GRAY);
         g2d.drawRect(0, 0, 63, 31);
         g2d.setColor(Color.BLACK);
-        g2d.drawString("EXPAND", 4, 16);
-    }
-
-    public void buildPressed()
-    {
-        Graphics2D g2d = super.getPressImage().createGraphics();
-
-        g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, 32, 32);
-        g2d.setColor(Color.GRAY);
-        g2d.drawRect(0, 0, 31, 31);
-        g2d.setColor(Color.WHITE);
         g2d.drawString("EXPAND", 4, 16);
     }
 
@@ -375,19 +321,23 @@ class ExpansionSelectButton extends RadialButton
     }
 }
 
-class MeepleSelectButton extends RadialButton
+class MeepleSelectButton extends Button
 {
     private GameManager manager;
     private Building building;
+    private BufferedImage pressedImage;
+    private boolean pressed;
 
     public MeepleSelectButton(Point origin, GameManager manager, Building building)
     {
-        super(origin, new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB) );
+        super(origin, new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB) );
         this.manager = manager;
         this.building = building;
+        pressedImage = new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB);
         buildBase();
         buildHover();
         buildPressed();
+        pressed = false;
     }
 
     public void buildBase()
@@ -416,20 +366,20 @@ class MeepleSelectButton extends RadialButton
 
     public void buildPressed()
     {
-        Graphics2D g2d = super.getPressImage().createGraphics();
+        Graphics2D g2d = pressedImage.createGraphics();
 
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(Color.GRAY);
         g2d.fillRect(0, 0, 64, 32);
         g2d.setColor(Color.GRAY);
         g2d.drawRect(0, 0, 63, 31);
-        g2d.setColor(Color.WHITE);
+        g2d.setColor(Color.BLACK);
         g2d.drawString(building.toString(), 4, 16);
     }
 
     public void press()
     {
+        pressed = true;
         manager.setActiveBuilding(building);
-        manager.setExpandNext(false);
     }
 
     /*
@@ -448,19 +398,18 @@ class MeepleSelectButton extends RadialButton
 
  }
 
- class TerrainSelectButton extends RadialButton
+ class TerrainSelectButton extends Button
  {
      private Terrain terrain;
      private GameManager manager;
 
      public TerrainSelectButton(Point origin, GameManager manager, Terrain terrain)
      {
-         super(origin, new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB));
+         super(origin, new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB));
          this.manager = manager;
          this.terrain = terrain;
          buildBase();
          buildHover();
-         buildPressed();
      }
 
      public void buildBase()
@@ -479,7 +428,7 @@ class MeepleSelectButton extends RadialButton
      {
          Graphics2D g2d = super.getHoverImage().createGraphics();
 
-         g2d.setColor(terrain.getColor());
+         g2d.setColor(Color.GRAY);
          g2d.fillRect(0, 0, 64, 32);
          g2d.setColor(Color.GRAY);
          g2d.drawRect(0, 0, 63, 31);
@@ -487,21 +436,8 @@ class MeepleSelectButton extends RadialButton
          g2d.drawString(terrain.toString(), 4, 16);
      }
 
-     public void buildPressed()
-     {
-         Graphics2D g2d = super.getPressImage().createGraphics();
-
-         g2d.setColor(terrain.getColor());
-         g2d.fillRect(0, 0, 64, 32);
-         g2d.setColor(Color.BLACK);
-         g2d.drawRect(0, 0, 63, 31);
-         g2d.setColor(Color.BLACK);
-         g2d.drawString(terrain.toString(), 4, 16);
-     }
-
      public void press()
      {
-         manager.setExpandNext(true);
          manager.setActiveTerrain(terrain);
      }
 

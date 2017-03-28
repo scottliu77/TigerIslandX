@@ -174,9 +174,6 @@ class BaseMenu extends Menu
 
     private HexButton hoverHex;
 
-    private ArrayList<RadialButton> buildRadials;
-    private RadialButton depressedBuildRadial;
-
     public BaseMenu()
     {
         super();
@@ -185,22 +182,13 @@ class BaseMenu extends Menu
         Board board = gameManager.getBoard();
         Deck deck = board.getDeck();
 
-        buildRadials = new ArrayList<RadialButton>();
-        MeepleSelectButton villagerButton;
-        MeepleSelectButton tigerButton;
-        MeepleSelectButton totoroButton;
-        TerrainSelectButton lakeButton;
-        TerrainSelectButton rockyButton;
-        TerrainSelectButton grassButton;
-        TerrainSelectButton jungleButton;
-
         super.addDisplay(backgroundDisplay = new BackgroundDisplay());
         super.addDisplay(boardDisplay = new BoardDisplay(board));
         super.addDisplay(deckDisplay = new DeckDisplay(deck));
         super.addDisplay(hexDetailDisplay = new HexDetailDisplay());
         super.addDisplay(turnStatusDisplay = new TurnStatusDisplay(board));
-        super.addDisplay(player1StatusDisplay = new PlayerStatusDisplay(board.getPlayer1(), new Point(256, 16)));
-        super.addDisplay(player2StatusDisplay = new PlayerStatusDisplay(board.getPlayer2(), new Point(544, 16)));
+        super.addDisplay(player1StatusDisplay = new PlayerStatusDisplay(board.getPlayer1(), new Point(256, 32)));
+        super.addDisplay(player2StatusDisplay = new PlayerStatusDisplay(board.getPlayer2(), new Point(544, 32)));
         super.addDisplay(settlementsDisplay = new SettlementsDisplay(board.getSettlementManager()));
         super.addDisplay(moveAnalyzerDisplay = new MoveAnalyzerDisplay(board.getMoveAnalyzer()));
 
@@ -208,22 +196,15 @@ class BaseMenu extends Menu
         super.addButton(new RotateLeftButton((new Point(832, 256)), deck));
         super.addButton(new RotateRightButton((new Point(896, 256)), deck));
 
-        super.addButton(villagerButton = new MeepleSelectButton(new Point(800, 496), gameManager, Building.VILLAGER));
-        super.addButton(tigerButton = new MeepleSelectButton(new Point(864, 496), gameManager, Building.TIGER));
-        super.addButton(totoroButton = new MeepleSelectButton(new Point(928, 496), gameManager, Building.TOTORO));
+        super.addButton(new MeepleSelectButton(new Point(832, 512), gameManager, Building.VILLAGER));
+        super.addButton(new MeepleSelectButton(new Point(896, 512), gameManager, Building.TIGER));
+        super.addButton(new MeepleSelectButton(new Point(896, 544), gameManager, Building.TOTORO));
+        super.addButton(new ExpansionSelectButton(new Point(832, 544), gameManager));
 
-        super.addButton(lakeButton = new TerrainSelectButton(new Point(832, 544), gameManager, Terrain.LAKE));
-        super.addButton(rockyButton = new TerrainSelectButton(new Point(896, 544), gameManager, Terrain.ROCKY));
-        super.addButton(grassButton = new TerrainSelectButton(new Point(832, 576), gameManager, Terrain.GRASS));
-        super.addButton(jungleButton = new TerrainSelectButton(new Point(896, 576), gameManager, Terrain.JUNGLE));
-
-        buildRadials.add(villagerButton);
-        buildRadials.add(tigerButton);
-        buildRadials.add(totoroButton);
-        buildRadials.add(lakeButton);
-        buildRadials.add(rockyButton);
-        buildRadials.add(grassButton);
-        buildRadials.add(jungleButton);
+        super.addButton(new TerrainSelectButton(new Point(832, 576), gameManager, Terrain.LAKE));
+        super.addButton(new TerrainSelectButton(new Point(896, 576), gameManager, Terrain.ROCKY));
+        super.addButton(new TerrainSelectButton(new Point(832, 608), gameManager, Terrain.GRASS));
+        super.addButton(new TerrainSelectButton(new Point(896, 608), gameManager, Terrain.JUNGLE));
 
         addHexButtons(board.getButtonMap());
     }
@@ -307,7 +288,7 @@ class BaseMenu extends Menu
             if (button.hoverCheck(point))
             {
                 super.setHoverButton(button);
-                break;
+                return;
             }
         }
 
@@ -323,20 +304,7 @@ class BaseMenu extends Menu
             if (button.pointIsOn(point))
             {
                 button.press();
-                //if(RadialButton.class.isAssignableFrom(button.getClass()))
-                if(buildRadials.contains(button) && depressedBuildRadial != button)
-                {
-                    if(depressedBuildRadial != null)
-                    {
-                        depressedBuildRadial.setDepressed(false);
-                    }
-                    depressedBuildRadial = (RadialButton) button;
-                    depressedBuildRadial.setDepressed(true);
-                }
-                else
-                {
-                    addHexButtons(gameManager.getButtonMap());
-                }
+                addHexButtons(gameManager.getButtonMap());
                 return;
             }
         }
