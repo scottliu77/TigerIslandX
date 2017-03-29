@@ -31,7 +31,18 @@ public class Hex
     private static final int hexagonX[] = {10, 30, 40, 30, 10, 0};
     private static final int hexagonY[] = {0, 0, 20, 40, 40, 20};
     private static final Polygon hexagon = new Polygon(hexagonX, hexagonY, 6);
-
+    URL url1 = getClass().getResource("empty.png");
+    private final File emptyImage = new File(url1.getPath());
+    URL url2 = getClass().getResource("volcano.png");
+    private final File volcanoImage = new File(url2.getPath());
+    URL url3 = getClass().getResource("lake.png");
+    private final File lakeImage = new File(url3.getPath());
+    URL url4 = getClass().getResource("grass.png");
+    private final File grassImage = new File(url4.getPath());
+    URL url5 = getClass().getResource("jungle.png");
+    private final File jungleImage = new File(url5.getPath());
+    URL url6 = getClass().getResource("rocky.png");
+    private final File rockyImage = new File(url6.getPath());
     public Hex(Terrain terrain)
     {
         this(terrain, 0);
@@ -44,28 +55,22 @@ public class Hex
 
         try {
             if(terrain.getColor() == Color.RED){
-                URL url = getClass().getResource("volcano.png");
-                terrainImage = new File(url.getPath());
+                terrainImage = volcanoImage;
             }
             else if (terrain.getColor() == Color.YELLOW){
-                URL url = getClass().getResource("grass.png");
-                terrainImage = new File(url.getPath());
+                terrainImage = grassImage;
             }
             else if (terrain.getColor() == Color.GRAY){
-                URL url = getClass().getResource("rocky.png");
-                terrainImage = new File(url.getPath());
+                terrainImage = rockyImage;
             }
             else if (terrain.getColor() == Color.CYAN){
-                URL url = getClass().getResource("lake.png");
-                terrainImage = new File(url.getPath());
+                terrainImage = lakeImage;
             }
             else if (terrain.getColor() == Color.GREEN){
-                URL url = getClass().getResource("jungle.png");
-                terrainImage = new File(url.getPath());
+                terrainImage = jungleImage;
             }
             else{
-                URL url = getClass().getResource("empty.png");
-                terrainImage = new File(url.getPath());
+                terrainImage = emptyImage;
             }
             bufferedTestImg = ImageIO.read(terrainImage );
         }
