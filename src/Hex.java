@@ -31,8 +31,6 @@ public class Hex
     private static final int hexagonX[] = {10, 30, 40, 30, 10, 0};
     private static final int hexagonY[] = {0, 0, 20, 40, 40, 20};
     private static final Polygon hexagon = new Polygon(hexagonX, hexagonY, 6);
-
-    /*
     URL url1 = getClass().getResource("empty.png");
     private final File emptyImage = new File(url1.getPath());
     URL url2 = getClass().getResource("volcano.png");
@@ -45,7 +43,6 @@ public class Hex
     private final File jungleImage = new File(url5.getPath());
     URL url6 = getClass().getResource("rocky.png");
     private final File rockyImage = new File(url6.getPath());
-    */
     public Hex(Terrain terrain)
     {
         this(terrain, 0);
@@ -53,7 +50,6 @@ public class Hex
 
     public Hex(Terrain terrain, int tileId)
     {
-        /*
         File terrainImage = null;
         BufferedImage bufferedTestImg = null;
 
@@ -78,7 +74,7 @@ public class Hex
             }
             bufferedTestImg = ImageIO.read(terrainImage );
         }
-        catch (IOException e) { }*/
+        catch (IOException e) { }
 
         image = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
         hoverImage = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
@@ -95,11 +91,9 @@ public class Hex
         g2d.setColor(Color.BLACK);
         g2d.draw(hexagon);
 
-        /*
         g2d.setClip(hexagon);
         g2d.drawImage(bufferedTestImg,0,0,null);
         g2d.setClip(null);
-        */
 
         g2d = hoverImage.createGraphics();
         g2d.drawImage(image, 0, 0, null);
@@ -108,11 +102,9 @@ public class Hex
         g2d.setStroke(stroke);
         g2d.draw(hexagon);
 
-        /*
         g2d.setClip(hexagon);
         g2d.drawImage(bufferedTestImg,0,0,null);
         g2d.setClip(null);
-        */
 
 
         // Alternate hover graphic, roughly equivalent to mouse detection box:
@@ -231,4 +223,3 @@ enum Building
         return placeScore;
     }
 }
-
