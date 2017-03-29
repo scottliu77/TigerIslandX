@@ -42,10 +42,9 @@ public class Hex
         File terrainImage = null;
         BufferedImage bufferedTestImg = null;
 
-        try {
+            try {
             if(terrain.getColor() == Color.RED){
-                URL url = getClass().getResource("volcano.png");
-                terrainImage = new File(url.getPath());
+                terrainImage = volcanoImage;
             }
             else if (terrain.getColor() == Color.YELLOW){
                 URL url = getClass().getResource("grass.png");
