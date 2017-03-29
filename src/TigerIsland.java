@@ -23,7 +23,6 @@ public class TigerIsland
                 createAndShowGUI();
             }
         });
-        createAndShowGUI();
     }
 
     // createAndShowGUI assembles and configures the JFrame
