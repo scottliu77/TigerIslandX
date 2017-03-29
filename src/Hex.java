@@ -1,9 +1,5 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 
 /**
  * Created by Wylie on 3/14/2017.
@@ -39,38 +35,6 @@ public class Hex
 
     public Hex(Terrain terrain, int tileId)
     {
-        File terrainImage = null;
-        BufferedImage bufferedTestImg = null;
-
-            try {
-            if(terrain.getColor() == Color.RED){
-                terrainImage = volcanoImage;
-
-            }
-            else if (terrain.getColor() == Color.YELLOW){
-                URL url = getClass().getResource("grass.png");
-                terrainImage = new File(url.getPath());
-            }
-            else if (terrain.getColor() == Color.GRAY){
-                URL url = getClass().getResource("rocky.png");
-                terrainImage = new File(url.getPath());
-            }
-            else if (terrain.getColor() == Color.CYAN){
-                URL url = getClass().getResource("lake.png");
-                terrainImage = new File(url.getPath());
-            }
-            else if (terrain.getColor() == Color.GREEN){
-                URL url = getClass().getResource("jungle.png");
-                terrainImage = new File(url.getPath());
-            }
-            else{
-                URL url = getClass().getResource("empty.png");
-                terrainImage = new File(url.getPath());
-            }
-            bufferedTestImg = ImageIO.read(terrainImage );
-        }
-        catch (IOException e) { }
-
         image = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
         hoverImage = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = image.createGraphics();
@@ -86,21 +50,12 @@ public class Hex
         g2d.setColor(Color.BLACK);
         g2d.draw(hexagon);
 
-        g2d.setClip(hexagon);
-        g2d.drawImage(bufferedTestImg,0,0,null);
-        g2d.setClip(null);
-
         g2d = hoverImage.createGraphics();
         g2d.drawImage(image, 0, 0, null);
         g2d.setColor(Color.PINK);
         Stroke stroke = new BasicStroke(2);
         g2d.setStroke(stroke);
         g2d.draw(hexagon);
-
-        g2d.setClip(hexagon);
-        g2d.drawImage(bufferedTestImg,0,0,null);
-        g2d.setClip(null);
-
 
         // Alternate hover graphic, roughly equivalent to mouse detection box:
         //g2d.setColor(Color.GREEN);
