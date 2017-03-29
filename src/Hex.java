@@ -45,6 +45,7 @@ public class Hex
             try {
             if(terrain.getColor() == Color.RED){
                 terrainImage = volcanoImage;
+
             }
             else if (terrain.getColor() == Color.YELLOW){
                 URL url = getClass().getResource("grass.png");
