@@ -163,13 +163,14 @@ public class MoveAnalyzer
             return null;
         }
 
-        if (legalTotoroPlacements.size() > 0)
-        {
-            return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
-        }
-        else if (legalTigerPlacements.size() > 0)
+
+        if (legalTigerPlacements.size() > 0)
         {
             return legalTigerPlacements.get(0);
+        }
+        else if (legalTotoroPlacements.size() > 0)
+        {
+            return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
         }
         else if (legalSettlementExpansions.size() > 0)
         {
