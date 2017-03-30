@@ -11,6 +11,8 @@ public class MoveAnalyzer
     private ArrayList<HexButton> overallMoveset;
     private ArrayList<HexButton> legalMoves;
     private ArrayList<TilePlacementMove> legalTilePlacements;
+    private ArrayList<TilePlacementMove> legalVolcanoPlacements;
+    private ArrayList<TilePlacementMove> legalEmptyPlacements;
     private ArrayList<BuildingPlacementMove> legalTotoroPlacements;
     private ArrayList<BuildingPlacementMove> legalVillagerPlacements;
     private ArrayList<BuildingPlacementMove> legalTigerPlacements;
@@ -48,6 +50,8 @@ public class MoveAnalyzer
     public void updateTilePlacements()
     {
         legalTilePlacements = new ArrayList<TilePlacementMove>();
+        legalVolcanoPlacements = new ArrayList<TilePlacementMove>();
+        legalEmptyPlacements = new ArrayList<TilePlacementMove>();
         Tile activeTile = board.getDeck().getTopTile();
         for(HexButton hex : overallMoveset)
         {
@@ -56,7 +60,16 @@ public class MoveAnalyzer
                 activeTile.setOrientation(Orientation.values()[i]);
                 if(board.tilePlacementIsLegal(activeTile, hex))
                 {
-                    legalTilePlacements.add(new TilePlacementMove(board.getActivePlayer(), hex.getOrigin(), activeTile.getOrientation()));
+                    TilePlacementMove newMove = new TilePlacementMove(board.getActivePlayer(), hex.getOrigin(), activeTile.getOrientation());
+                    legalTilePlacements.add(newMove);
+                    if (hex.getHex().getTerrain() == Terrain.VOLCANO)
+                    {
+                        legalVolcanoPlacements.add(newMove);
+                    }
+                    else
+                    {
+                        legalEmptyPlacements.add(newMove);
+                    }
                 }
             }
         }
@@ -152,7 +165,7 @@ public class MoveAnalyzer
 
         if (legalTotoroPlacements.size() > 0)
         {
-            return legalTotoroPlacements.get(0);
+            return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
         }
         else if (legalTigerPlacements.size() > 0)
         {
@@ -174,7 +187,15 @@ public class MoveAnalyzer
 
     public TilePlacementMove getNextTilePlacement()
     {
-        return legalTilePlacements.get(rand.nextInt(legalTilePlacements.size()));
+        //return legalTilePlacements.get(rand.nextInt(legalTilePlacements.size()));
+        if(legalVolcanoPlacements.size() > 0)
+        {
+            return legalVolcanoPlacements.get(rand.nextInt(legalVolcanoPlacements.size()));
+        }
+        else
+        {
+            return legalEmptyPlacements.get(rand.nextInt(legalEmptyPlacements.size()));
+        }
     }
 
     public void selectAndPlayMove()
