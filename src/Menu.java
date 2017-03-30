@@ -217,6 +217,8 @@ class BaseMenu extends Menu
         super.addButton(grassButton = new TerrainSelectButton(new Point(832, 576), gameManager, Terrain.GRASS));
         super.addButton(jungleButton = new TerrainSelectButton(new Point(896, 576), gameManager, Terrain.JUNGLE));
 
+        super.addButton(new PlayAnalyzerMoveButton(board.getMoveAnalyzer()));
+
         buildRadials.add(villagerButton);
         buildRadials.add(tigerButton);
         buildRadials.add(totoroButton);
@@ -224,6 +226,9 @@ class BaseMenu extends Menu
         buildRadials.add(rockyButton);
         buildRadials.add(grassButton);
         buildRadials.add(jungleButton);
+
+        depressedBuildRadial = villagerButton;
+        villagerButton.setDepressed(true);
 
         addHexButtons(board.getButtonMap());
     }
@@ -326,10 +331,7 @@ class BaseMenu extends Menu
                 //if(RadialButton.class.isAssignableFrom(button.getClass()))
                 if(buildRadials.contains(button) && depressedBuildRadial != button)
                 {
-                    if(depressedBuildRadial != null)
-                    {
-                        depressedBuildRadial.setDepressed(false);
-                    }
+                    depressedBuildRadial.setDepressed(false);
                     depressedBuildRadial = (RadialButton) button;
                     depressedBuildRadial.setDepressed(true);
                 }

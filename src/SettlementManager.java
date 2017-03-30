@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -64,6 +65,11 @@ public class SettlementManager
             }
         }
         return null;
+    }
+
+    public Settlement getSettlement(Point origin)
+    {
+        return getSettlement(board.getHexButton(origin));
     }
 
     public boolean isInSettlement(HexButton hexButton)

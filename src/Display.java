@@ -348,8 +348,8 @@ class HexDetailDisplay extends Display
 
 class SettlementsDisplay extends Display
 {
-    SettlementManager settlementManager;
-    Graphics2D g2d;
+    private SettlementManager settlementManager;
+    private Graphics2D g2d;
 
     public SettlementsDisplay(SettlementManager settlementManager)
     {

@@ -90,21 +90,31 @@ class HexButton extends Button
     private GameManager manager;
     private Hex hex;
 
+    private Point hitboxOrigin;
+    private Point hitboxTerminal;
+
     public HexButton(Point origin, Hex hex, GameManager manager)
     {
         super(origin, hex.getImage(), hex.getHoverImage());
         this.hex = hex;
         this.manager = manager;
+        hitboxOrigin = new Point(getOrigin().x + 8, getOrigin().y + 4);
+        hitboxTerminal = new Point(getOrigin().x + 32, getOrigin().y + 36);
     }
 
     public boolean pointIsOn(Point point)
     {
+        return (point.x >= hitboxOrigin.x && point.x <= hitboxTerminal.x &&
+            point.y >= hitboxOrigin.y && point.y <= hitboxTerminal.y);
+        /*
         int radius = 16;
         int centerX = super.getOrigin().x + 5 + radius;
         int centerY = super.getOrigin().y + 5 + radius;
         float dX = centerX - point.x;
         float dY = centerY - point.y;
         return (sqrt((dX*dX) + (dY*dY)) < radius);
+        */
+
     }
 
     public void changeHex(Hex newHex)
@@ -205,6 +215,8 @@ class RotateRightButton extends Button
     {
         BufferedImage baseImg = super.getBaseImage();
         Graphics2D g2d = baseImg.createGraphics();
+        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON );
         drawBaseImage(g2d);
     }
 
@@ -212,6 +224,8 @@ class RotateRightButton extends Button
     {
         BufferedImage hoverImg = super.getHoverImage();
         Graphics2D g2d = hoverImg.createGraphics();
+        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON );
         drawBaseImage(g2d);
 
         g2d.setColor(Color.BLUE);
@@ -249,6 +263,8 @@ class RotateLeftButton extends Button
     {
         BufferedImage baseImg = super.getBaseImage();
         Graphics2D g2d = baseImg.createGraphics();
+        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON );
         drawBaseImage(g2d);
     }
 
@@ -256,6 +272,8 @@ class RotateLeftButton extends Button
     {
         BufferedImage hoverImg = super.getHoverImage();
         Graphics2D g2d = hoverImg.createGraphics();
+        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON );
         drawBaseImage(g2d);
 
         g2d.setColor(Color.BLUE);
@@ -394,6 +412,9 @@ class MeepleSelectButton extends RadialButton
     {
         Graphics2D g2d = super.getBaseImage().createGraphics();
 
+        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON );
+
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, 64, 32);
         g2d.setColor(Color.GRAY);
@@ -406,6 +427,9 @@ class MeepleSelectButton extends RadialButton
     {
         Graphics2D g2d = super.getHoverImage().createGraphics();
 
+        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON );
+
         g2d.setColor(Color.GRAY);
         g2d.fillRect(0, 0, 64, 32);
         g2d.setColor(Color.GRAY);
@@ -417,6 +441,9 @@ class MeepleSelectButton extends RadialButton
     public void buildPressed()
     {
         Graphics2D g2d = super.getPressImage().createGraphics();
+
+        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON );
 
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, 64, 32);
@@ -467,6 +494,9 @@ class MeepleSelectButton extends RadialButton
      {
          Graphics2D g2d = super.getBaseImage().createGraphics();
 
+         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                 RenderingHints.VALUE_ANTIALIAS_ON );
+
          g2d.setColor(Color.WHITE);
          g2d.fillRect(0, 0, 64, 32);
          g2d.setColor(Color.GRAY);
@@ -479,6 +509,9 @@ class MeepleSelectButton extends RadialButton
      {
          Graphics2D g2d = super.getHoverImage().createGraphics();
 
+         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                 RenderingHints.VALUE_ANTIALIAS_ON );
+
          g2d.setColor(terrain.getColor());
          g2d.fillRect(0, 0, 64, 32);
          g2d.setColor(Color.GRAY);
@@ -490,6 +523,9 @@ class MeepleSelectButton extends RadialButton
      public void buildPressed()
      {
          Graphics2D g2d = super.getPressImage().createGraphics();
+
+         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                 RenderingHints.VALUE_ANTIALIAS_ON );
 
          g2d.setColor(terrain.getColor());
          g2d.fillRect(0, 0, 64, 32);
@@ -507,4 +543,53 @@ class MeepleSelectButton extends RadialButton
 
  }
 
+ class PlayAnalyzerMoveButton extends Button
+ {
+     private MoveAnalyzer moveAnalyzer;
+
+     public PlayAnalyzerMoveButton(MoveAnalyzer moveAnalyzer)
+     {
+         super(new Point(32, 640), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB) );
+         this.moveAnalyzer = moveAnalyzer;
+         drawBase();
+         drawHover();
+     }
+
+     public void drawBase()
+     {
+         Graphics2D g2d = super.getBaseImage().createGraphics();
+
+         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                 RenderingHints.VALUE_ANTIALIAS_ON );
+
+         g2d.setColor(Color.WHITE);
+         g2d.fillRect(0, 0, 64, 32);
+         g2d.setColor(Color.GRAY);
+         g2d.drawRect(0, 0, 63, 31);
+         g2d.setColor(Color.BLACK);
+         g2d.drawString("AI MOVE", 4, 26);
+     }
+
+     public void drawHover()
+     {
+
+         Graphics2D g2d = super.getHoverImage().createGraphics();
+
+         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                 RenderingHints.VALUE_ANTIALIAS_ON );
+
+         g2d.setColor(Color.GRAY);
+         g2d.fillRect(0, 0, 64, 32);
+         g2d.setColor(Color.BLACK);
+         g2d.drawRect(0, 0, 63, 31);
+         g2d.setColor(Color.WHITE);
+         g2d.drawString("AI MOVE", 4, 26);
+     }
+
+     public void press()
+     {
+         moveAnalyzer.selectAndPlayMove();
+     }
+
+ }
 

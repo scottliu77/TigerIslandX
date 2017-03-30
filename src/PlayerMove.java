@@ -46,14 +46,20 @@ class BuildingPlacementMove implements PlayerMove
 
 class SettlementExpansionMove implements PlayerMove
 {
-    private Point targetPoint;
+    //private Point targetPoint;
+    private Settlement settlement;
     private Terrain terrain;
 
-    public SettlementExpansionMove(Player player, Point targetPoint, Terrain terrain)
+    public SettlementExpansionMove(Player player, Settlement settlement, Terrain terrain)
     {
-        this.targetPoint = targetPoint;
+        this.settlement = settlement;
         this.terrain = terrain;
     }
 
-    public void execute(Board board) { board.expandSettlement(targetPoint, terrain);}
+    public Settlement getSettlement()
+    {
+        return settlement;
+    }
+
+    public void execute(Board board) { board.expandSettlement(settlement, terrain);}
 }

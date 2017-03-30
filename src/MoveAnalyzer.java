@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -14,10 +15,12 @@ public class MoveAnalyzer
     private ArrayList<BuildingPlacementMove> legalVillagerPlacements;
     private ArrayList<BuildingPlacementMove> legalTigerPlacements;
     private ArrayList<SettlementExpansionMove> legalSettlementExpansions;
+    private Random rand;
 
     public MoveAnalyzer(Board board)
     {
         this.board = board;
+        this.rand = new Random();
         updateMoveset();
         updateTilePlacements();
         updateBuildingPlacements();
@@ -119,11 +122,13 @@ public class MoveAnalyzer
         {
             if(settlement.getOwner() == board.getActivePlayer())
             {
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 4; i++)
+                {
                     Terrain terrain = Terrain.values()[i];
                     Expansion expansion = board.getSettlementManager().getExpansion(settlement, terrain);
-                    if (board.settlementExpansionIsLegal(expansion)) {
-                        legalSettlementExpansions.add(new SettlementExpansionMove(board.getActivePlayer(), settlement.getHexes().get(0).getOrigin(), terrain));
+                    if (board.settlementExpansionIsLegal(expansion))
+                    {
+                        legalSettlementExpansions.add(new SettlementExpansionMove(board.getActivePlayer(), settlement, terrain));
                     }
                 }
             }
@@ -137,5 +142,50 @@ public class MoveAnalyzer
         return (moveCount == 0);
     }
 
+    public PlayerMove getNextBuildAction()
+    {
+        if (noPossibleBuildActions())
+        {
+            System.out.println("Error: no legal build actions detected");
+            return null;
+        }
 
+        if (legalTotoroPlacements.size() > 0)
+        {
+            return legalTotoroPlacements.get(0);
+        }
+        else if (legalTigerPlacements.size() > 0)
+        {
+            return legalTigerPlacements.get(0);
+        }
+        else if (legalSettlementExpansions.size() > 0)
+        {
+            for(SettlementExpansionMove expansionMove : legalSettlementExpansions)
+            {
+                if(!expansionMove.getSettlement().hasTotoro())
+                {
+                    return expansionMove;
+                }
+            }
+        }
+
+        return legalVillagerPlacements.get(0);
+    }
+
+    public TilePlacementMove getNextTilePlacement()
+    {
+        return legalTilePlacements.get(rand.nextInt(legalTilePlacements.size()));
+    }
+
+    public void selectAndPlayMove()
+    {
+        if(!board.getTilePlaced())
+        {
+            board.processTurn(getNextTilePlacement());
+        }
+        else
+        {
+            board.processTurn(getNextBuildAction());
+        }
+    }
 }

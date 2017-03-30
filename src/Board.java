@@ -7,49 +7,37 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by Wylie on 3/14/2017.
  */
-public class Board
-{
-    private GameManager manager;
-
+public class Board {
+    private static final int WIDTH = 512;
+    private static final int HEIGHT = 512;
+    private static final int xOffset = 10;
+    private static final int yOffset = 5;
+    private static final Point[] neighborPts =
+            {
+                    new Point(0, -40),
+                    new Point(30, -20),
+                    new Point(30, 20),
+                    new Point(0, 40),
+                    new Point(-30, 20),
+                    new Point(-30, -20)
+            };
     Player activePlayer;
     Player player1;
     Player player2;
     Player players[];
     Player winner;
-
+    private GameManager manager;
     private HashMap<Point, HexButton> buttonMap;
-
     private SettlementManager settlementManager;
     private MoveAnalyzer moveAnalyzer;
-
-    private static final int WIDTH = 512;
-    private static final int HEIGHT = 512;
-
-    private static final int xOffset = 10;
-    private static final int yOffset = 5;
-
     private Deck deck;
-
     private boolean tilePlaced;
     private boolean playerTracker;
-
     private int settlementCount;
-
     private GameResult gameResult;
 
-    private static final Point[] neighborPts =
-            {
-                new Point(0, -40),
-                new Point(30, -20),
-                new Point(30, 20),
-                new Point(0, 40),
-                new Point(-30, 20),
-                new Point(-30, -20)
-            };
-
     // Constructor:
-    public Board(GameManager manager)
-    {
+    public Board(GameManager manager) {
         this.manager = manager;
 
         deck = new Deck();
@@ -82,9 +70,7 @@ public class Board
     // Resetting and Initialization methods:
 
 
-
-    public void resetButtonMap()
-    {
+    public void resetButtonMap() {
         buttonMap = new HashMap<Point, HexButton>();
 
         int startX = 256;
@@ -93,10 +79,8 @@ public class Board
         int hexVertOffset = 20;
         int hexHoriOffset = 30;
 
-        for(int i = startX + xOffset; i <= startX + WIDTH - hexBoxSize; i += hexHoriOffset * 2)
-        {
-            for(int j = startY + yOffset; j <= startY + HEIGHT - hexBoxSize; j += hexVertOffset * 2)
-            {
+        for (int i = startX + xOffset; i <= startX + WIDTH - hexBoxSize; i += hexHoriOffset * 2) {
+            for (int j = startY + yOffset; j <= startY + HEIGHT - hexBoxSize; j += hexVertOffset * 2) {
                 Point point = new Point(i, j);
                 Hex hex = new Hex(Terrain.EMPTY);
                 HexButton hexButton = new HexButton(point, hex, manager);
@@ -107,10 +91,8 @@ public class Board
             }
         }
 
-        for(int i = startX + hexHoriOffset + xOffset; i <= startX + WIDTH - hexBoxSize; i += hexHoriOffset * 2)
-        {
-            for (int j = startY + hexVertOffset + yOffset; j <= startY + HEIGHT - hexBoxSize; j += hexVertOffset * 2)
-            {
+        for (int i = startX + hexHoriOffset + xOffset; i <= startX + WIDTH - hexBoxSize; i += hexHoriOffset * 2) {
+            for (int j = startY + hexVertOffset + yOffset; j <= startY + HEIGHT - hexBoxSize; j += hexVertOffset * 2) {
                 Point point = new Point(i, j);
                 Hex hex = new Hex(Terrain.EMPTY);
                 HexButton hexButton = new HexButton(point, hex, manager);
@@ -123,36 +105,30 @@ public class Board
         resetBoard();
     }
 
-    public void clearHexes()
-    {
-        for(HexButton button : buttonMap.values())
-        {
+    public void clearHexes() {
+        for (HexButton button : buttonMap.values()) {
             button.resetButton();
         }
         resetBoard();
     }
 
-    private void resetMapWithCenterHex()
-    {
+    private void resetMapWithCenterHex() {
         buttonMap = new HashMap<Point, HexButton>();
 
         Point point = new Point(256 + 236, 128 + 236);
         buttonMap.put(point, new HexButton(point, new Hex(Terrain.EMPTY), manager));
     }
 
-    public void resetWithOneHex()
-    {
+    public void resetWithOneHex() {
         resetMapWithCenterHex();
         resetBoard();
     }
 
-    public void resetDeck()
-    {
+    public void resetDeck() {
         deck.resetTileCount();
     }
 
-    public void resetBoard()
-    {
+    public void resetBoard() {
         resetDeck();
         tilePlaced = false;
         settlementCount = 0;
@@ -167,22 +143,19 @@ public class Board
     // ====================================
     // Game state management methods:
 
-    public void processTurn(PlayerMove playerMove)
-    {
-        if(!tilePlaced) // if tilePlaced is false, Board expects a Tile Placement
+    public void processTurn(PlayerMove playerMove) {
+        if (!tilePlaced) // if tilePlaced is false, Board expects a Tile Placement
         {
             playerMove.execute(this);
             tilePlaced = true;
             settlementManager.updateSettlements();
             moveAnalyzer.analyze();
 
-            if(moveAnalyzer.noPossibleBuildActions())
-            {
+            if (moveAnalyzer.noPossibleBuildActions()) {
                 forfeitGame(activePlayer);
             }
 
-        }
-        else // if tilePlaced is true, Board expects a Build Action
+        } else // if tilePlaced is true, Board expects a Build Action
         {
             playerMove.execute(this);
             tilePlaced = false;
@@ -192,8 +165,7 @@ public class Board
             settlementManager.updateSettlements();
             moveAnalyzer.analyze();
 
-            if(activePlayer.outOfResources())
-            {
+            if (activePlayer.outOfResources() || deck.getTopTile().getTileId() > 48) {
                 endGame(activePlayer);
             }
         }
@@ -201,36 +173,26 @@ public class Board
 
     }
 
-    public void forfeitGame(Player loser)
-    {
+    public void forfeitGame(Player loser) {
         manager.sendForfeitSignal(loser);
-        if(loser == player1)
-        {
+        if (loser == player1) {
             winner = player2;
-        }
-        else
-        {
+        } else {
             winner = player1;
         }
         gameResult = GameResult.DEFAULT;
     }
 
-    public void endGame(Player tieVictor)
-    {
+    public void endGame(Player tieVictor) {
         int score1 = player1.getScore();
         int score2 = player2.getScore();
-        if(score1 > score2)
-        {
+        if (score1 > score2) {
             winner = player1;
             gameResult = GameResult.SCORE;
-        }
-        else if(score2 > score1)
-        {
+        } else if (score2 > score1) {
             winner = player2;
             gameResult = GameResult.SCORE;
-        }
-        else
-        {
+        } else {
             winner = tieVictor;
             gameResult = GameResult.TIEBREAK;
         }
@@ -240,14 +202,12 @@ public class Board
     // ====================================
     // Tile Placement methods:
 
-    public void placeTile(Point origin, Orientation orientation)
-    {
+    public void placeTile(Point origin, Orientation orientation) {
         Tile tile = deck.getTopTile();
         tile.setOrientation(orientation);
         HexButton centerButton = buttonMap.get(origin);
 
-        if(tilePlacementIsLegal(tile, centerButton))
-        {
+        if (tilePlacementIsLegal(tile, centerButton)) {
             centerButton.changeHex(tile.getVolcano());
             placePerimeterHexes(origin);
 
@@ -258,12 +218,10 @@ public class Board
         }
     }
 
-    public void placeTile(Tile tile, Point origin)
-    {
+    public void placeTile(Tile tile, Point origin) {
         HexButton centerButton = buttonMap.get(origin);
 
-        if(tilePlacementIsLegal(tile, centerButton))
-        {
+        if (tilePlacementIsLegal(tile, centerButton)) {
             centerButton.changeHex(tile.getVolcano());
             placePerimeterHexes(origin);
 
@@ -272,27 +230,21 @@ public class Board
         }
     }
 
-    private void placeHex(Point center, Hex hex, int orientation)
-    {
+    private void placeHex(Point center, Hex hex, int orientation) {
         Point delta = neighborPts[orientation];
         Point origin = new Point(center.x + delta.x, center.y + delta.y);
-        if(buttonMap.containsKey(origin))
-        {
+        if (buttonMap.containsKey(origin)) {
             HexButton button = buttonMap.get(origin);
             button.changeHex(hex);
-        }
-        else
-        {
+        } else {
             HexButton button = new HexButton(origin, hex, manager);
             buttonMap.put(origin, button);
         }
         placePerimeterHexes(origin);
     }
 
-    private void placePerimeterHexes(Point center)
-    {
-        for(int i = 0; i < 6; i++)
-        {
+    private void placePerimeterHexes(Point center) {
+        for (int i = 0; i < 6; i++) {
             Point neighborPoint = neighborPts[i];
             Point buttonPoint = new Point(center.x + neighborPoint.x, center.y + neighborPoint.y);
             placeIfUnmapped(buttonPoint);
@@ -300,30 +252,24 @@ public class Board
         }
     }
 
-    private void place2ndLayerPerimeter(Point center)
-    {
-        for(int i = 0; i < 6; i++)
-        {
+    private void place2ndLayerPerimeter(Point center) {
+        for (int i = 0; i < 6; i++) {
             Point neighborPoint = neighborPts[i];
             Point buttonPoint = new Point(center.x + neighborPoint.x, center.y + neighborPoint.y);
             placeIfUnmapped(buttonPoint);
         }
     }
 
-    private void placeIfUnmapped(Point buttonPoint)
-    {
-        if(!buttonMap.containsKey(buttonPoint))
-        {
+    private void placeIfUnmapped(Point buttonPoint) {
+        if (!buttonMap.containsKey(buttonPoint)) {
             HexButton button = new HexButton(buttonPoint, new Hex(Terrain.EMPTY), manager);
             buttonMap.put(buttonPoint, button);
         }
     }
 
-    public void placeBuilding(Point buttonPoint, Building building)
-    {
+    public void placeBuilding(Point buttonPoint, Building building) {
         HexButton hexButton = buttonMap.get(buttonPoint);
-        if (buildingPlacementIsLegal(building, hexButton))
-        {
+        if (buildingPlacementIsLegal(building, hexButton)) {
             hexButton.placeBuilding(building, activePlayer);
             activePlayer.consumeMeeples(building, 1);
             activePlayer.increaseScore(building);
@@ -338,54 +284,43 @@ public class Board
     }
 
     // Need to convert most of these if-conditions to separate methods for readability
-    public boolean buildingPlacementIsLegal(Building building, HexButton hexButton)
-    {
-        if(!hexButton.getHex().getTerrain().isBuildable())
-        {
+    public boolean buildingPlacementIsLegal(Building building, HexButton hexButton) {
+        if (!hexButton.getHex().getTerrain().isBuildable()) {
             System.out.println("Illegal move: unbuildable terrain type");
             return false;
         }
 
-        if(hexButton.getHex().getBuilding().occupiesHex())
-        {
+        if (hexButton.getHex().getBuilding().occupiesHex()) {
             System.out.println("Illegal move: hex is already occupied");
             return false;
         }
 
-        if(activePlayer.getMeeples()[building.ordinal()] < 1)
-        {
+        if (activePlayer.getMeeples()[building.ordinal()] < 1) {
             System.out.println("Illegal move: " + activePlayer.getName() + " has insufficient " + building.toString() + "s");
             return false;
         }
 
-        if(building == Building.VILLAGER)
-        {
-            if(hexButton.getHex().getLevel() != 1)
-            {
+        if (building == Building.VILLAGER) {
+            if (hexButton.getHex().getLevel() != 1) {
                 System.out.println("Illegal move: villager placement requires level = 1");
                 return false;
             }
         }
 
-        if(building == Building.TIGER)
-        {
-            if(hexButton.getHex().getLevel() < 3)
-            {
+        if (building == Building.TIGER) {
+            if (hexButton.getHex().getLevel() < 3) {
                 System.out.println("Illegal move: tiger placement requires level >= 3");
                 return false;
             }
 
-            if(!isTigerlessSettlementAdjacent(hexButton))
-            {
+            if (!isTigerlessSettlementAdjacent(hexButton)) {
                 System.out.println("Illegal move: tiger placement requires adjacent settlement");
                 return false;
             }
         }
 
-        if(building == Building.TOTORO)
-        {
-            if(!isTotorolessSize5SettlementAdjacent(hexButton))
-            {
+        if (building == Building.TOTORO) {
+            if (!isTotorolessSize5SettlementAdjacent(hexButton)) {
                 System.out.println("Illegal move: totoro placement requires adjacent settlement size 5+ with no totoro");
                 return false;
             }
@@ -394,46 +329,37 @@ public class Board
         return true;
     }
 
-    public boolean isTotorolessSize5SettlementAdjacent(HexButton hexButton)
-    {
-        for(int i = 0; i < 6; i++)
-        {
+    public boolean isTotorolessSize5SettlementAdjacent(HexButton hexButton) {
+        for (int i = 0; i < 6; i++) {
             HexButton neighbor = getNeighborButton(hexButton, i);
-                Settlement settlement = settlementManager.getSettlement(neighbor);
-                if(settlement != null && settlement.getOwner() == activePlayer)
-                {
-                    if(!settlement.hasTotoro())
-                    {
-                        if(settlement.getSize() >= 5)
-                        {
-                            return true;
-                        }
+            Settlement settlement = settlementManager.getSettlement(neighbor);
+            if (settlement != null && settlement.getOwner() == activePlayer) {
+                if (!settlement.hasTotoro()) {
+                    if (settlement.getSize() >= 5) {
+                        return true;
                     }
                 }
+            }
         }
 
         return false;
     }
 
-    public boolean isTigerlessSettlementAdjacent(HexButton hexButton)
-    {
-        for(int i = 0; i < 6; i++)
-        {
+    public boolean isTigerlessSettlementAdjacent(HexButton hexButton) {
+        for (int i = 0; i < 6; i++) {
             HexButton neighbor = getNeighborButton(hexButton, i);
             //if (settlementManager.isInSettlement(hexButton))
             //{
-                //System.out.println("Neighbor " + i + " is a settlement member");
-                Settlement settlement = settlementManager.getSettlement(neighbor);
-                if(settlement != null && settlement.getOwner() == activePlayer)
-                {
-                    //System.out.println("Neighbor's settlement is owned by activePlayer " + activePlayer.getName());
-                    if(!settlement.hasTiger())
-                    {
-                        //System.out.println("Settlement has no tiger, returning true");
-                        return true;
-                    }
+            //System.out.println("Neighbor " + i + " is a settlement member");
+            Settlement settlement = settlementManager.getSettlement(neighbor);
+            if (settlement != null && settlement.getOwner() == activePlayer) {
+                //System.out.println("Neighbor's settlement is owned by activePlayer " + activePlayer.getName());
+                if (!settlement.hasTiger()) {
+                    //System.out.println("Settlement has no tiger, returning true");
+                    return true;
                 }
-           // }
+            }
+            // }
         }
 
         return false;
@@ -441,90 +367,83 @@ public class Board
     // ====================================
     // Accessors for member data:
 
-    public HashMap<Point, HexButton> getButtonMap()
-    {
+    public HashMap<Point, HexButton> getButtonMap() {
         return buttonMap;
     }
 
-    public HexButton getNeighborButton(HexButton base, int index)
-    {
-        if(index < 0 || index > 5)
-        {
+    public HexButton getNeighborButton(HexButton base, int index) {
+        if (index < 0 || index > 5) {
             System.out.println("Error, invalid neighbor index = " + index);
             return null;
-        }
-        else
-        {
+        } else {
             Point delta = neighborPts[index];
             Point neighborPt = new Point(base.getOrigin().x + delta.x, base.getOrigin().y + delta.y);
-            if(!buttonMap.containsKey(neighborPt))
-            {
+            if (!buttonMap.containsKey(neighborPt)) {
                 return new HexButton(neighborPt, new Hex(Terrain.EMPTY), manager);
-            }
-            else
-            {
+            } else {
                 return buttonMap.get(neighborPt);
             }
         }
     }
 
-    public Deck getDeck()
-    {
+    public Deck getDeck() {
         return deck;
     }
 
-    public HexButton getHexButton(Point point){return buttonMap.get(point);}
-
-    public boolean getTilePlaced() { return tilePlaced; }
-
-    public boolean getPlayerTracker() { return playerTracker; }
-
-    public boolean activePlayerIs1()
-    {
-        return activePlayer == player1;
+    public HexButton getHexButton(Point point) {
+        return buttonMap.get(point);
     }
 
-    public Player getActivePlayer()
-    {
+    public boolean getTilePlaced() {
+        return tilePlaced;
+    }
+
+    public Player getActivePlayer() {
         return activePlayer;
     }
 
-    public Player getPlayer1()
-    {
+    public Player getPlayer1() {
         return player1;
     }
 
-    public Player getPlayer2()
-    {
+    public Player getPlayer2() {
         return player2;
     }
 
-    public Building getActiveBuilding()
-    {
+    public Building getActiveBuilding() {
         return manager.getActiveBuilding();
     }
 
-    public Terrain getActiveTerrain() { return manager.getActiveTerrain(); }
+    public Terrain getActiveTerrain() {
+        return manager.getActiveTerrain();
+    }
 
-    public boolean getExpandNext() { return manager.getExpandNext(); }
+    public boolean getExpandNext() {
+        return manager.getExpandNext();
+    }
 
-    public MoveAnalyzer getMoveAnalyzer() { return moveAnalyzer; }
+    public MoveAnalyzer getMoveAnalyzer() {
+        return moveAnalyzer;
+    }
 
-    public CopyOnWriteArrayList<Settlement> getSettlements()
-    {
+    public CopyOnWriteArrayList<Settlement> getSettlements() {
         return settlementManager.getSettlements();
     }
 
-    public GameResult getGameResult() { return gameResult; }
+    public GameResult getGameResult() {
+        return gameResult;
+    }
 
-    public Player getWinner() { return winner; }
+    public Player getWinner() {
+        return winner;
+    }
 
     // ==============================================
     // Tile Placement legality checking functions:
 
     public boolean tilePlacementIsLegal(Tile tile, HexButton targetButton)
     {
-        if(!targetIsEmptyOrVolcano(targetButton))
+        if (!targetIsEmptyOrVolcano(targetButton))
         {
             System.out.println("Illegal move: target neither volcano nor empty");
             return false;
@@ -554,6 +473,7 @@ public class Board
         }
         else if (targetButton.getHex().getTerrain() == Terrain.EMPTY && tile.getTileId() != 1)
         {
+
             if (!allHexesEmpty(tile, targetButton))
             {
                 System.out.println("Illegal move: empty/nonempty tile placement");
@@ -577,7 +497,7 @@ public class Board
         HexButton buttonA = getNeighborButton(targetButton, positionA);
         HexButton buttonB = getNeighborButton(targetButton, positionB);
 
-        return(settlementManager.nukeWillDestroySettlement(buttonA, buttonB));
+        return (settlementManager.nukeWillDestroySettlement(buttonA, buttonB));
     }
 
     public boolean destroysPermanentBuilding(Tile tile, HexButton targetButton)
@@ -588,7 +508,7 @@ public class Board
         HexButton buttonA = getNeighborButton(targetButton, positionA);
         HexButton buttonB = getNeighborButton(targetButton, positionB);
 
-        return(buttonA.getHex().getBuilding().isPermanent() || buttonB.getHex().getBuilding().isPermanent());
+        return (buttonA.getHex().getBuilding().isPermanent() || buttonB.getHex().getBuilding().isPermanent());
     }
 
     // adjacentToNonEmptyHex returns true if any Fex of the Tile will be adjacent to a non-Empty Hex
@@ -607,7 +527,7 @@ public class Board
     // hasNonEmptyNeighbor returns true if any of a Hex's neighbors are not Empty
     public boolean hasNonEmptyNeighbor(HexButton targetButton)
     {
-        for(int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++)
         {
             HexButton neighborButton = getNeighborButton(targetButton, i);
             // If neighborButton's hex is not Empty, return true
@@ -681,14 +601,12 @@ public class Board
         return settlementManager;
     }
 
-    public void expandSettlement(Point targetPoint, Terrain terrain)
+    public void expandSettlement(Settlement settlement, Terrain terrain)
     {
-        HexButton hexButton = buttonMap.get(targetPoint);
-        Settlement settlement = settlementManager.getSettlement(hexButton);
         Expansion expansion = settlementManager.getExpansion(settlement, terrain);
         if (settlementExpansionIsLegal(expansion))
         {
-            for(HexButton button : expansion.getHexes())
+            for (HexButton button : expansion.getHexes())
             {
                 button.placeBuilding(Building.VILLAGER, activePlayer);
                 int level = button.getHex().getLevel();
@@ -700,13 +618,13 @@ public class Board
 
     public boolean settlementExpansionIsLegal(Expansion expansion)
     {
-        if(expansion.getHexes().isEmpty())
+        if (expansion.getHexes().isEmpty())
         {
             System.out.println("Illegal move: no expandable hexes");
             return false;
         }
 
-        if(activePlayer.getVillagers() < expansion.getCost())
+        if (activePlayer.getVillagers() < expansion.getCost())
         {
             System.out.println("Illegal move: insufficient resources");
             return false;

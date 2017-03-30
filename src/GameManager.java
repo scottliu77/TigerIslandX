@@ -29,7 +29,7 @@ public class GameManager
         }
         else
         {
-            return new SettlementExpansionMove(board.getActivePlayer(), targetPoint, activeTerrain);
+            return new SettlementExpansionMove(board.getActivePlayer(), board.getSettlementManager().getSettlement(targetPoint), activeTerrain);
         }
     }
 
@@ -83,6 +83,7 @@ public class GameManager
     public void emptyHexes()
     {
         board.clearHexes();
+        //board = new Board(this);
     }
 
     public void resetHexes()
