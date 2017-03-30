@@ -143,33 +143,39 @@ public class Board {
     // ====================================
     // Game state management methods:
 
-    public void processTurn(PlayerMove playerMove) {
-        if (!tilePlaced) // if tilePlaced is false, Board expects a Tile Placement
+    public void processTurn(PlayerMove playerMove)
+    {
+        if(playerMove != null)
         {
-            playerMove.execute(this);
-            tilePlaced = true;
-            settlementManager.updateSettlements();
-            moveAnalyzer.analyze();
+            if (!tilePlaced) // if tilePlaced is false, Board expects a Tile Placement
+            {
+                playerMove.execute(this);
+                tilePlaced = true;
+                settlementManager.updateSettlements();
+                moveAnalyzer.analyze();
 
-            if (moveAnalyzer.noPossibleBuildActions()) {
-                forfeitGame(activePlayer);
+                if (moveAnalyzer.noPossibleBuildActions())
+                {
+                    forfeitGame(activePlayer);
+                }
+
             }
+            else // if tilePlaced is true, Board expects a Build Action
+            {
+                playerMove.execute(this);
+                tilePlaced = false;
 
-        } else // if tilePlaced is true, Board expects a Build Action
-        {
-            playerMove.execute(this);
-            tilePlaced = false;
+                // activePlayer is then switched from player1 to player2 or vice-versa:
+                activePlayer = (activePlayer == player1 ? player2 : player1);
+                settlementManager.updateSettlements();
+                moveAnalyzer.analyze();
 
-            // activePlayer is then switched from player1 to player2 or vice-versa:
-            activePlayer = (activePlayer == player1 ? player2 : player1);
-            settlementManager.updateSettlements();
-            moveAnalyzer.analyze();
-
-            if (activePlayer.outOfResources() || deck.getTopTile().getTileId() > 48) {
-                endGame(activePlayer);
+                if (activePlayer.outOfResources() || deck.getTopTile().getTileId() > 48)
+                {
+                    endGame(activePlayer);
+                }
             }
         }
-
 
     }
 
@@ -286,42 +292,42 @@ public class Board {
     // Need to convert most of these if-conditions to separate methods for readability
     public boolean buildingPlacementIsLegal(Building building, HexButton hexButton) {
         if (!hexButton.getHex().getTerrain().isBuildable()) {
-            System.out.println("Illegal move: unbuildable terrain type");
+            //System.out.println("Illegal move: unbuildable terrain type");
             return false;
         }
 
         if (hexButton.getHex().getBuilding().occupiesHex()) {
-            System.out.println("Illegal move: hex is already occupied");
+            //System.out.println("Illegal move: hex is already occupied");
             return false;
         }
 
         if (activePlayer.getMeeples()[building.ordinal()] < 1) {
-            System.out.println("Illegal move: " + activePlayer.getName() + " has insufficient " + building.toString() + "s");
+            //System.out.println("Illegal move: " + activePlayer.getName() + " has insufficient " + building.toString() + "s");
             return false;
         }
 
         if (building == Building.VILLAGER) {
             if (hexButton.getHex().getLevel() != 1) {
-                System.out.println("Illegal move: villager placement requires level = 1");
+                //System.out.println("Illegal move: villager placement requires level = 1");
                 return false;
             }
         }
 
         if (building == Building.TIGER) {
             if (hexButton.getHex().getLevel() < 3) {
-                System.out.println("Illegal move: tiger placement requires level >= 3");
+                //System.out.println("Illegal move: tiger placement requires level >= 3");
                 return false;
             }
 
             if (!isTigerlessSettlementAdjacent(hexButton)) {
-                System.out.println("Illegal move: tiger placement requires adjacent settlement");
+                //System.out.println("Illegal move: tiger placement requires adjacent settlement");
                 return false;
             }
         }
 
         if (building == Building.TOTORO) {
             if (!isTotorolessSize5SettlementAdjacent(hexButton)) {
-                System.out.println("Illegal move: totoro placement requires adjacent settlement size 5+ with no totoro");
+                //System.out.println("Illegal move: totoro placement requires adjacent settlement size 5+ with no totoro");
                 return false;
             }
         }
@@ -445,29 +451,29 @@ public class Board {
     {
         if (!targetIsEmptyOrVolcano(targetButton))
         {
-            System.out.println("Illegal move: target neither volcano nor empty");
+            //System.out.println("Illegal move: target neither volcano nor empty");
             return false;
         }
         if (targetButton.getHex().getTerrain() == Terrain.VOLCANO)
         {
             if (destroysWholeSettlement(tile, targetButton))
             {
-                System.out.println("Illegal move: destroys at least one settlement");
+                //System.out.println("Illegal move: destroys at least one settlement");
                 return false;
             }
             if (destroysPermanentBuilding(tile, targetButton))
             {
-                System.out.println("Illegal move: destroys tiger or totoro");
+                //System.out.println("Illegal move: destroys tiger or totoro");
                 return false;
             }
             if (hexesShareTile(tile, targetButton))
             {
-                System.out.println("Illegal move: hexes share tile");
+                //System.out.println("Illegal move: hexes share tile");
                 return false;
             }
             if (!hexesShareLevel(tile, targetButton))
             {
-                System.out.println("Illegal move: hexes not same height");
+               // System.out.println("Illegal move: hexes not same height");
                 return false;
             }
         }
@@ -476,12 +482,12 @@ public class Board {
 
             if (!allHexesEmpty(tile, targetButton))
             {
-                System.out.println("Illegal move: empty/nonempty tile placement");
+              //  System.out.println("Illegal move: empty/nonempty tile placement");
                 return false;
             }
             if (!adjacentToNonEmptyHex(tile, targetButton))
             {
-                System.out.println("Illegal move: attempted to make new island");
+               // System.out.println("Illegal move: attempted to make new island");
                 return false;
             }
         }
@@ -620,13 +626,13 @@ public class Board {
     {
         if (expansion.getHexes().isEmpty())
         {
-            System.out.println("Illegal move: no expandable hexes");
+            //System.out.println("Illegal move: no expandable hexes");
             return false;
         }
 
         if (activePlayer.getVillagers() < expansion.getCost())
         {
-            System.out.println("Illegal move: insufficient resources");
+            //System.out.println("Illegal move: insufficient resources");
             return false;
         }
 
