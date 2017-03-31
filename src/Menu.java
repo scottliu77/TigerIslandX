@@ -202,7 +202,7 @@ class BaseMenu extends Menu
         super.addDisplay(player1StatusDisplay = new PlayerStatusDisplay(board.getPlayer1(), new Point(256, 16)));
         super.addDisplay(player2StatusDisplay = new PlayerStatusDisplay(board.getPlayer2(), new Point(544, 16)));
         super.addDisplay(settlementsDisplay = new SettlementsDisplay(board.getSettlementManager()));
-        super.addDisplay(moveAnalyzerDisplay = new MoveAnalyzerDisplay(board.getMoveAnalyzer()));
+        super.addDisplay(moveAnalyzerDisplay = new MoveAnalyzerDisplay(board));
 
         // Note: should hold Board in Menu instead of at Display level...
         super.addButton(new RotateLeftButton((new Point(832, 256)), deck));
@@ -217,7 +217,7 @@ class BaseMenu extends Menu
         super.addButton(grassButton = new TerrainSelectButton(new Point(832, 576), gameManager, Terrain.GRASS));
         super.addButton(jungleButton = new TerrainSelectButton(new Point(896, 576), gameManager, Terrain.JUNGLE));
 
-        super.addButton(new PlayAnalyzerMoveButton(board.getMoveAnalyzer()));
+        super.addButton(new PlayAnalyzerMoveButton(board));
 
         buildRadials.add(villagerButton);
         buildRadials.add(tigerButton);

@@ -13,6 +13,7 @@ public class MoveAnalyzer
     private ArrayList<TilePlacementMove> legalTilePlacements;
     private ArrayList<TilePlacementMove> legalVolcanoPlacements;
     private ArrayList<TilePlacementMove> legalEmptyPlacements;
+    private ArrayList<BuildingPlacementMove> legalBuildingPlacements;
     private ArrayList<BuildingPlacementMove> legalTotoroPlacements;
     private ArrayList<BuildingPlacementMove> legalVillagerPlacements;
     private ArrayList<BuildingPlacementMove> legalTigerPlacements;
@@ -101,27 +102,38 @@ public class MoveAnalyzer
         return legalSettlementExpansions;
     }
 
+    public ArrayList<BuildingPlacementMove> getLegalBuildingPlacements() { return legalBuildingPlacements; }
+
+    public Board getBoard() { return board; }
+
     public void updateBuildingPlacements()
     {
+        legalBuildingPlacements = new ArrayList<BuildingPlacementMove>();
         legalVillagerPlacements = new ArrayList<BuildingPlacementMove>();
         legalTotoroPlacements = new ArrayList<BuildingPlacementMove>();
         legalTigerPlacements = new ArrayList<BuildingPlacementMove>();
 
         for(HexButton hex : overallMoveset)
         {
-            if(board.buildingPlacementIsLegal(Building.VILLAGER, hex))
-            {
-                legalVillagerPlacements.add(new BuildingPlacementMove(board.getActivePlayer(), hex.getOrigin(), Building.VILLAGER));
-            }
-
             if(board.buildingPlacementIsLegal(Building.TIGER, hex))
             {
-                legalTigerPlacements.add(new BuildingPlacementMove(board.getActivePlayer(), hex.getOrigin(), Building.TIGER));
+                BuildingPlacementMove move = new BuildingPlacementMove(board.getActivePlayer(), hex.getOrigin(), Building.TIGER);
+                legalTigerPlacements.add(move);
+                legalBuildingPlacements.add(move);
             }
 
             if(board.buildingPlacementIsLegal(Building.TOTORO, hex))
             {
-                legalTotoroPlacements.add(new BuildingPlacementMove(board.getActivePlayer(), hex.getOrigin(), Building.TOTORO));
+                BuildingPlacementMove move = new BuildingPlacementMove(board.getActivePlayer(), hex.getOrigin(), Building.TOTORO);
+                legalTotoroPlacements.add(move);
+                legalBuildingPlacements.add(move);
+            }
+
+            if(board.buildingPlacementIsLegal(Building.VILLAGER, hex))
+            {
+                BuildingPlacementMove move = new BuildingPlacementMove(board.getActivePlayer(), hex.getOrigin(), Building.VILLAGER);
+                legalVillagerPlacements.add(move);
+                legalBuildingPlacements.add(move);
             }
         }
     }
@@ -211,3 +223,124 @@ public class MoveAnalyzer
         }
     }
 }
+
+class PrematurePreston extends MoveAnalyzer
+{
+    public PrematurePreston(Board board)
+    {
+        super(board);
+    }
+
+    public TilePlacementMove getNextTilePlacement()
+    {
+        return super.getTilePlacements().get(0);
+    }
+
+    public PlayerMove getNextBuildAction()
+    {
+        ArrayList<BuildingPlacementMove> legalBuildingPlacements = super.getLegalBuildingPlacements();
+
+        if (super.noPossibleBuildActions())
+        {
+            System.out.println("Error: no legal build actions detected");
+            return null;
+        }
+
+        if(legalBuildingPlacements.size() > 0)
+        {
+            return legalBuildingPlacements.get(0);
+        }
+        else
+        {
+            return super.getLegalSettlementExpansions().get(0);
+        }
+    }
+
+}
+
+class RandomRandy extends MoveAnalyzer
+{
+    Random rand;
+
+    public RandomRandy(Board board)
+    {
+        super(board);
+        rand = new Random();
+    }
+
+    public TilePlacementMove getNextTilePlacement()
+    {
+        ArrayList<TilePlacementMove> legalTilePlacements = super.getTilePlacements();
+        return legalTilePlacements.get(rand.nextInt(legalTilePlacements.size()));
+    }
+
+    public PlayerMove getNextBuildAction()
+    {
+        if (super.noPossibleBuildActions())
+        {
+            System.out.println("Error: no legal build actions detected");
+            return null;
+        }
+
+        /*
+        ArrayList<BuildingPlacementMove> legalTigerPlacements = super.getLegalTigerPlacements();
+        ArrayList<BuildingPlacementMove> legalTotoroPlacements = super.getLegalTotoroPlacements();
+        ArrayList<BuildingPlacementMove> legalVillagerPlacements = super.getLegalVillagerPlacements();
+        ArrayList<SettlementExpansionMove> legalSettlementExpansions = super.getLegalSettlementExpansions();
+
+        if (legalTigerPlacements.size() > 0)
+        {
+            return legalTigerPlacements.get(rand.nextInt(legalTigerPlacements.size()));
+        }
+        else if (legalTotoroPlacements.size() > 0)
+        {
+            return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
+        }
+        else if (legalSettlementExpansions.size() > 0)
+        {
+            for(SettlementExpansionMove expansionMove : legalSettlementExpansions)
+            {
+                if(!expansionMove.getSettlement().hasTotoro())
+                {
+                    return expansionMove;
+                }
+            }
+        }
+
+        return legalVillagerPlacements.get(0);
+        */
+
+        ArrayList<BuildingPlacementMove> legalTigerPlacements = super.getLegalTigerPlacements();
+        ArrayList<BuildingPlacementMove> legalTotoroPlacements = super.getLegalTotoroPlacements();
+        ArrayList<BuildingPlacementMove> legalVillagerPlacements = super.getLegalVillagerPlacements();
+
+        /*
+        ArrayList<BuildingPlacementMove> buildingPlacementMoves = super.getLegalBuildingPlacements();
+        if(buildingPlacementMoves.size() > 0)
+        {
+            return buildingPlacementMoves.get(0);
+        }
+        */
+
+        if(legalTigerPlacements.size() > 0)
+        {
+            return legalTigerPlacements.get(0);
+        }
+
+        if(legalTotoroPlacements.size() > 0)
+        {
+            return legalTotoroPlacements.get(0);
+        }
+
+        if(legalVillagerPlacements.size() > 0)
+        {
+            return legalVillagerPlacements.get(0);
+        }
+
+        else
+        {
+            return super.getLegalSettlementExpansions().get(0);
+        }
+    }
+}
+

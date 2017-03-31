@@ -545,12 +545,12 @@ class MeepleSelectButton extends RadialButton
 
  class PlayAnalyzerMoveButton extends Button
  {
-     private MoveAnalyzer moveAnalyzer;
+     private Board board;
 
-     public PlayAnalyzerMoveButton(MoveAnalyzer moveAnalyzer)
+     public PlayAnalyzerMoveButton(Board board)
      {
          super(new Point(32, 640), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB) );
-         this.moveAnalyzer = moveAnalyzer;
+         this.board = board;
          drawBase();
          drawHover();
      }
@@ -588,7 +588,7 @@ class MeepleSelectButton extends RadialButton
 
      public void press()
      {
-         moveAnalyzer.selectAndPlayMove();
+         board.getActiveAnalyzer().selectAndPlayMove();
      }
 
  }

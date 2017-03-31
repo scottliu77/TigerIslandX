@@ -29,7 +29,8 @@ public class Board {
     private GameManager manager;
     private HashMap<Point, HexButton> buttonMap;
     private SettlementManager settlementManager;
-    private MoveAnalyzer moveAnalyzer;
+    private MoveAnalyzer analyzer1;
+    private MoveAnalyzer analyzer2;
     private Deck deck;
     private boolean tilePlaced;
     private boolean playerTracker;
@@ -63,7 +64,8 @@ public class Board {
         resetMapWithCenterHex();
 
         settlementManager = new SettlementManager(this);
-        moveAnalyzer = new MoveAnalyzer(this);
+        analyzer1 = new PrematurePreston(this);
+        analyzer2 = new MoveAnalyzer(this);
     }
 
     // ====================================
@@ -137,7 +139,8 @@ public class Board {
         player2.resetResources();
         player2.resetScore();
         settlementManager.updateSettlements();
-        moveAnalyzer.analyze();
+        analyzer1.analyze();
+        analyzer2.analyze();
     }
 
     // ====================================
@@ -152,9 +155,10 @@ public class Board {
                 playerMove.execute(this);
                 tilePlaced = true;
                 settlementManager.updateSettlements();
-                moveAnalyzer.analyze();
+                analyzer1.analyze();
+                analyzer2.analyze();
 
-                if (moveAnalyzer.noPossibleBuildActions())
+                if (analyzer1.noPossibleBuildActions())
                 {
                     forfeitGame(activePlayer);
                 }
@@ -168,7 +172,8 @@ public class Board {
                 // activePlayer is then switched from player1 to player2 or vice-versa:
                 activePlayer = (activePlayer == player1 ? player2 : player1);
                 settlementManager.updateSettlements();
-                moveAnalyzer.analyze();
+                analyzer1.analyze();
+                analyzer2.analyze();
 
                 if (activePlayer.outOfResources() || deck.getTopTile().getTileId() > 48)
                 {
@@ -181,24 +186,33 @@ public class Board {
 
     public void forfeitGame(Player loser) {
         manager.sendForfeitSignal(loser);
-        if (loser == player1) {
+        if (loser == player1)
+        {
             winner = player2;
-        } else {
+        }
+        else
+        {
             winner = player1;
         }
         gameResult = GameResult.DEFAULT;
     }
 
-    public void endGame(Player tieVictor) {
+    public void endGame(Player tieVictor)
+    {
         int score1 = player1.getScore();
         int score2 = player2.getScore();
-        if (score1 > score2) {
+        if (score1 > score2)
+        {
             winner = player1;
             gameResult = GameResult.SCORE;
-        } else if (score2 > score1) {
+        }
+        else if (score2 > score1)
+        {
             winner = player2;
             gameResult = GameResult.SCORE;
-        } else {
+        }
+        else
+        {
             winner = tieVictor;
             gameResult = GameResult.TIEBREAK;
         }
@@ -208,12 +222,14 @@ public class Board {
     // ====================================
     // Tile Placement methods:
 
-    public void placeTile(Point origin, Orientation orientation) {
+    public void placeTile(Point origin, Orientation orientation)
+    {
         Tile tile = deck.getTopTile();
         tile.setOrientation(orientation);
         HexButton centerButton = buttonMap.get(origin);
 
-        if (tilePlacementIsLegal(tile, centerButton)) {
+        if (tilePlacementIsLegal(tile, centerButton))
+        {
             centerButton.changeHex(tile.getVolcano());
             placePerimeterHexes(origin);
 
@@ -428,10 +444,6 @@ public class Board {
         return manager.getExpandNext();
     }
 
-    public MoveAnalyzer getMoveAnalyzer() {
-        return moveAnalyzer;
-    }
-
     public CopyOnWriteArrayList<Settlement> getSettlements() {
         return settlementManager.getSettlements();
     }
@@ -442,6 +454,18 @@ public class Board {
 
     public Player getWinner() {
         return winner;
+    }
+
+    public MoveAnalyzer getActiveAnalyzer()
+    {
+        if(activePlayer == player1)
+        {
+            return analyzer1;
+        }
+        else
+        {
+            return analyzer2;
+        }
     }
 
     // ==============================================

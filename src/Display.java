@@ -398,14 +398,16 @@ class SettlementsDisplay extends Display
 
 class MoveAnalyzerDisplay extends Display
 {
+    private Board board;
     private MoveAnalyzer moveAnalyzer;
     private Graphics2D g2d;
 
-    public MoveAnalyzerDisplay(MoveAnalyzer moveAnalyzer)
+    public MoveAnalyzerDisplay(Board board)
     {
         super(new BufferedImage(192, 128, BufferedImage.TYPE_INT_ARGB), new Point(32, 544));
         g2d = super.getImg().createGraphics();
-        this.moveAnalyzer = moveAnalyzer;
+        this.board = board;
+        this.moveAnalyzer = board.getActiveAnalyzer();
         update();
     }
 
@@ -425,10 +427,12 @@ class MoveAnalyzerDisplay extends Display
         g2d.drawString("Possible tiger placements: " + moveAnalyzer.getLegalTigerPlacements().size(), 4, 48);
         g2d.drawString("Possible totoro placements: " + moveAnalyzer.getLegalTotoroPlacements().size(), 4, 64);
         g2d.drawString("Possible settlement expands: " + moveAnalyzer.getLegalSettlementExpansions().size(), 4, 80);
+        g2d.drawString("Active: " + moveAnalyzer.getClass().toString(), 4, 94);
     }
 
     public void update()
     {
+        moveAnalyzer = board.getActiveAnalyzer();
         drawBase();
         drawStrings();
     }
