@@ -128,13 +128,13 @@ class HexButton extends Button
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
         g2d.setColor(Color.BLACK);
-        g2d.drawString("" + hex.getLevel(), 25, 15);
+        g2d.drawString("" + hex.getLevel(), 27, 17);
 
         g2d = hex.getHoverImage().createGraphics();
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
         g2d.setColor(Color.BLACK);
-        g2d.drawString("" + hex.getLevel(), 25, 15);
+        g2d.drawString("" + hex.getLevel(), 27, 17);
 
         super.setBaseImage(hex.getImage());
         super.setHoverImage(hex.getHoverImage());

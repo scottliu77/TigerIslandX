@@ -229,6 +229,7 @@ class DeckDisplay extends Display
     private Deck deck;
     private Graphics2D g2d;
 
+    /*
     private static final int BOX_SIZE = 40;
     private static final int X_OFFSET = BOX_SIZE * 3 / 4;
     private static final int Y_OFFSET = BOX_SIZE / 2;
@@ -244,6 +245,21 @@ class DeckDisplay extends Display
                 new Point(center.x - X_OFFSET, center.y + Y_OFFSET),
                 new Point(center.x - X_OFFSET, center.y - Y_OFFSET)
             };
+
+     */
+
+    private static final Point center = new Point(44, 44);
+
+    private static final Point[] posPoints =
+            {
+                    new Point(center.x + -20, center.y + -30),
+                    new Point(center.x + 20, center.y + -30),
+                    new Point(center.x + 40, center.y + 0),
+                    new Point(center.x + 20, center.y + 30),
+                    new Point(center.x + -20, center.y + 30),
+                    new Point(center.x + -40, center.y + 0)
+            };
+
 
     public DeckDisplay(Deck deck)
     {

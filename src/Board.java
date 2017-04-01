@@ -12,6 +12,7 @@ public class Board {
     private static final int HEIGHT = 512;
     private static final int xOffset = 10;
     private static final int yOffset = 5;
+    /*
     private static final Point[] neighborPts =
             {
                     new Point(0, -40),
@@ -21,6 +22,19 @@ public class Board {
                     new Point(-30, 20),
                     new Point(-30, -20)
             };
+
+            */
+
+    private static final Point[] neighborPts =
+    {
+        new Point(-20, -30),
+        new Point(20, -30),
+        new Point(40, 0),
+        new Point(20, 30),
+        new Point(-20, 30),
+        new Point(-40, 0)
+    };
+
     Player activePlayer;
     Player player1;
     Player player2;
@@ -46,16 +60,6 @@ public class Board {
         player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
         player2 = new Player("Player 2", Color.BLACK, Color.WHITE);
         activePlayer = player1;
-
-        int hexagonX[] = {10, 30, 40, 30, 10, 0};
-        int hexagonY[] = {0, 0, 20, 40, 40, 20};
-        Polygon hexagon = new Polygon(hexagonX, hexagonY, 6);
-
-
-        BufferedImage hexTemplate = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D templateG2 = hexTemplate.createGraphics();
-        templateG2.setColor(Color.BLACK);
-        templateG2.draw(hexagon);
 
         //g2d.drawImage(hexTemplate, 250, 200, null);
 

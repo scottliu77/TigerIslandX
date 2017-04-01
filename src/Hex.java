@@ -24,9 +24,16 @@ public class Hex
     private Building building;
 
     // Hexagon shape definition:
+    /*
     private static final int hexagonX[] = {10, 30, 40, 30, 10, 0};
     private static final int hexagonY[] = {0, 0, 20, 40, 40, 20};
+    */
+
+    private static final int hexagonX[] = {0, 20, 40, 40, 20, 0};
+    private static final int hexagonY[] = {10, 0, 10, 30, 40, 30};
     private static final Polygon hexagon = new Polygon(hexagonX, hexagonY, 6);
+
+
 
     public Hex(Terrain terrain)
     {
