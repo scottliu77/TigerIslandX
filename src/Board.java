@@ -123,6 +123,7 @@ public class Board {
 
         Point point = new Point(256 + 236, 128 + 236);
         buttonMap.put(point, new HexButton(point, new Hex(Terrain.EMPTY), manager));
+        placeStartingTile(point);
     }
 
     public void resetWithOneHex() {
@@ -225,6 +226,18 @@ public class Board {
 
     // ====================================
     // Tile Placement methods:
+
+    public void placeStartingTile(Point origin)
+    {
+        HexButton centerButton = buttonMap.get(origin);
+
+        centerButton.changeHex(new Hex(Terrain.VOLCANO, 0));
+        placePerimeterHexes(origin);
+        placeHex(origin, new Hex(Terrain.JUNGLE, 0), 0);
+        placeHex(origin, new Hex(Terrain.LAKE, 0), 1);
+        placeHex(origin, new Hex(Terrain.GRASS, 0), 3);
+        placeHex(origin, new Hex(Terrain.ROCKY, 0), 4);
+    }
 
     public void placeTile(Point origin, Orientation orientation)
     {
@@ -505,7 +518,7 @@ public class Board {
                 return false;
             }
         }
-        else if (targetButton.getHex().getTerrain() == Terrain.EMPTY && tile.getTileId() != 1)
+        else if (targetButton.getHex().getTerrain() == Terrain.EMPTY)
         {
 
             if (!allHexesEmpty(tile, targetButton))
@@ -620,7 +633,7 @@ public class Board {
         int tileA = buttonA.getHex().getTileId();
         int tileB = buttonB.getHex().getTileId();
 
-        return tileV == tileA && tileV == tileB && tileV != 0;
+        return tileV == tileA && tileV == tileB && tileV != -1;
     }
 
     // targetIsEmptyOrVolcano returns true if the target hex is Empty or a Volcano

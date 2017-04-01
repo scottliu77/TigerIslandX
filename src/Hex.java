@@ -37,7 +37,7 @@ public class Hex
 
     public Hex(Terrain terrain)
     {
-        this(terrain, 0);
+        this(terrain, -1);
     }
 
     public Hex(Terrain terrain, int tileId)
@@ -60,7 +60,7 @@ public class Hex
         g2d = hoverImage.createGraphics();
         g2d.drawImage(image, 0, 0, null);
         g2d.setColor(Color.PINK);
-        Stroke stroke = new BasicStroke(2);
+        Stroke stroke = new BasicStroke(3);
         g2d.setStroke(stroke);
         g2d.draw(hexagon);
 
