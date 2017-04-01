@@ -153,7 +153,7 @@ public class Board {
 
     public void processTurn(PlayerMove playerMove)
     {
-        if(playerMove != null)
+        if(playerMove != null && gameResult == null)
         {
             if (!tilePlaced) // if tilePlaced is false, Board expects a Tile Placement
             {

@@ -30,7 +30,7 @@ public class TigerIsland
     {
         JFrame frame = new JFrame();
 
-        frame.setTitle("Group O - TigerIsland v2 Development Build");
+        frame.setTitle("Group O - TigerIsland v3.0 Development Build");
         frame.setSize(WIDTH + 16, HEIGHT + 62);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 

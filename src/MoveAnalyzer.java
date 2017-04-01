@@ -175,27 +175,48 @@ public class MoveAnalyzer
             return null;
         }
 
-
-        if (legalTigerPlacements.size() > 0)
+        if(board.getActivePlayer().outOfTigersOrTotoros())
         {
-            return legalTigerPlacements.get(0);
-        }
-        else if (legalTotoroPlacements.size() > 0)
-        {
-            return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
-        }
-        else if (legalSettlementExpansions.size() > 0)
-        {
-            for(SettlementExpansionMove expansionMove : legalSettlementExpansions)
+            if(legalSettlementExpansions.size() > 0)
             {
-                if(!expansionMove.getSettlement().hasTotoro())
-                {
-                    return expansionMove;
-                }
+                return legalSettlementExpansions.get(0);
+            }
+            else if (legalVillagerPlacements.size() > 0)
+            {
+                return legalVillagerPlacements.get(0);
+            }
+            else if (legalTigerPlacements.size() > 0)
+            {
+                return legalTigerPlacements.get(0);
+            }
+            else
+            {
+                return legalTotoroPlacements.get(0);
             }
         }
+        else
+        {
+            if (legalTigerPlacements.size() > 0)
+            {
+                return legalTigerPlacements.get(0);
+            }
+            else if (legalTotoroPlacements.size() > 0)
+            {
+                return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
+            }
+            else if (legalSettlementExpansions.size() > 0)
+            {
+                for (SettlementExpansionMove expansionMove : legalSettlementExpansions)
+                {
+                    if (!expansionMove.getSettlement().hasTotoro())
+                    {
+                        return expansionMove;
+                    }
+                }
+            }
 
-        return legalVillagerPlacements.get(0);
+            return legalVillagerPlacements.get(0);
+        }
     }
 
     public TilePlacementMove getNextTilePlacement()
@@ -282,45 +303,9 @@ class RandomRandy extends MoveAnalyzer
             return null;
         }
 
-        /*
         ArrayList<BuildingPlacementMove> legalTigerPlacements = super.getLegalTigerPlacements();
         ArrayList<BuildingPlacementMove> legalTotoroPlacements = super.getLegalTotoroPlacements();
         ArrayList<BuildingPlacementMove> legalVillagerPlacements = super.getLegalVillagerPlacements();
-        ArrayList<SettlementExpansionMove> legalSettlementExpansions = super.getLegalSettlementExpansions();
-
-        if (legalTigerPlacements.size() > 0)
-        {
-            return legalTigerPlacements.get(rand.nextInt(legalTigerPlacements.size()));
-        }
-        else if (legalTotoroPlacements.size() > 0)
-        {
-            return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
-        }
-        else if (legalSettlementExpansions.size() > 0)
-        {
-            for(SettlementExpansionMove expansionMove : legalSettlementExpansions)
-            {
-                if(!expansionMove.getSettlement().hasTotoro())
-                {
-                    return expansionMove;
-                }
-            }
-        }
-
-        return legalVillagerPlacements.get(0);
-        */
-
-        ArrayList<BuildingPlacementMove> legalTigerPlacements = super.getLegalTigerPlacements();
-        ArrayList<BuildingPlacementMove> legalTotoroPlacements = super.getLegalTotoroPlacements();
-        ArrayList<BuildingPlacementMove> legalVillagerPlacements = super.getLegalVillagerPlacements();
-
-        /*
-        ArrayList<BuildingPlacementMove> buildingPlacementMoves = super.getLegalBuildingPlacements();
-        if(buildingPlacementMoves.size() > 0)
-        {
-            return buildingPlacementMoves.get(0);
-        }
-        */
 
         if(legalTigerPlacements.size() > 0)
         {

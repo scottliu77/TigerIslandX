@@ -34,7 +34,6 @@ public class Hex
     private static final Polygon hexagon = new Polygon(hexagonX, hexagonY, 6);
 
 
-
     public Hex(Terrain terrain)
     {
         this(terrain, -1);

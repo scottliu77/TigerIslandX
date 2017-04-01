@@ -55,6 +55,7 @@ public class Player
         boolean outOfTigers = (meeples[Building.TIGER.ordinal()] == 0);
         boolean outOfTotoros = (meeples[Building.TOTORO.ordinal()] == 0);
 
+        // Returns true if two of the three are true
         return outOfVillagers ? (outOfTigers || outOfTotoros) : (outOfTigers && outOfTotoros);
     }
 
@@ -93,6 +94,11 @@ public class Player
     public boolean outOfResources()
     {
         return (meeples[Building.TOTORO.ordinal()] == 0 && meeples[Building.VILLAGER.ordinal()] == 0 && meeples[Building.TIGER.ordinal()] == 0);
+    }
+
+    public boolean outOfTigersOrTotoros()
+    {
+        return (meeples[Building.TOTORO.ordinal()] == 0 || meeples[Building.TIGER.ordinal()] == 0);
     }
 
     public int getScore()
