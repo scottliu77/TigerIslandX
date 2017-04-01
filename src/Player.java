@@ -49,6 +49,15 @@ public class Player
         meeples[Building.TOTORO.ordinal()] = 3;
     }
 
+    public boolean instaWins()
+    {
+        boolean outOfVillagers = (meeples[Building.VILLAGER.ordinal()] == 0);
+        boolean outOfTigers = (meeples[Building.TIGER.ordinal()] == 0);
+        boolean outOfTotoros = (meeples[Building.TOTORO.ordinal()] == 0);
+
+        return outOfVillagers ? (outOfTigers || outOfTotoros) : (outOfTigers && outOfTotoros);
+    }
+
     public void decreaseTotoros()
     {
         meeples[Building.TOTORO.ordinal()]--;

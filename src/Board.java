@@ -174,19 +174,33 @@ public class Board {
                 playerMove.execute(this);
                 tilePlaced = false;
 
-                // activePlayer is then switched from player1 to player2 or vice-versa:
-                activePlayer = (activePlayer == player1 ? player2 : player1);
+
                 settlementManager.updateSettlements();
                 analyzer1.analyze();
                 analyzer2.analyze();
 
-                if (activePlayer.outOfResources() || deck.getTopTile().getTileId() > 48)
+                if (activePlayer.instaWins())
+                {
+                    instaWin(activePlayer);
+                }
+
+                else if (deck.getTopTile().getTileId() > 48)
                 {
                     endGame(activePlayer);
                 }
+
+                // activePlayer is then switched from player1 to player2 or vice-versa:
+                activePlayer = (activePlayer == player1 ? player2 : player1);
             }
         }
 
+    }
+
+    public void instaWin(Player winner)
+    {
+        this.winner = winner;
+        manager.sendInstaWinSignal(winner);
+        gameResult = GameResult.INSTAWIN;
     }
 
     public void forfeitGame(Player loser) {

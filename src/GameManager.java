@@ -140,4 +140,8 @@ public class GameManager
     {
         return activeTerrain;
     }
+
+    public void sendInstaWinSignal(Player winner) {
+
+    }
 }
