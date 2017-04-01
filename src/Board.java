@@ -585,6 +585,20 @@ public class Board {
 
     }
 
+    public boolean adjacentToSettlementMember(Settlement settlement, HexButton targetButton)
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            HexButton neighbor = getNeighborButton(targetButton, i);
+            if(settlement.getHexes().contains(neighbor))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // hasNonEmptyNeighbor returns true if any of a Hex's neighbors are not Empty
     public boolean hasNonEmptyNeighbor(HexButton targetButton)
     {

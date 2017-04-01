@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -13,6 +14,9 @@ public class MoveAnalyzer
     private ArrayList<TilePlacementMove> legalTilePlacements;
     private ArrayList<TilePlacementMove> legalVolcanoPlacements;
     private ArrayList<TilePlacementMove> legalEmptyPlacements;
+    private ArrayList<TilePlacementMove> expansionEnablers;
+    private ArrayList<TilePlacementMove> singleNukes;
+    private ArrayList<TilePlacementMove> doubleNukes;
     private ArrayList<BuildingPlacementMove> legalBuildingPlacements;
     private ArrayList<BuildingPlacementMove> legalTotoroPlacements;
     private ArrayList<BuildingPlacementMove> legalVillagerPlacements;
@@ -25,17 +29,19 @@ public class MoveAnalyzer
         this.board = board;
         this.rand = new Random();
         updateMoveset();
+        updateSettlementExpansions();
         updateTilePlacements();
         updateBuildingPlacements();
-        updateSettlementExpansions();
+
     }
 
     public void analyze()
     {
         updateMoveset();
+        updateSettlementExpansions();
         updateTilePlacements();
         updateBuildingPlacements();
-        updateSettlementExpansions();
+
     }
 
     public void updateMoveset()
@@ -53,6 +59,15 @@ public class MoveAnalyzer
         legalTilePlacements = new ArrayList<TilePlacementMove>();
         legalVolcanoPlacements = new ArrayList<TilePlacementMove>();
         legalEmptyPlacements = new ArrayList<TilePlacementMove>();
+        expansionEnablers = new ArrayList<TilePlacementMove>();
+        singleNukes = new ArrayList<TilePlacementMove>();
+        doubleNukes = new ArrayList<TilePlacementMove>();
+
+        HexButton targetA;
+        HexButton targetB;
+
+        Player activePlayer = board.getActivePlayer();
+
         Tile activeTile = board.getDeck().getTopTile();
         for(HexButton hex : overallMoveset)
         {
@@ -66,6 +81,19 @@ public class MoveAnalyzer
                     if (hex.getHex().getTerrain() == Terrain.VOLCANO)
                     {
                         legalVolcanoPlacements.add(newMove);
+                        targetA = board.getNeighborButton(hex, activeTile.getOrientation().ordinal());
+                        targetB = board.getNeighborButton(hex, activeTile.getOrientationPlus(1).ordinal());
+                        Hex targetHexA = targetA.getHex();
+                        Hex targetHexB = targetB.getHex();
+                        if(targetHexA.isOccupied() && targetHexB.isOccupied() && targetHexA.getOwner() != activePlayer && targetHexB.getOwner() != activePlayer)
+                        {
+                            doubleNukes.add(newMove);
+                        }
+                        else if ((targetHexA.isOccupied() && targetHexA.getOwner() != activePlayer) || (targetHexB.isOccupied() && targetHexB.getOwner() != activePlayer))
+                        {
+                            singleNukes.add(newMove);
+                        }
+
                     }
                     else
                     {
@@ -74,6 +102,53 @@ public class MoveAnalyzer
                 }
             }
         }
+
+
+        /*
+
+        for(Settlement settlement : board.getSettlements())
+        {
+            System.out.println("Checking new settlement");
+            if(settlement.getOwner() == board.getActivePlayer())
+            {
+                System.out.println("Owned settlement found");
+                if(!settlement.hasTotoro() && settlement.hasNoExpansions(legalSettlementExpansions))
+                {
+                    System.out.println("Bottle-necked settlement identified");
+                    for(HexButton hex : settlement.getHexes())
+                    {
+                        for(int i = 0; i < 6; i++)
+                        {
+                            HexButton neighbor1 = board.getNeighborButton(hex, i);
+                            for(int j = 0; j < 6; i++)
+                            {
+                                HexButton neighbor2 = board.getNeighborButton(neighbor1, j);
+                                for(int k = 0; k < 6; k++)
+                                {
+                                    activeTile.setOrientation(Orientation.values()[k]);
+                                    targetA = board.getNeighborButton(neighbor2, k);
+                                    targetB = board.getNeighborButton(neighbor2, (k + 1) % 6);
+                                    if(board.tilePlacementIsLegal(activeTile, neighbor2))
+                                    {
+                                        if(board.adjacentToSettlementMember(settlement, targetA) || board.adjacentToSettlementMember(settlement, targetB))
+                                        {
+                                            TilePlacementMove newMove = new TilePlacementMove(board.getActivePlayer(), hex.getOrigin(), activeTile.getOrientation());
+                                            expansionEnablers.add(newMove);
+                                            System.out.println("ExpansionEnabler added");
+                                            activeTile.setOrientation(board.getDeck().getOrientation());
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        */
+
+
         activeTile.setOrientation(board.getDeck().getOrientation());
     }
 
@@ -136,6 +211,8 @@ public class MoveAnalyzer
                 legalBuildingPlacements.add(move);
             }
         }
+
+
     }
 
     public void updateSettlementExpansions()
@@ -222,6 +299,26 @@ public class MoveAnalyzer
     public TilePlacementMove getNextTilePlacement()
     {
         //return legalTilePlacements.get(rand.nextInt(legalTilePlacements.size()));
+
+        /*
+        if(expansionEnablers.size() > 0)
+        {
+            return expansionEnablers.get(rand.nextInt(expansionEnablers.size()));
+        }
+        */
+
+        if(doubleNukes.size() > 0)
+        {
+            System.out.println("Double nuking!");
+            return doubleNukes.get(0);
+        }
+
+        if(singleNukes.size() > 0)
+        {
+            System.out.println("Single nuking!");
+            return singleNukes.get(0);
+        }
+
         if(legalVolcanoPlacements.size() > 0)
         {
             return legalVolcanoPlacements.get(rand.nextInt(legalVolcanoPlacements.size()));
