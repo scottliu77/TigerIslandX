@@ -1,3 +1,5 @@
+import javafx.geometry.Point3D;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.nio.Buffer;
@@ -313,7 +315,7 @@ class HexDetailDisplay extends Display
 
     public HexDetailDisplay()
     {
-        super(new BufferedImage(128, 144, BufferedImage.TYPE_INT_ARGB), new Point(832, 336));
+        super(new BufferedImage(160, 144, BufferedImage.TYPE_INT_ARGB), new Point(816, 336));
         g2d = super.createGraphics();
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
@@ -324,9 +326,9 @@ class HexDetailDisplay extends Display
     public void drawBackground()
     {
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, 128, 144);
+        g2d.fillRect(0, 0, 160, 144);
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(0, 0, 127, 143);
+        g2d.drawRect(0, 0, 159, 143);
     }
 
     public void update(HexButton hoverButton)
@@ -340,12 +342,18 @@ class HexDetailDisplay extends Display
         {
             Hex hex = hexButton.getHex();
             Point point = hexButton.getOrigin();
-            g2d.drawImage(hex.getImage(), 84, 4, null);
+            Point3D abcPt = hexButton.getABCPoint();
+            Point qrPt = hexButton.getQRPoint();
+            g2d.drawImage(hex.getImage(), 100, 4, null);
             g2d.setColor(Color.BLACK);
             g2d.drawString("TileId: " + hex.getTileId(), 4, 19);
             g2d.drawString("Level: " + hex.getLevel(), 4, 39);
             g2d.drawString("Building: " + hex.getBuilding().toString(), 4, 59);
-            g2d.drawString("Origin: (" + point.x + ", " + point.y + ")", 4, 79);
+            g2d.drawString("Pt: (" + point.x + ", " + point.y + ") == (" + (int) abcPt.getX() + ", " + (int) abcPt.getY() + ", " + (int) abcPt.getZ() + ")" , 4, 79);
+            // Outputs for checking QR and ABC coordinate conversions:
+            //g2d.drawString("QR: " + qrPt.x + ", " + qrPt.y, 4, 39);
+            //g2d.drawString("Origin: (" + point.x + ", " + point.y + ")", 4, 59);
+            //g2d.drawString("ABC: " + (int) abcPt.getX() + ", " + (int) abcPt.getY() + ", " + (int) abcPt.getZ(), 4, 79);
             g2d.drawString("Terrain: " + hex.getTypeName(), 4, 99);
             String playerName;
             if(hex.getOwner() == null)

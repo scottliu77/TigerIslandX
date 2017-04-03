@@ -1,3 +1,5 @@
+import javafx.geometry.Point3D;
+
 import java.awt.*;
 import java.awt.image.*;
 
@@ -93,6 +95,9 @@ class HexButton extends Button
     private Point hitboxOrigin;
     private Point hitboxTerminal;
 
+    private Point3D abcPt;
+    private Point qrPt;
+
     public HexButton(Point origin, Hex hex, GameManager manager)
     {
         super(origin, hex.getImage(), hex.getHoverImage());
@@ -100,6 +105,39 @@ class HexButton extends Button
         this.manager = manager;
         hitboxOrigin = new Point(getOrigin().x + 8, getOrigin().y + 4);
         hitboxTerminal = new Point(getOrigin().x + 32, getOrigin().y + 36);
+        abcPt = toHexPt(origin);
+    }
+
+    public Point3D toHexPt(Point pixelPt)
+    {
+        double x = pixelPt.x;
+        double y = pixelPt.y;
+        Point offsetPt = GameManager.hexOffsetPoint;
+
+        //System.out.println("x, y : " + x + ", " + y);
+
+        x -= offsetPt.x;
+        y -= offsetPt.y;
+
+        //System.out.println("adj x, y: " + x + ", " + y);
+
+        double q = ((x * (sqrt(3.0) / 3.0) - (y / 3.0)) / 20.0);
+        double r = (y * (2.0 / 3.0) / 20.0);
+
+        //System.out.println("q, r : " + q + ", " + r);
+
+        int intQ = (int) Math.round(q);
+        int intR = (int) Math.round(r);
+
+        //System.out.println("(int) q, r: " + intQ + ", " + intR);
+
+        qrPt = new Point(intQ, intR);
+
+        int a = intQ;
+        int c = intR;
+        int b = -a - c;
+
+        return new Point3D(a, b, c);
     }
 
     public boolean pointIsOn(Point point)
@@ -143,6 +181,11 @@ class HexButton extends Button
     public Hex getHex()
     {
         return hex;
+    }
+
+    public Point3D getABCPoint()
+    {
+        return abcPt;
     }
 
     public void placeBuilding(Building building, Player activePlayer)
@@ -196,6 +239,10 @@ class HexButton extends Button
         }
     }
 
+    public Point getQRPoint()
+    {
+        return qrPt;
+    }
 }
 
 

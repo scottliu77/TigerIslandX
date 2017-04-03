@@ -77,18 +77,6 @@ public class Settlement
         return false;
     }
 
-    public boolean hasNoExpansions(ArrayList<SettlementExpansionMove> expansions)
-    {
-        for(SettlementExpansionMove expansion : expansions)
-        {
-            if(expansion.getSettlement() == this)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean hasTotoro()
     {
         checkForTotoro();

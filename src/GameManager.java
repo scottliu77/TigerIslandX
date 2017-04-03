@@ -9,6 +9,8 @@ public class GameManager
     private Terrain activeTerrain;
     private boolean expandNext;
 
+    public static final Point hexOffsetPoint = new Point( 256 + 236,  128 + 236);
+
     GameManager()
     {
         board = new Board(this);
@@ -143,5 +145,10 @@ public class GameManager
 
     public void sendInstaWinSignal(Player winner) {
 
+    }
+
+    public Point getHexOffsetPoint()
+    {
+        return hexOffsetPoint;
     }
 }
