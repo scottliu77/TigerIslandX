@@ -5,34 +5,40 @@ import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
-public class Network {
-    private static final int P1_PORT = 3232;
-    private static final int P2_PORT = 3434;
-    private static final String ADDRESS = "10.136.18.224";
-//  private static final String ADDRESS = "10.0.1.45";
+public class Network implements Runnable {
+    private int port;
+    private String address;
 
-    private String fromServer;
+    Network (String address, int port) {
+        this.address = address;
+        this.port = port;
+    }
 
-    private PrintWriter out = null;
+    public void run() {
+        try {
+            this.Client();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void Client() throws IOException {
         Socket kkSocket = null;
         BufferedReader in = null;
+        PrintWriter out = null;
 
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 
-        int port;
-        port = available(P1_PORT) ? P1_PORT : P2_PORT;
-
         try {
-            kkSocket = new Socket(ADDRESS, port );
+            kkSocket = new Socket(address, port );
             out = new PrintWriter(kkSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
         } catch (UnknownHostException e) {
-            System.err.println("Don't know about host: " + ADDRESS);
+            System.err.println("Don't know about host: " + address);
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to: " + ADDRESS);
+            System.err.println("Couldn't get I/O for the connection to: " + address);
             System.exit(1);
         }
 
@@ -57,13 +63,14 @@ public class Network {
 
     private class ReceiveChat implements Runnable {
         private BufferedReader in;
-        private BufferedReader stdIn;
-        private PrintWriter out;
+        private String fromServer;
+//        private BufferedReader stdIn;
+//        private PrintWriter out;
 
         private ReceiveChat(BufferedReader in, BufferedReader stdIn, PrintWriter out) {
             this.in = in;
-            this.stdIn = stdIn;
-            this.out = out;
+//            this.stdIn = stdIn;
+//            this.out = out;
         }
 
         public void run() {
@@ -82,48 +89,5 @@ public class Network {
             }
         }
     }
-
-    private static boolean available(int port) {
-        ServerSocket ss = null;
-        DatagramSocket ds = null;
-        try {
-            ss = new ServerSocket(port);
-            ss.setReuseAddress(true);
-            ds = new DatagramSocket(port);
-            ds.setReuseAddress(true);
-            System.out.println("port is available");
-            return true;
-        } catch (IOException e) {
-        } finally {
-            if (ds != null) {
-                ds.close();
-            }
-
-            if (ss != null) {
-                try {
-                    ss.close();
-                } catch (IOException e) {
-                /* should not be thrown */
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public static void main(String... args) {
-
-       Thread alien = new Thread(new Runnable() {
-            public void run() {
-                Network net = new Network();
-                try {
-                    net.Client();
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-       alien.start();
-    }
 }
+
