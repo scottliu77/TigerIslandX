@@ -15,11 +15,15 @@ public class MoveAnalyzer
     private ArrayList<TilePlacementMove> legalVolcanoPlacements;
     private ArrayList<TilePlacementMove> legalEmptyPlacements;
     private ArrayList<TilePlacementMove> expansionEnablers;
+    private ArrayList<TilePlacementMove> tigerEnablers;
+    private ArrayList<TilePlacementMove> totoroEnablers;
     private ArrayList<TilePlacementMove> singleNukes;
     private ArrayList<TilePlacementMove> doubleNukes;
     private ArrayList<BuildingPlacementMove> legalBuildingPlacements;
     private ArrayList<BuildingPlacementMove> legalTotoroPlacements;
     private ArrayList<BuildingPlacementMove> legalVillagerPlacements;
+    private ArrayList<BuildingPlacementMove> villagerPlacementsThatExpand;
+    private ArrayList<BuildingPlacementMove> villagerPlacementsForTigers;
     private ArrayList<BuildingPlacementMove> legalTigerPlacements;
     private ArrayList<SettlementExpansionMove> legalSettlementExpansions;
     private Random rand;
@@ -59,6 +63,8 @@ public class MoveAnalyzer
         legalTilePlacements = new ArrayList<TilePlacementMove>();
         legalVolcanoPlacements = new ArrayList<TilePlacementMove>();
         legalEmptyPlacements = new ArrayList<TilePlacementMove>();
+        tigerEnablers = new ArrayList<TilePlacementMove>();
+        totoroEnablers = new ArrayList<TilePlacementMove>();
         expansionEnablers = new ArrayList<TilePlacementMove>();
         singleNukes = new ArrayList<TilePlacementMove>();
         doubleNukes = new ArrayList<TilePlacementMove>();
@@ -80,11 +86,18 @@ public class MoveAnalyzer
                     legalTilePlacements.add(newMove);
                     if (hex.getHex().getTerrain() == Terrain.VOLCANO)
                     {
-                        legalVolcanoPlacements.add(newMove);
+                        //legalVolcanoPlacements.add(newMove);
                         targetA = board.getNeighborButton(hex, activeTile.getOrientation().ordinal());
                         targetB = board.getNeighborButton(hex, activeTile.getOrientationPlus(1).ordinal());
                         Hex targetHexA = targetA.getHex();
                         Hex targetHexB = targetB.getHex();
+
+                        if(!((targetHexA.isOccupied() && targetHexA.getOwner() == activePlayer && !board.getSettlementManager().getSettlement(targetA).hasTotoro())
+                                || (targetHexB.isOccupied() && targetHexB.getOwner() == activePlayer && !board.getSettlementManager().getSettlement(targetB).hasTotoro())))
+                        {
+                            // Don't add volcano placements that cause friendly fire
+                            legalVolcanoPlacements.add(newMove);
+                        }
                         if(targetHexA.isOccupied() && targetHexB.isOccupied() && targetHexA.getOwner() != activePlayer && targetHexB.getOwner() != activePlayer)
                         {
                             doubleNukes.add(newMove);
@@ -98,55 +111,28 @@ public class MoveAnalyzer
                     else
                     {
                         legalEmptyPlacements.add(newMove);
-                    }
-                }
-            }
-        }
 
+                        targetA = board.getNeighborButton(hex, activeTile.getOrientation().ordinal());
+                        targetB = board.getNeighborButton(hex, activeTile.getOrientationPlus(1).ordinal());
+                        Hex targetHexA = targetA.getHex();
+                        Hex targetHexB = targetB.getHex();
 
-        /*
-
-        for(Settlement settlement : board.getSettlements())
-        {
-            System.out.println("Checking new settlement");
-            if(settlement.getOwner() == board.getActivePlayer())
-            {
-                System.out.println("Owned settlement found");
-                if(!settlement.hasTotoro() && settlement.hasNoExpansions(legalSettlementExpansions))
-                {
-                    System.out.println("Bottle-necked settlement identified");
-                    for(HexButton hex : settlement.getHexes())
-                    {
-                        for(int i = 0; i < 6; i++)
+                        if(board.hexIsTigerEligibleAdjacent(targetA) || board.hexIsTigerEligibleAdjacent(targetB))
                         {
-                            HexButton neighbor1 = board.getNeighborButton(hex, i);
-                            for(int j = 0; j < 6; i++)
-                            {
-                                HexButton neighbor2 = board.getNeighborButton(neighbor1, j);
-                                for(int k = 0; k < 6; k++)
-                                {
-                                    activeTile.setOrientation(Orientation.values()[k]);
-                                    targetA = board.getNeighborButton(neighbor2, k);
-                                    targetB = board.getNeighborButton(neighbor2, (k + 1) % 6);
-                                    if(board.tilePlacementIsLegal(activeTile, neighbor2))
-                                    {
-                                        if(board.adjacentToSettlementMember(settlement, targetA) || board.adjacentToSettlementMember(settlement, targetB))
-                                        {
-                                            TilePlacementMove newMove = new TilePlacementMove(board.getActivePlayer(), hex.getOrigin(), activeTile.getOrientation());
-                                            expansionEnablers.add(newMove);
-                                            System.out.println("ExpansionEnabler added");
-                                            activeTile.setOrientation(board.getDeck().getOrientation());
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
+                            tigerEnablers.add(newMove);
+                        }
+
+                        if(hexIsExpansionlessTotorolessSettlementAdjacent(targetA) || hexIsExpansionlessTotorolessSettlementAdjacent(targetB))
+                        {
+                            totoroEnablers.add(newMove);
+                            //System.out.println("Added totoroEnabler: " + hex.getOrigin().toString() + ", O = " + activeTile.getOrientation());
+
                         }
                     }
                 }
             }
         }
-        */
+
 
 
         activeTile.setOrientation(board.getDeck().getOrientation());
@@ -188,6 +174,9 @@ public class MoveAnalyzer
         legalTotoroPlacements = new ArrayList<BuildingPlacementMove>();
         legalTigerPlacements = new ArrayList<BuildingPlacementMove>();
 
+        villagerPlacementsForTigers = new ArrayList<BuildingPlacementMove>();
+        villagerPlacementsThatExpand = new ArrayList<BuildingPlacementMove>();
+
         for(HexButton hex : overallMoveset)
         {
             if(board.buildingPlacementIsLegal(Building.TIGER, hex))
@@ -209,6 +198,16 @@ public class MoveAnalyzer
                 BuildingPlacementMove move = new BuildingPlacementMove(board.getActivePlayer(), hex.getOrigin(), Building.VILLAGER);
                 legalVillagerPlacements.add(move);
                 legalBuildingPlacements.add(move);
+
+                if(board.hexIsTotorolessSettlementAdjacent(hex))
+                {
+                    villagerPlacementsThatExpand.add(move);
+                }
+
+                if(board.hexIsTigerEligibleAdjacent(hex))
+                {
+                    villagerPlacementsForTigers.add(move);
+                }
             }
         }
 
@@ -281,6 +280,20 @@ public class MoveAnalyzer
             {
                 return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
             }
+            else if (villagerPlacementsForTigers.size() > 0)
+            {
+                return villagerPlacementsForTigers.get(0);
+            }
+            else if (villagerPlacementsThatExpand.size() > 0)
+            {
+                return villagerPlacementsThatExpand.get(0);
+            }
+            /*
+            else if (legalVillagerPlacements.size() > 0)
+            {
+                return legalVillagerPlacements.get(0);
+            }
+            */
             else if (legalSettlementExpansions.size() > 0)
             {
                 for (SettlementExpansionMove expansionMove : legalSettlementExpansions)
@@ -306,6 +319,17 @@ public class MoveAnalyzer
             return expansionEnablers.get(rand.nextInt(expansionEnablers.size()));
         }
         */
+
+        if(tigerEnablers.size() > 0)
+        {
+            return tigerEnablers.get(rand.nextInt(tigerEnablers.size()));
+        }
+
+        if(totoroEnablers.size() > 0)
+        {
+            System.out.println("Totoro enabling!");
+            return totoroEnablers.get(rand.nextInt(totoroEnablers.size()));
+        }
 
         if(doubleNukes.size() > 0)
         {
@@ -340,6 +364,46 @@ public class MoveAnalyzer
             board.processTurn(getNextBuildAction());
         }
     }
+
+    public boolean hexIsExpansionlessTotorolessSettlementAdjacent(HexButton hex)
+    {
+       // System.out.println("Checking hex " + hex.getOrigin().toString() + "for expansionless-totoroless-settlement adjacency");
+        for(int i = 0; i < 6; i++)
+        {
+
+            HexButton neighbor = board.getNeighborButton(hex, i);
+            Hex neighborHex = neighbor.getHex();
+            if(neighborHex.isOccupied() && neighborHex.getOwner() == board.getActivePlayer())
+            {
+                //System.out.println("Hex " + hex.getOrigin().toString() + " Neighbor " + i + " is owned by current player");
+                Settlement settlement = board.getSettlementManager().getSettlement(neighbor);
+                if(!settlement.hasTotoro())
+                {
+                    //System.out.println("Settlement of which neighbor is member has no totoro");
+                    if(!hasExpansions(settlement, legalSettlementExpansions))
+                    {
+                        //System.out.println("Settlement has no expansions, is totoro enabler");
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean hasExpansions(Settlement settlement, ArrayList<SettlementExpansionMove> legalSettlementExpansions)
+    {
+        for(SettlementExpansionMove expansionMove : legalSettlementExpansions)
+        {
+            if(expansionMove.getSettlement() == settlement)
+            {
+                //System.out.println("Settlement has expansion, returning true");
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
 class PrematurePreston extends MoveAnalyzer
@@ -360,7 +424,7 @@ class PrematurePreston extends MoveAnalyzer
 
         if (super.noPossibleBuildActions())
         {
-            System.out.println("Error: no legal build actions detected");
+            //System.out.println("Error: no legal build actions detected");
             return null;
         }
 
@@ -424,5 +488,15 @@ class RandomRandy extends MoveAnalyzer
             return super.getLegalSettlementExpansions().get(0);
         }
     }
+}
+
+class CautiousCasey extends MoveAnalyzer
+{
+    public CautiousCasey(Board board)
+    {
+        super(board);
+    }
+
+
 }
 

@@ -153,6 +153,7 @@ public class Board {
 
     public void processTurn(PlayerMove playerMove)
     {
+        MoveAnalyzer activeAnalyzer = getActiveAnalyzer();
         if(playerMove != null && gameResult == null)
         {
             if (!tilePlaced) // if tilePlaced is false, Board expects a Tile Placement
@@ -160,10 +161,9 @@ public class Board {
                 playerMove.execute(this);
                 tilePlaced = true;
                 settlementManager.updateSettlements();
-                analyzer1.analyze();
-                analyzer2.analyze();
+                activeAnalyzer.analyze();
 
-                if (analyzer1.noPossibleBuildActions())
+                if (activeAnalyzer.noPossibleBuildActions())
                 {
                     forfeitGame(activePlayer);
                 }
@@ -176,8 +176,7 @@ public class Board {
 
 
                 settlementManager.updateSettlements();
-                analyzer1.analyze();
-                analyzer2.analyze();
+                activeAnalyzer.analyze();
 
                 if (activePlayer.instaWins())
                 {
@@ -191,6 +190,7 @@ public class Board {
 
                 // activePlayer is then switched from player1 to player2 or vice-versa:
                 activePlayer = (activePlayer == player1 ? player2 : player1);
+                getActiveAnalyzer().analyze();
             }
         }
 
@@ -198,12 +198,14 @@ public class Board {
 
     public void instaWin(Player winner)
     {
+        System.out.println("GAME OVER, instawin!");
         this.winner = winner;
         manager.sendInstaWinSignal(winner);
         gameResult = GameResult.INSTAWIN;
     }
 
     public void forfeitGame(Player loser) {
+        System.out.println("GAME OVER, forfeit!");
         manager.sendForfeitSignal(loser);
         if (loser == player1)
         {
@@ -218,6 +220,7 @@ public class Board {
 
     public void endGame(Player tieVictor)
     {
+        System.out.println("GAME OVER, scoring!");
         int score1 = player1.getScore();
         int score2 = player2.getScore();
         if (score1 > score2)
@@ -707,4 +710,40 @@ public class Board {
 
         return true;
     }
+
+    public boolean hexIsTotorolessSettlementAdjacent(HexButton hex)
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            HexButton neighbor = getNeighborButton(hex, i);
+            Hex neighborHex = neighbor.getHex();
+            if(neighborHex.isOccupied() && neighborHex.getOwner() == activePlayer && !getSettlementManager().getSettlement(neighbor).hasTotoro())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hexIsTigerEligibleAdjacent(HexButton hex)
+    {
+        boolean status = false;
+        for(int i = 0; i < 6; i++)
+        {
+            HexButton neighbor = getNeighborButton(hex, i);
+            Hex neighborHex = neighbor.getHex();
+            if(!neighborHex.isOccupied() && neighborHex.getTerrain().isBuildable() && neighborHex.getLevel() >= 3)
+            {
+                status = true;
+            }
+            else if (neighborHex.isOccupied() && neighborHex.getBuilding() == Building.TIGER)
+            {
+                return false;
+            }
+        }
+        return status;
+    }
+
+
+
 }
