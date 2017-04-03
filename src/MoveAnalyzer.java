@@ -276,13 +276,13 @@ public class MoveAnalyzer
             {
                 return legalTigerPlacements.get(0);
             }
-            else if (legalTotoroPlacements.size() > 0)
-            {
-                return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
-            }
             else if (villagerPlacementsForTigers.size() > 0)
             {
                 return villagerPlacementsForTigers.get(0);
+            }
+            else if (legalTotoroPlacements.size() > 0)
+            {
+                return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
             }
             else if (villagerPlacementsThatExpand.size() > 0)
             {
@@ -404,6 +404,20 @@ public class MoveAnalyzer
         return false;
     }
 
+    public ArrayList<BuildingPlacementMove> getVillagerPlacementsForTigers()
+    {
+        return villagerPlacementsForTigers;
+    }
+
+    public ArrayList<TilePlacementMove> getDoubleNukes()
+    {
+        return doubleNukes;
+    }
+
+    public ArrayList<TilePlacementMove> getSingleNukes()
+    {
+        return singleNukes;
+    }
 }
 
 class PrematurePreston extends MoveAnalyzer
@@ -415,17 +429,48 @@ class PrematurePreston extends MoveAnalyzer
 
     public TilePlacementMove getNextTilePlacement()
     {
+        ArrayList<TilePlacementMove> doubleNukes = super.getDoubleNukes();
+        ArrayList<TilePlacementMove> singleNukes = super.getSingleNukes();
+
+        if(doubleNukes.size() > 0)
+        {
+            return doubleNukes.get(0);
+        }
+
+        else if (singleNukes.size() > 0)
+        {
+            return singleNukes.get(0);
+        }
+
         return super.getTilePlacements().get(0);
     }
 
     public PlayerMove getNextBuildAction()
     {
         ArrayList<BuildingPlacementMove> legalBuildingPlacements = super.getLegalBuildingPlacements();
+        ArrayList<BuildingPlacementMove> legalTigerPlacements = super.getLegalTigerPlacements();
+        ArrayList<BuildingPlacementMove> legalTotoroPlacements = super.getLegalTotoroPlacements();
+        ArrayList<BuildingPlacementMove> villagerPlacementsForTigers = super.getVillagerPlacementsForTigers();
 
         if (super.noPossibleBuildActions())
         {
             //System.out.println("Error: no legal build actions detected");
             return null;
+        }
+
+        if(legalTigerPlacements.size() > 0)
+        {
+            return legalTigerPlacements.get(0);
+        }
+
+        if(legalTotoroPlacements.size() > 0)
+        {
+            return legalTotoroPlacements.get(0);
+        }
+
+        if(villagerPlacementsForTigers.size() > 0)
+        {
+            return villagerPlacementsForTigers.get(0);
         }
 
         if(legalBuildingPlacements.size() > 0)
