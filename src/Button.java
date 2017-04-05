@@ -687,7 +687,11 @@ class MeepleSelectButton extends RadialButton
      {
          while(board.getGameResult() == null)
          {
+             long startTime = System.currentTimeMillis();
              board.getActiveAnalyzer().selectAndPlayMove();
+             board.getActiveAnalyzer().selectAndPlayMove();
+             long endTime = System.currentTimeMillis();
+             System.out.println("Time elapsed during turn: " + (endTime - startTime) + " ms");
          }
      }
  }

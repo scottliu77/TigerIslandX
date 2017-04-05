@@ -11,6 +11,7 @@ public class MoveAnalyzer
     private Board board;
     private ArrayList<HexButton> overallMoveset;
     private ArrayList<HexButton> legalMoves;
+
     private ArrayList<TilePlacementMove> legalTilePlacements;
     private ArrayList<TilePlacementMove> legalVolcanoPlacements;
     private ArrayList<TilePlacementMove> legalEmptyPlacements;
