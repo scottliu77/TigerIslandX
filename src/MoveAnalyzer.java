@@ -53,11 +53,6 @@ public class MoveAnalyzer
         overallMoveset = new ArrayList<HexButton>(board.getButtonMap().values());
     }
 
-    public void updateLegalMoves()
-    {
-        legalMoves = new ArrayList<HexButton>();
-    }
-
     public void updateTilePlacements()
     {
         legalTilePlacements = new ArrayList<TilePlacementMove>();
@@ -497,51 +492,57 @@ class RandomRandy extends MoveAnalyzer
 
     public TilePlacementMove getNextTilePlacement()
     {
-        ArrayList<TilePlacementMove> legalTilePlacements = super.getTilePlacements();
-        return legalTilePlacements.get(rand.nextInt(legalTilePlacements.size()));
+        ArrayList<TilePlacementMove> doubleNukes = super.getDoubleNukes();
+        ArrayList<TilePlacementMove> singleNukes = super.getSingleNukes();
+
+        if(doubleNukes.size() > 0)
+        {
+            return doubleNukes.get(rand.nextInt(doubleNukes.size()));
+        }
+
+        else if (singleNukes.size() > 0)
+        {
+            return singleNukes.get(rand.nextInt(singleNukes.size()));
+        }
+
+        return super.getTilePlacements().get(rand.nextInt(super.getTilePlacements().size()));
     }
 
     public PlayerMove getNextBuildAction()
     {
+        ArrayList<BuildingPlacementMove> legalBuildingPlacements = super.getLegalBuildingPlacements();
+        ArrayList<BuildingPlacementMove> legalTigerPlacements = super.getLegalTigerPlacements();
+        ArrayList<BuildingPlacementMove> legalTotoroPlacements = super.getLegalTotoroPlacements();
+        ArrayList<BuildingPlacementMove> villagerPlacementsForTigers = super.getVillagerPlacementsForTigers();
+
         if (super.noPossibleBuildActions())
         {
-            System.out.println("Error: no legal build actions detected");
+            //System.out.println("Error: no legal build actions detected");
             return null;
         }
 
-        ArrayList<BuildingPlacementMove> legalTigerPlacements = super.getLegalTigerPlacements();
-        ArrayList<BuildingPlacementMove> legalTotoroPlacements = super.getLegalTotoroPlacements();
-        ArrayList<BuildingPlacementMove> legalVillagerPlacements = super.getLegalVillagerPlacements();
-
         if(legalTigerPlacements.size() > 0)
         {
-            return legalTigerPlacements.get(0);
+            return legalTigerPlacements.get(rand.nextInt(legalTigerPlacements.size()));
         }
 
         if(legalTotoroPlacements.size() > 0)
         {
-            return legalTotoroPlacements.get(0);
+            return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
         }
 
-        if(legalVillagerPlacements.size() > 0)
+        if(villagerPlacementsForTigers.size() > 0)
         {
-            return legalVillagerPlacements.get(0);
+            return villagerPlacementsForTigers.get(rand.nextInt(villagerPlacementsForTigers.size()));
         }
 
+        if(legalBuildingPlacements.size() > 0)
+        {
+            return legalBuildingPlacements.get(rand.nextInt(legalBuildingPlacements.size()));
+        }
         else
         {
-            return super.getLegalSettlementExpansions().get(0);
+            return super.getLegalSettlementExpansions().get(rand.nextInt(super.getLegalSettlementExpansions().size()));
         }
     }
 }
-
-class CautiousCasey extends MoveAnalyzer
-{
-    public CautiousCasey(Board board)
-    {
-        super(board);
-    }
-
-
-}
-

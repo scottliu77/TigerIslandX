@@ -35,11 +35,13 @@ public class Board {
         new Point(-40, 0)
     };
 
-    Player activePlayer;
-    Player player1;
-    Player player2;
-    Player players[];
-    Player winner;
+
+    private Player player1;
+    private Player player2;
+
+    private Player activePlayer;
+    private Player winner;
+
     private GameManager manager;
     private HashMap<Point, HexButton> buttonMap;
     private SettlementManager settlementManager;
@@ -47,8 +49,6 @@ public class Board {
     private MoveAnalyzer analyzer2;
     private Deck deck;
     private boolean tilePlaced;
-    private boolean playerTracker;
-    private int settlementCount;
     private GameResult gameResult;
 
     // Constructor:
@@ -68,7 +68,7 @@ public class Board {
         resetMapWithCenterHex();
 
         settlementManager = new SettlementManager(this);
-        analyzer1 = new PrematurePreston(this);
+        analyzer1 = new RandomRandy(this);
         analyzer2 = new MoveAnalyzer(this);
     }
 
@@ -138,7 +138,6 @@ public class Board {
     public void resetBoard() {
         resetDeck();
         tilePlaced = false;
-        settlementCount = 0;
         player1.resetResources();
         player1.resetScore();
         player2.resetResources();

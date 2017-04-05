@@ -28,6 +28,8 @@ public class TigerIsland
     // createAndShowGUI assembles and configures the JFrame
     public static void createAndShowGUI()
     {
+        int menuCount = 0;
+
         JFrame frame = new JFrame();
 
         frame.setTitle("Group O - TigerIsland v3.0 Development Build");
@@ -50,41 +52,39 @@ public class TigerIsland
         fileMenu.add(exit);
 
 
-        JMenuItem clear = new JMenuItem("Empty all Hexes");
-        clear.addActionListener(new ActionListener()
+
+
+        JMenu menuChangeMenu = new JMenu("Change Menu");
+
+        JMenuItem setMenu0 = new JMenuItem("Menu 0");
+        setMenu0.addActionListener(new ActionListener()
+        {
+           public void actionPerformed(ActionEvent event) { panel.setActiveMenu(0);}
+        });
+
+        JMenuItem setMenu1 = new JMenuItem("Menu 1");
+        setMenu1.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent event) { panel.setActiveMenu(1);}
+        });
+
+        JMenuItem addGame = new JMenuItem("Reset Games");
+        addGame.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent event)
             {
-                panel.emptyHexes();
+                panel.initializeMenus();
             }
         });
 
-        fileMenu.add(clear);
+        fileMenu.add(addGame);
 
-        JMenuItem reset = new JMenuItem("Reset to Large Board");
-        reset.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                panel.resetHexes();
-            }
-        });
-
-        fileMenu.add(reset);
-
-        JMenuItem resetWithOneHex = new JMenuItem("Reset with One Hex");
-        resetWithOneHex.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event)
-            {
-                panel.resetWithOneHex();
-            }
-        });
-
-        fileMenu.add(resetWithOneHex);
+        menuChangeMenu.add(setMenu0);
+        menuChangeMenu.add(setMenu1);
 
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(fileMenu);
+        menuBar.add(menuChangeMenu);
         frame.setJMenuBar(menuBar);
 
         frame.getContentPane().add(panel, BorderLayout.CENTER);
@@ -104,9 +104,9 @@ class TigerPanel extends JPanel
 
     //private GameManager manager;
 
-    private ArrayList<Menu> menus;
+    private ArrayList<BaseMenu> menus;
     private BaseMenu baseMenu;
-    private Menu activeMenu;
+    private BaseMenu activeMenu;
 
     public TigerPanel(BufferedImage image) {
         this.image = image;
@@ -154,30 +154,14 @@ class TigerPanel extends JPanel
 
     }
 
-    private void initializeMenus()
+    public void initializeMenus()
     {
-        menus = new ArrayList<Menu>();
+        menus = new ArrayList<BaseMenu>();
         baseMenu = new BaseMenu();
         menus.add(baseMenu);
+        menus.add(new BaseMenu());
         activeMenu = menus.get(0);
         activeMenu.drawMenu(g2d);
-    }
-
-    public void emptyHexes() {
-        baseMenu.clearHexes();
-        baseMenu.drawMenu(g2d);
-        repaint();
-    }
-
-    public void resetHexes() {
-        baseMenu.resetHexes();
-        baseMenu.drawMenu(g2d);
-        repaint();
-    }
-
-    public void resetWithOneHex() {
-        baseMenu.resetWithOneHex();
-        baseMenu.drawMenu(g2d);
         repaint();
     }
 
@@ -195,4 +179,14 @@ class TigerPanel extends JPanel
         g.drawImage(image, 0, 0, null);
     }
 
+    public void setActiveMenu(int index) {
+        this.activeMenu = menus.get(index);
+        activeMenu.drawMenu(g2d);
+        repaint();
+    }
+
+    public void makeNewMenu()
+    {
+        menus.add(new BaseMenu());
+    }
 }

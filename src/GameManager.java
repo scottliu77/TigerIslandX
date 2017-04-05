@@ -82,11 +82,6 @@ public class GameManager
         board.processTurn(playerMove);
     }
 
-    public void emptyHexes()
-    {
-        board.clearHexes();
-        //board = new Board(this);
-    }
 
     public void resetHexes()
     {
