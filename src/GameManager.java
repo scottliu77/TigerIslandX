@@ -11,9 +11,9 @@ public class GameManager
 
     public static final Point hexOffsetPoint = new Point( 256 + 236,  128 + 236);
 
-    GameManager()
+    GameManager(boolean playerFirst)
     {
-        board = new Board(this);
+        board = new Board(this, playerFirst);
         activeBuilding = Building.VILLAGER;
         activeTerrain = Terrain.GRASS;
         expandNext = false;

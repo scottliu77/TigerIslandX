@@ -2,6 +2,7 @@ import javafx.geometry.Point3D;
 
 import java.awt.*;
 import java.awt.image.*;
+import java.util.Timer;
 
 import static java.lang.Math.sqrt;
 
@@ -638,5 +639,56 @@ class MeepleSelectButton extends RadialButton
          board.getActiveAnalyzer().selectAndPlayMove();
      }
 
+ }
+
+ class AutoResolveButton extends Button
+ {
+     private Board board;
+
+     public AutoResolveButton(Board board)
+     {
+         super(new Point(96, 640), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB), new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB));
+         this.board = board;
+         drawBase();
+         drawHover();
+     }
+
+     public void drawBase()
+     {
+         Graphics2D g2d = super.getBaseImage().createGraphics();
+
+         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                 RenderingHints.VALUE_ANTIALIAS_ON );
+
+         g2d.setColor(Color.WHITE);
+         g2d.fillRect(0, 0, 64, 32);
+         g2d.setColor(Color.GRAY);
+         g2d.drawRect(0, 0, 63, 31);
+         g2d.setColor(Color.BLACK);
+         g2d.drawString("RESOLVE", 4, 26);
+     }
+
+     public void drawHover()
+     {
+         Graphics2D g2d = super.getHoverImage().createGraphics();
+
+         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+                 RenderingHints.VALUE_ANTIALIAS_ON );
+
+         g2d.setColor(Color.GRAY);
+         g2d.fillRect(0, 0, 64, 32);
+         g2d.setColor(Color.BLACK);
+         g2d.drawRect(0, 0, 63, 31);
+         g2d.setColor(Color.WHITE);
+         g2d.drawString("RESOLVE", 4, 26);
+     }
+
+     public void press()
+     {
+         while(board.getGameResult() == null)
+         {
+             board.getActiveAnalyzer().selectAndPlayMove();
+         }
+     }
  }
 

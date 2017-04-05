@@ -52,7 +52,7 @@ public class Board {
     private GameResult gameResult;
 
     // Constructor:
-    public Board(GameManager manager) {
+    public Board(GameManager manager, boolean playerFirst) {
         this.manager = manager;
 
         deck = new Deck();
@@ -68,8 +68,18 @@ public class Board {
         resetMapWithCenterHex();
 
         settlementManager = new SettlementManager(this);
-        analyzer1 = new RandomRandy(this);
-        analyzer2 = new MoveAnalyzer(this);
+
+        if(playerFirst)
+        {
+            analyzer1 = new MoveAnalyzer(this);
+            analyzer2 = new RandomRandy(this);
+        }
+        else
+        {
+            analyzer1 = new RandomRandy(this);
+            analyzer2 = new MoveAnalyzer(this);
+        }
+
     }
 
     // ====================================

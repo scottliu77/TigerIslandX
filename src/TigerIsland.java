@@ -157,10 +157,17 @@ class TigerPanel extends JPanel
     public void initializeMenus()
     {
         menus = new ArrayList<BaseMenu>();
-        baseMenu = new BaseMenu();
+        baseMenu = new BaseMenu(true);
         menus.add(baseMenu);
-        menus.add(new BaseMenu());
+        menus.add(new BaseMenu(false));
         activeMenu = menus.get(0);
+        activeMenu.drawMenu(g2d);
+        repaint();
+    }
+
+    public void drawActiveMenu()
+    {
+        activeMenu.updateDisplays();
         activeMenu.drawMenu(g2d);
         repaint();
     }
@@ -183,10 +190,5 @@ class TigerPanel extends JPanel
         this.activeMenu = menus.get(index);
         activeMenu.drawMenu(g2d);
         repaint();
-    }
-
-    public void makeNewMenu()
-    {
-        menus.add(new BaseMenu());
     }
 }

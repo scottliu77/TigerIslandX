@@ -177,11 +177,11 @@ class BaseMenu extends Menu
     private ArrayList<RadialButton> buildRadials;
     private RadialButton depressedBuildRadial;
 
-    public BaseMenu()
+    public BaseMenu(boolean playerFirst)
     {
         super();
 
-        gameManager = new GameManager();
+        gameManager = new GameManager(playerFirst);
         Board board = gameManager.getBoard();
         Deck deck = board.getDeck();
 
@@ -195,7 +195,6 @@ class BaseMenu extends Menu
         TerrainSelectButton jungleButton;
 
         super.addDisplay(backgroundDisplay = new BackgroundDisplay());
-        super.addDisplay(boardDisplay = new BoardDisplay(board));
         super.addDisplay(deckDisplay = new DeckDisplay(deck));
         super.addDisplay(hexDetailDisplay = new HexDetailDisplay());
         super.addDisplay(turnStatusDisplay = new TurnStatusDisplay(board));
@@ -218,6 +217,7 @@ class BaseMenu extends Menu
         super.addButton(jungleButton = new TerrainSelectButton(new Point(896, 576), gameManager, Terrain.JUNGLE));
 
         super.addButton(new PlayAnalyzerMoveButton(board));
+        super.addButton(new AutoResolveButton(board));
 
         buildRadials.add(villagerButton);
         buildRadials.add(tigerButton);

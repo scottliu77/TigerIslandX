@@ -48,7 +48,7 @@ public class TilePlacementTest
         Random rand = new Random();
         Orientation randomOrientation = Orientation.values()[rand.nextInt(6)];
 
-        Board board = new Board(null);
+        Board board = new Board(null, true);
         Deck deck = board.getDeck();
 
         Tile tile = deck.getTopTile();

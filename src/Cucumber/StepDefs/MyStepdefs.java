@@ -49,7 +49,7 @@ public class MyStepdefs {
     @Given("^Hex and neighbors initialized$")
     public void hexAndNeighborsInitialized() throws Throwable
     {
-        manager = new GameManager();
+        manager = new GameManager(true);
         board = manager.getBoard();
         tile = board.getDeck().getTopTile();
 
