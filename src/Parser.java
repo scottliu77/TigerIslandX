@@ -75,7 +75,7 @@ public class Parser{
             rounds = Integer.parseInt(input[4]);
         }
         check = input[0].equals("NEW")&&input[1].equals("MATCH")&&input[2].equals("BEGINNING")&&input[3].equals("NOW");
-        if(check){
+        if(check) {
             pidOpponent = Integer.parseInt(input[8]);
         }
     }

@@ -76,8 +76,10 @@ public class MoveAnalyzer
         {
             if(System.currentTimeMillis() - analysisStartTime >= 1250)
             {
+                System.out.println("Potential timeout detected, terminating analysis");
                 break;
             }
+
             for(int i = 0; i < 6; i++)
             {
                 activeTile.setOrientation(Orientation.values()[i]);
@@ -180,6 +182,7 @@ public class MoveAnalyzer
         {
             if(System.currentTimeMillis() - analysisStartTime >= 1250)
             {
+                System.out.println("Potential timeout detected, terminating analysis");
                 break;
             }
 
@@ -228,6 +231,7 @@ public class MoveAnalyzer
         {
             if(System.currentTimeMillis() - analysisStartTime >= 1250)
             {
+                System.out.println("Potential timeout detected, terminating analysis");
                 break;
             }
 
