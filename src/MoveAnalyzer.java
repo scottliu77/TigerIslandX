@@ -74,9 +74,9 @@ public class MoveAnalyzer
         Tile activeTile = board.getDeck().getTopTile();
         for(HexButton hex : overallMoveset)
         {
-            if(System.currentTimeMillis() - analysisStartTime >= 1250)
+            if(System.currentTimeMillis() - analysisStartTime >= 1000)
             {
-                System.out.println("Potential timeout detected, terminating analysis");
+                System.out.println("Potential timeout detected, terminating tile analysis");
                 break;
             }
 
