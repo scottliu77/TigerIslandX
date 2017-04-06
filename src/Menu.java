@@ -161,7 +161,6 @@ class BaseMenu extends Menu
     //Board board;
 
     private BackgroundDisplay backgroundDisplay;
-    private BoardDisplay boardDisplay;
     private DeckDisplay deckDisplay;
     private HexDetailDisplay hexDetailDisplay;
     private TurnStatusDisplay turnStatusDisplay;
@@ -171,8 +170,6 @@ class BaseMenu extends Menu
     private MoveAnalyzerDisplay moveAnalyzerDisplay;
 
     private GameManager gameManager;
-
-    private HexButton hoverHex;
 
     private ArrayList<RadialButton> buildRadials;
     private RadialButton depressedBuildRadial;
@@ -329,7 +326,7 @@ class BaseMenu extends Menu
             {
                 button.press();
                 //if(RadialButton.class.isAssignableFrom(button.getClass()))
-                if(buildRadials.contains(button) && depressedBuildRadial != button)
+                if(button instanceof RadialButton && buildRadials.contains(button) && depressedBuildRadial != button)
                 {
                     depressedBuildRadial.setDepressed(false);
                     depressedBuildRadial = (RadialButton) button;

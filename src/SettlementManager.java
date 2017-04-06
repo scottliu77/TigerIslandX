@@ -140,6 +140,7 @@ class Expansion
     private ArrayList<HexButton> hexes;
     private int cost;
     private int score;
+    public double efficiency;
 
     public Expansion(ArrayList<HexButton> hexButtons)
     {
@@ -152,6 +153,7 @@ class Expansion
             cost += level;
             score += (level * level);
         }
+        efficiency = (double) cost / (double) hexes.size();
     }
 
     public ArrayList<HexButton> getHexes()
@@ -168,5 +170,7 @@ class Expansion
     {
         return score;
     }
+
+    public double getEfficiency() { return efficiency; }
 
 }

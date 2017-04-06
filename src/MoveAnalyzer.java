@@ -10,38 +10,40 @@ public class MoveAnalyzer
 {
     private Board board;
     private ArrayList<HexButton> overallMoveset;
-    private ArrayList<HexButton> legalMoves;
 
     private ArrayList<TilePlacementMove> legalTilePlacements;
     private ArrayList<TilePlacementMove> legalVolcanoPlacements;
     private ArrayList<TilePlacementMove> legalEmptyPlacements;
-    private ArrayList<TilePlacementMove> expansionEnablers;
     private ArrayList<TilePlacementMove> tigerEnablers;
     private ArrayList<TilePlacementMove> totoroEnablers;
     private ArrayList<TilePlacementMove> singleNukes;
     private ArrayList<TilePlacementMove> doubleNukes;
+
     private ArrayList<BuildingPlacementMove> legalBuildingPlacements;
     private ArrayList<BuildingPlacementMove> legalTotoroPlacements;
     private ArrayList<BuildingPlacementMove> legalVillagerPlacements;
     private ArrayList<BuildingPlacementMove> villagerPlacementsThatExpand;
     private ArrayList<BuildingPlacementMove> villagerPlacementsForTigers;
     private ArrayList<BuildingPlacementMove> legalTigerPlacements;
+
     private ArrayList<SettlementExpansionMove> legalSettlementExpansions;
+    private ArrayList<SettlementExpansionMove> efficientExpansions;
+
     private Random rand;
+
+    private long analysisStartTime;
 
     public MoveAnalyzer(Board board)
     {
         this.board = board;
         this.rand = new Random();
-        updateMoveset();
-        updateSettlementExpansions();
-        updateTilePlacements();
-        updateBuildingPlacements();
 
+        analyze();
     }
 
     public void analyze()
     {
+        analysisStartTime = System.currentTimeMillis();
         updateMoveset();
         updateSettlementExpansions();
         updateTilePlacements();
@@ -61,7 +63,6 @@ public class MoveAnalyzer
         legalEmptyPlacements = new ArrayList<TilePlacementMove>();
         tigerEnablers = new ArrayList<TilePlacementMove>();
         totoroEnablers = new ArrayList<TilePlacementMove>();
-        expansionEnablers = new ArrayList<TilePlacementMove>();
         singleNukes = new ArrayList<TilePlacementMove>();
         doubleNukes = new ArrayList<TilePlacementMove>();
 
@@ -73,6 +74,10 @@ public class MoveAnalyzer
         Tile activeTile = board.getDeck().getTopTile();
         for(HexButton hex : overallMoveset)
         {
+            if(System.currentTimeMillis() - analysisStartTime >= 1250)
+            {
+                break;
+            }
             for(int i = 0; i < 6; i++)
             {
                 activeTile.setOrientation(Orientation.values()[i]);
@@ -110,8 +115,6 @@ public class MoveAnalyzer
 
                         targetA = board.getNeighborButton(hex, activeTile.getOrientation().ordinal());
                         targetB = board.getNeighborButton(hex, activeTile.getOrientationPlus(1).ordinal());
-                        Hex targetHexA = targetA.getHex();
-                        Hex targetHexB = targetB.getHex();
 
                         if(board.hexIsTigerEligibleAdjacent(targetA) || board.hexIsTigerEligibleAdjacent(targetB))
                         {
@@ -175,6 +178,11 @@ public class MoveAnalyzer
 
         for(HexButton hex : overallMoveset)
         {
+            if(System.currentTimeMillis() - analysisStartTime >= 1250)
+            {
+                break;
+            }
+
             if(board.buildingPlacementIsLegal(Building.TIGER, hex))
             {
                 BuildingPlacementMove move = new BuildingPlacementMove(board.getActivePlayer(), hex.getOrigin(), Building.TIGER);
@@ -213,10 +221,16 @@ public class MoveAnalyzer
     public void updateSettlementExpansions()
     {
         legalSettlementExpansions = new ArrayList<SettlementExpansionMove>();
+        efficientExpansions = new ArrayList<SettlementExpansionMove>();
 
         CopyOnWriteArrayList<Settlement> settlements = board.getSettlements();
         for(Settlement settlement : settlements)
         {
+            if(System.currentTimeMillis() - analysisStartTime >= 1250)
+            {
+                break;
+            }
+
             if(settlement.getOwner() == board.getActivePlayer())
             {
                 for (int i = 0; i < 4; i++)
@@ -225,7 +239,12 @@ public class MoveAnalyzer
                     Expansion expansion = board.getSettlementManager().getExpansion(settlement, terrain);
                     if (board.settlementExpansionIsLegal(expansion))
                     {
-                        legalSettlementExpansions.add(new SettlementExpansionMove(board.getActivePlayer(), settlement, terrain));
+                        SettlementExpansionMove expansionMove = new SettlementExpansionMove(board.getActivePlayer(), settlement, terrain);
+                        legalSettlementExpansions.add(expansionMove);
+                        if(expansion.getEfficiency() > 0.49)
+                        {
+                            efficientExpansions.add(expansionMove);
+                        }
                     }
                 }
             }
@@ -266,22 +285,14 @@ public class MoveAnalyzer
                 return legalTotoroPlacements.get(0);
             }
         }
-        else
-        {
-            if (legalTigerPlacements.size() > 0)
-            {
+        else {
+            if (legalTigerPlacements.size() > 0) {
                 return legalTigerPlacements.get(0);
-            }
-            else if (villagerPlacementsForTigers.size() > 0)
-            {
+            } else if (villagerPlacementsForTigers.size() > 0) {
                 return villagerPlacementsForTigers.get(0);
-            }
-            else if (legalTotoroPlacements.size() > 0)
-            {
+            } else if (legalTotoroPlacements.size() > 0) {
                 return legalTotoroPlacements.get(rand.nextInt(legalTotoroPlacements.size()));
-            }
-            else if (villagerPlacementsThatExpand.size() > 0)
-            {
+            } else if (villagerPlacementsThatExpand.size() > 0) {
                 return villagerPlacementsThatExpand.get(0);
             }
             /*
@@ -290,6 +301,23 @@ public class MoveAnalyzer
                 return legalVillagerPlacements.get(0);
             }
             */
+            else if (efficientExpansions.size() > 0)
+            {
+                // should move this analysis into settlement analysis algorithm...
+
+                for (SettlementExpansionMove expansionMove : efficientExpansions)
+                {
+                    if (!expansionMove.getSettlement().hasTotoro())
+                    {
+                        // to-do: and if expansion does not border a player-owned totoroed settlement
+                        // and if expansion does not cost more than 4 villagers
+                        return expansionMove;
+                    }
+                }
+            }
+
+            /*
+
             else if (legalSettlementExpansions.size() > 0)
             {
                 for (SettlementExpansionMove expansionMove : legalSettlementExpansions)
@@ -300,8 +328,9 @@ public class MoveAnalyzer
                     }
                 }
             }
+            */
 
-            return legalVillagerPlacements.get(0);
+            return legalVillagerPlacements.get(rand.nextInt(legalVillagerPlacements.size()));
         }
     }
 
@@ -318,6 +347,7 @@ public class MoveAnalyzer
 
         if(tigerEnablers.size() > 0)
         {
+            System.out.println("Tiger enabling!");
             return tigerEnablers.get(rand.nextInt(tigerEnablers.size()));
         }
 

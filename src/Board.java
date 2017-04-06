@@ -1,4 +1,7 @@
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,9 +54,23 @@ public class Board {
     private boolean tilePlaced;
     private GameResult gameResult;
 
+    private Timer timeoutTimer;
+    private boolean timeout;
+
     // Constructor:
     public Board(GameManager manager, boolean playerFirst) {
         this.manager = manager;
+
+        timeout = false;
+
+        timeoutTimer = new Timer(1500, new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                timeoutTimer.stop();
+                timeout = true;
+            }
+        });
 
         deck = new Deck();
 
