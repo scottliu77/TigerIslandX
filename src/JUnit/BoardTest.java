@@ -108,5 +108,16 @@ public class BoardTest {
             }
         }
     }
+    
+     @Test
+    public void InstaWin() throws Exception {
+        Object winner = null;
+        this.winner = winner;
+        GameResult gameResult = (GameResult) winner;
+        assert (gameResult == this.winner);
+    }
+
+
+
 }
 
