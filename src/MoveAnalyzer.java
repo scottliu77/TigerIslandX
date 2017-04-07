@@ -51,6 +51,11 @@ public class MoveAnalyzer
 
     }
 
+    public void setStartTime()
+    {
+        analysisStartTime = System.currentTimeMillis();
+    }
+
     public void updateMoveset()
     {
         overallMoveset = new ArrayList<HexButton>(board.getButtonMap().values());

@@ -187,7 +187,12 @@ public class Board {
                 playerMove.execute(this);
                 tilePlaced = true;
                 settlementManager.updateSettlements();
-                activeAnalyzer.analyze();
+                //activeAnalyzer.analyze();
+
+                activeAnalyzer.setStartTime();
+                activeAnalyzer.updateMoveset();
+                activeAnalyzer.updateSettlementExpansions();
+                activeAnalyzer.updateBuildingPlacements();
 
                 if (activeAnalyzer.noPossibleBuildActions())
                 {
