@@ -108,7 +108,8 @@ public class BoardTest {
             }
         }
     }
-    
+
+    /*
      @Test
     public void InstaWin() throws Exception {
         Object winner = null;
@@ -166,7 +167,7 @@ public class BoardTest {
 
     }
 
-
+    */
 
 
 }

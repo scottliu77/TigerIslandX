@@ -142,6 +142,23 @@ public class GameManager
 
     }
 
+    public void selectAndPlayMove()
+    {
+        board.getActiveAnalyzer().selectAndPlayMove();
+    }
+
+    public void resolveGame()
+    {
+        while(board.getGameResult() == null)
+        {
+            long startTime = System.currentTimeMillis();
+            board.getActiveAnalyzer().selectAndPlayMove(); // Tile Placement Action
+            board.getActiveAnalyzer().selectAndPlayMove(); // Build Action
+            long endTime = System.currentTimeMillis();
+            System.out.println("Time elapsed during turn: " + (endTime - startTime) + " ms");
+        }
+    }
+
     public Point getHexOffsetPoint()
     {
         return hexOffsetPoint;
