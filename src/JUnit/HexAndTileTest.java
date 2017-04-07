@@ -1,3 +1,4 @@
+
 import org.junit.*;
 
 import java.awt.*;
@@ -29,6 +30,7 @@ public class HexAndTileTest {
         Hex genericHex = new Hex(Terrain.GRASS,1);
         assert (genericHex.isOccupied()==false);
     }
+    @Test
     public void testHexOccupied() throws Exception {
         Hex genericHex = new Hex(Terrain.GRASS,1);
         genericHex.placeBuilding(Building.TOTORO, new Player("Generic Player", Color.BLACK, Color.WHITE));

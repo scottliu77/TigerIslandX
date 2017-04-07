@@ -46,13 +46,13 @@ public class TilePlacementTest
     public void testTilePlacement() throws Exception
     {
         Random rand = new Random();
-        Orientation randomOrientation = Orientation.values()[rand.nextInt(6)];
+        Orientation orient = Orientation.values()[3];
 
         Board board = new Board(null, true);
         Deck deck = board.getDeck();
 
         Tile tile = deck.getTopTile();
-        tile.setOrientation(randomOrientation);
+        tile.setOrientation(orient);
 
         Hex volcano = tile.getVolcano();
         Hex hexA = tile.getA();
@@ -62,10 +62,11 @@ public class TilePlacementTest
         ArrayList<Point> pointList = new ArrayList<Point>(buttonMap.keySet());
 
         Point initialPoint = pointList.get(0);
-        Point pointA = new Point(initialPoint.x + posPoints[randomOrientation.ordinal()].x, initialPoint.y + posPoints[randomOrientation.ordinal()].y);
-        Point pointB = new Point(initialPoint.x + posPoints[(randomOrientation.ordinal() + 1) % 6].x, initialPoint.y + posPoints[(randomOrientation.ordinal() + 1) % 6].y);
+        // assuming orientation 3
+        Point pointA = new Point(initialPoint.x + 20, initialPoint.y + 30);
+        Point pointB = new Point(initialPoint.x - 20, initialPoint.y + 30);
 
-        board.placeTile(initialPoint, randomOrientation);
+        board.placeTile(initialPoint, orient);
 
         HexButton targetButton = buttonMap.get(initialPoint);
         HexButton buttonA = buttonMap.get(pointA);
