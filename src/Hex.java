@@ -44,24 +44,24 @@ public class Hex
         image = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
         hoverImage = new BufferedImage(41, 41, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = image.createGraphics();
-
-        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON );
+//
+//        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+//                RenderingHints.VALUE_ANTIALIAS_ON );
 
         this.terrain = terrain;
 
         // Draw base and hover hex images for buttons:
-        g2d.setColor(terrain.getColor());
-        g2d.fill(hexagon);
-        g2d.setColor(Color.BLACK);
+//        g2d.setColor(terrain.getColor());
+//        g2d.fill(hexagon);
+//        g2d.setColor(Color.BLACK);
         g2d.draw(hexagon);
 
-        g2d = hoverImage.createGraphics();
-        g2d.drawImage(image, 0, 0, null);
-        g2d.setColor(Color.PINK);
-        Stroke stroke = new BasicStroke(3);
-        g2d.setStroke(stroke);
-        g2d.draw(hexagon);
+//        g2d = hoverImage.createGraphics();
+//        g2d.drawImage(image, 0, 0, null);
+//        g2d.setColor(Color.PINK);
+//        Stroke stroke = new BasicStroke(3);
+//        g2d.setStroke(stroke);
+//        g2d.draw(hexagon);
 
         // Alternate hover graphic, roughly equivalent to mouse detection box:
         //g2d.setColor(Color.GREEN);
