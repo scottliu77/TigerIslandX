@@ -116,6 +116,56 @@ public class BoardTest {
         GameResult gameResult = (GameResult) winner;
         assert (gameResult == this.winner);
     }
+    
+    
+       @Test
+    public void ProcesesTurn() throws Exception {
+
+
+        Object gameResult = null;
+        SwingWorker playerMove = null;
+        if (playerMove != null && gameResult == null) {
+            boolean tilePlaced = true;
+            MoveAnalyzer activeAnalyzer = null;
+            SettlementManager settlementManager = null;
+            Player activePlayer = null;
+            if (!tilePlaced) // if tilePlaced is false, Board expects a Tile Placement
+            {
+
+                tilePlaced = true;
+                settlementManager.updateSettlements();
+                activeAnalyzer.analyze();
+
+                if (activeAnalyzer.noPossibleBuildActions()) {
+                    boolean forfeitGame = true;
+                }
+
+            } else // if tilePlaced is true, Board expects a Build Action
+            {
+
+                tilePlaced = false;
+
+                int deck = 0;
+                settlementManager.updateSettlements();
+                activeAnalyzer.analyze();
+
+                if (activePlayer.instaWins()) {
+                    boolean instaWin = true;
+                    activePlayer = (Player) winner;
+                } else if (deck > 48) {
+                    boolean endGame = true;
+                    assert (endGame == false);
+                }
+
+                Player player1 = null;
+                Player player2 = null;
+                activePlayer = (activePlayer == player1 ? player2 : player1);
+                assert (activePlayer == player1);
+            }
+        }
+
+    }
+
 
 
 
