@@ -54,15 +54,15 @@ public class TigerIsland
 
 
 
-        JMenu menuChangeMenu = new JMenu("Change Menu");
+        JMenu menuChangeMenu = new JMenu("Change View");
 
-        JMenuItem setMenu0 = new JMenuItem("Menu 0");
+        JMenuItem setMenu0 = new JMenuItem("Game 0");
         setMenu0.addActionListener(new ActionListener()
         {
            public void actionPerformed(ActionEvent event) { panel.setActiveMenu(0);}
         });
 
-        JMenuItem setMenu1 = new JMenuItem("Menu 1");
+        JMenuItem setMenu1 = new JMenuItem("Game 1");
         setMenu1.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent event) { panel.setActiveMenu(1);}
@@ -77,6 +77,16 @@ public class TigerIsland
             }
         });
 
+        JMenu autoplayMenu = new JMenu("Autoplay");
+
+        JMenuItem autoplayGames = new JMenuItem("Autoplay games");
+        autoplayGames.addActionListener( new ActionListener()
+        {
+            public void actionPerformed(ActionEvent event) { autoplayGames(); }
+        });
+
+        autoplayMenu.add(autoplayGames);
+
         fileMenu.add(addGame);
 
         menuChangeMenu.add(setMenu0);
@@ -85,6 +95,7 @@ public class TigerIsland
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(fileMenu);
         menuBar.add(menuChangeMenu);
+        menuBar.add(autoplayMenu);
         frame.setJMenuBar(menuBar);
 
         frame.getContentPane().add(panel, BorderLayout.CENTER);
@@ -93,6 +104,43 @@ public class TigerIsland
         frame.setVisible(true);
     }
 
+    public static void autoplayGames()
+    {
+        int numberOfGames = Integer.parseInt(JOptionPane.showInputDialog("How many games?"));
+        Boolean playerFirst = true;
+
+        int instawins = 0;
+        int defaults = 0;
+
+        for(int i = 0; i < numberOfGames; i++)
+        {
+            System.out.println("Starting Game #" + i);
+
+            GameManager newGame = new GameManager(playerFirst);
+            // Toggle first player:
+            playerFirst = !playerFirst;
+
+            newGame.resolveGame();
+
+            GameResult result = newGame.getBoard().getGameResult();
+
+            // Right now I only bother keeping track of instawins and default because those are all that ever seem to happen
+            if(result == GameResult.INSTAWIN)
+            {
+                instawins++;
+            }
+            else if (result == GameResult.DEFAULT)
+            {
+                defaults++;
+            }
+        }
+
+        int points = ((instawins * 20) - (defaults)) * 10;
+
+        System.out.println("Instawins: " + instawins + ", rate: " + ((float) instawins / (float) numberOfGames) * 100 + "%");
+        System.out.println("Defaults: " + defaults + ", rate: " + ((float) defaults / (float) numberOfGames) * 100 + "%");
+        System.out.println("Net points: " + points + ", average: " + ((float) points / (float) numberOfGames) + " points per game");
+    }
 }
 
 // TigerPanel displays the output image and detects mouse inputs
