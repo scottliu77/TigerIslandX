@@ -205,7 +205,6 @@ public class Board {
                 playerMove.execute(this);
                 tilePlaced = false;
 
-
                 settlementManager.updateSettlements();
                 activeAnalyzer.analyze();
 

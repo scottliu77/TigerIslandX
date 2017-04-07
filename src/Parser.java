@@ -24,8 +24,6 @@ public class Parser{
     private int tileCount = 2;
 
 
-
-
     public void Parser(){   }
 
     public void Parser(GameManager m){
@@ -42,14 +40,34 @@ public class Parser{
             moveNumber = Integer.parseInt(input[10]);
             tileUnifiedName = input[12];
             String tileTerrainNames[] = tileUnifiedName.split("\\+");
-            if(tileTerrainNames[0].equals("JUNGLE")){ terrainHexA = Terrain.JUNGLE;  }
-            else if(tileTerrainNames[0].equals("GRASS")){ terrainHexA = Terrain.GRASS;  }
-            else if(tileTerrainNames[0].equals("ROCKY")){ terrainHexA = Terrain.ROCKY;  }
-            else if(tileTerrainNames[0].equals("LAKE")){ terrainHexA = Terrain.LAKE;  }
-            if(tileTerrainNames[1].equals("JUNGLE")){ terrainHexB = Terrain.JUNGLE;  }
-            else if(tileTerrainNames[1].equals("GRASS")){ terrainHexB = Terrain.GRASS;  }
-            else if(tileTerrainNames[1].equals("ROCKY")){ terrainHexB = Terrain.ROCKY;  }
-            else if(tileTerrainNames[1].equals("LAKE")){ terrainHexB = Terrain.LAKE;  }
+            switch (tileTerrainNames[0]) {
+                case "JUNGLE":
+                    terrainHexA = Terrain.JUNGLE;
+                    break;
+                case "GRASS":
+                    terrainHexA = Terrain.GRASS;
+                    break;
+                case "ROCKY":
+                    terrainHexA = Terrain.ROCKY;
+                    break;
+                case "LAKE":
+                    terrainHexA = Terrain.LAKE;
+                    break;
+            }
+            switch (tileTerrainNames[1]) {
+                case "JUNGLE":
+                    terrainHexB = Terrain.JUNGLE;
+                    break;
+                case "GRASS":
+                    terrainHexB = Terrain.GRASS;
+                    break;
+                case "ROCKY":
+                    terrainHexB = Terrain.ROCKY;
+                    break;
+                case "LAKE":
+                    terrainHexB = Terrain.LAKE;
+                    break;
+            }
             Hex hexA = new Hex(terrainHexA, tileCount);
             Hex hexB = new Hex(terrainHexB, tileCount);
             nextTile = new Tile(hexA,hexB,tileCount, Orientation.N);

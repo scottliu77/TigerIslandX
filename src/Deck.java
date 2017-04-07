@@ -42,6 +42,11 @@ public class Deck
         return topTile;
     }
 
+    public void setTopTile(Tile topTile)
+    {
+        this.topTile = topTile;
+    }
+
     public Hex randomHex()
     {
         Hex nextHex;
@@ -49,9 +54,7 @@ public class Deck
 
         nextHex = new Hex(Terrain.values()[number], tileCount);
 
-
         return nextHex;
-
     }
 
     public void rotLeft()
