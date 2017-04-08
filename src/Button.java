@@ -109,6 +109,15 @@ class HexButton extends Button
         abcPt = toHexPt(origin);
     }
 
+    static public Point toPixelPt(Point3D hexPt)
+    {
+        int q = (int) hexPt.getX();
+        int r = (int) hexPt.getZ();
+        int x = (int) Math.round(20.0 * sqrt(3) * (q + (r/2)));
+        int y = (int) Math.round(20.0 * 1.5 * r);
+        return new Point(x, y);
+    }
+
     public Point3D toHexPt(Point pixelPt)
     {
         double x = pixelPt.x;
@@ -194,8 +203,8 @@ class HexButton extends Button
         hex.placeBuilding(building, activePlayer);
         Graphics2D g2d = hex.getImage().createGraphics();
 
-        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON );
+        //g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+        //        RenderingHints.VALUE_ANTIALIAS_ON );
 
         Color baseColor = activePlayer.getColor1();
         Color textColor = activePlayer.getColor2();
@@ -209,8 +218,8 @@ class HexButton extends Button
 
         g2d = hex.getHoverImage().createGraphics();
 
-        g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON );
+        //g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
+        //        RenderingHints.VALUE_ANTIALIAS_ON );
 
         g2d.setColor(baseColor);
         g2d.fillOval(7, 13, 20, 20);

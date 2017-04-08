@@ -169,7 +169,7 @@ public class Parser{
                 check2 = input[13].equals("FOUNDED") && input[14].equals("SETTLEMENT");
                 if(check2){
                     Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]),Integer.parseInt(input[17]),Integer.parseInt(input[18]));
-
+                    Point pixelPoint = HexButton.toPixelPt(buildPlacementPoint3d);
                     //buildPlacementPoint3d to build settlement
 
                 }
