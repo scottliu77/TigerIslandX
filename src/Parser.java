@@ -219,7 +219,7 @@ public class Parser{
 
         check = input[0].equals("GAME")&&input[2].equals("OVER");
         if(check){
-            gid = input[1);
+            gid = input[1];
             pid = input[4];
             score1 = Integer.parseInt(input[5]);
             pidOpponent = input[7];
