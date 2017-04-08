@@ -122,14 +122,99 @@ public class Parser{
             moveNumber = Integer.parseInt(input[3]);
             pidOpponent = Integer.parseInt(input[5]);
 
-            /*check2 = input[6].equals("PLACED");
-            if(check2){
+            check = input[6].equals("PLACED") && input[8].equals("AT");
+            if(check){
+                String tileTerrainNames[] = tileUnifiedName.split("\\+");
 
-            }*/
+                switch (tileTerrainNames[0]) {
+                    case "JUNGLE":
+                        terrainHexA = Terrain.JUNGLE;
+                        break;
+                    case "GRASS":
+                        terrainHexA = Terrain.GRASS;
+                        break;
+                    case "ROCK":
+                        terrainHexA = Terrain.ROCKY;
+                        break;
+                    case "LAKE":
+                        terrainHexA = Terrain.LAKE;
+                        break;
+                }
+
+                switch (tileTerrainNames[1]) {
+                    case "JUNGLE":
+                        terrainHexB = Terrain.JUNGLE;
+                        break;
+                    case "GRASS":
+                        terrainHexB = Terrain.GRASS;
+                        break;
+                    case "ROCK":
+                        terrainHexB = Terrain.ROCKY;
+                        break;
+                    case "LAKE":
+                        terrainHexB = Terrain.LAKE;
+                        break;
+                }
+
+                Hex hexA = new Hex(terrainHexA, tileCount);
+                Hex hexB = new Hex(terrainHexB, tileCount);
+                nextTile = new Tile(hexA,hexB,tileCount, Orientation.N);
+                tileCount++;
+                orientation = Integer.parseInt(input[12]);
+                Point3D tilePlacementPoint3d = new Point3D(Integer.parseInt(input[9]),Integer.parseInt(input[10]),Integer.parseInt(input[11]));
+
+                //place tile here
+
+
+                check2 = input[13].equals("FOUNDED") && input[14].equals("SETTLEMENT");
+                if(check2){
+                    Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]),Integer.parseInt(input[17]),Integer.parseInt(input[18]));
+
+                    //buildPlacementPoint3d to build settlement
+
+                }
+                check2 = input[13].equals("EXPANDED") && input[14].equals("SETTLEMENT");
+                if(check2){
+                    Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]),Integer.parseInt(input[17]),Integer.parseInt(input[18]));
+
+                    switch (input[19]) {
+                        case "JUNGLE":
+                            expandTerrain = Terrain.JUNGLE;
+                            break;
+                        case "GRASS":
+                            expandTerrain = Terrain.GRASS;
+                            break;
+                        case "ROCK":
+                            expandTerrain = Terrain.ROCKY;
+                            break;
+                        case "LAKE":
+                            expandTerrain = Terrain.LAKE;
+                            break;
+                    }
+
+                    //use values to expand settlement here
+
+                }
+                check2 = input[13].equals("BUILT") && input[14].equals("TOTORO");
+                if(check2){
+                    Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[17]),Integer.parseInt(input[18]),Integer.parseInt(input[19]));
+
+                    //build totoro here
+                }
+                check2 = input[13].equals("BUILT") && input[14].equals("TIGER");
+                if(check2){
+                    Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[17]),Integer.parseInt(input[18]),Integer.parseInt(input[19]));
+
+                    //build tiger here
+
+                }
+            }
+            else{
+                //Opponent either forfeited or lost
+            }
 
 
         }
-
 
     }
     //Normal build actions
