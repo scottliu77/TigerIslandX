@@ -158,9 +158,12 @@ public class Parser{
     }
     //Unable to build case
     public String sendAction(HexButton tileLocation, int orientation){
-        String outputMessage = "GAME " + gid + " MOVE " + moveNumber + " UNABLE TO BUILD";
+        String outputMessage = "GAME " + gid + " MOVE " + moveNumber + " PLACE " + tileUnifiedName;
+        outputMessage += " AT " + tileLocation.getABCPoint().getX() + " " + tileLocation.getABCPoint().getY() + " " + tileLocation.getABCPoint().getZ() + " " + orientation;
+        outputMessage += " UNABLE TO BUILD";
         return outputMessage;
     }
+
 
     public String sendTournamentPassword(String tournamentPassword){
         String outputMessage = "ENTER THUNDERDOME " + tournamentPassword;
