@@ -109,12 +109,12 @@ public class TigerIsland
         int instawins[] = new int[2];
         int defaults[] = new int[2];
         int gameCount[] = new int[2];
+        GameManager newGame;
 
         for(int i = 0; i < numberOfGames; i++)
         {
             System.out.println("Starting Game #" + i);
-
-            GameManager newGame = new GameManager(playerFirst);
+            newGame = new GameManager(playerFirst);
             // Toggle first player:
             playerFirst = !playerFirst;
 
@@ -142,6 +142,7 @@ public class TigerIsland
             System.out.println("First move Defaults: " + defaults[0] + ", rate: " + ((float) defaults[0] / (float) gameCount[0]) * 100 + "%");
             System.out.println("Second move Defaults: " + defaults[1] + ", rate: " + ((float) defaults[1] / (float) gameCount[1]) * 100 + "%");
 
+            newGame = null;
         }
 
         int instaTotal = instawins[0] + instawins[1];

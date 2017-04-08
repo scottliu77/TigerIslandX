@@ -90,7 +90,7 @@ public class MoveAnalyzer
                 activeTile.setOrientation(Orientation.values()[i]);
                 if(board.tilePlacementIsLegal(activeTile, hex))
                 {
-                    TilePlacementMove newMove = new TilePlacementMove(board.getActivePlayer(), hex.getOrigin(), activeTile.getOrientation());
+                    TilePlacementMove newMove = new TilePlacementMove(board.getActivePlayer(), hex, activeTile.getOrientation());
                     legalTilePlacements.add(newMove);
                     if (hex.getHex().getTerrain() == Terrain.VOLCANO)
                     {
@@ -193,21 +193,21 @@ public class MoveAnalyzer
 
             if(board.buildingPlacementIsLegal(Building.TIGER, hex))
             {
-                BuildingPlacementMove move = new BuildingPlacementMove(board.getActivePlayer(), hex.getOrigin(), Building.TIGER);
+                BuildingPlacementMove move = new BuildingPlacementMove(board.getActivePlayer(), hex, Building.TIGER);
                 legalTigerPlacements.add(move);
                 legalBuildingPlacements.add(move);
             }
 
             if(board.buildingPlacementIsLegal(Building.TOTORO, hex))
             {
-                BuildingPlacementMove move = new BuildingPlacementMove(board.getActivePlayer(), hex.getOrigin(), Building.TOTORO);
+                BuildingPlacementMove move = new BuildingPlacementMove(board.getActivePlayer(), hex, Building.TOTORO);
                 legalTotoroPlacements.add(move);
                 legalBuildingPlacements.add(move);
             }
 
             if(board.buildingPlacementIsLegal(Building.VILLAGER, hex))
             {
-                BuildingPlacementMove move = new BuildingPlacementMove(board.getActivePlayer(), hex.getOrigin(), Building.VILLAGER);
+                BuildingPlacementMove move = new BuildingPlacementMove(board.getActivePlayer(), hex, Building.VILLAGER);
                 legalVillagerPlacements.add(move);
                 legalBuildingPlacements.add(move);
 
@@ -381,11 +381,13 @@ public class MoveAnalyzer
             return doubleNukes.get(0);
         }
 
+        /*
         if(singleNukes.size() > 0)
         {
             System.out.println("Single nuking!");
             return singleNukes.get(0);
         }
+        */
 
         if(legalVolcanoPlacements.size() > 0)
         {

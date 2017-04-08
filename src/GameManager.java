@@ -8,12 +8,16 @@ public class GameManager
     private Building activeBuilding;
     private Terrain activeTerrain;
     private boolean expandNext;
+    private Parser parser;
+
+    private TilePlacementMove storedTilePlacement;
 
     public static final Point hexOffsetPoint = new Point( 256 + 236,  128 + 236);
 
     GameManager(boolean playerFirst)
     {
         board = new Board(this, playerFirst);
+        parser = new Parser();
         activeBuilding = Building.VILLAGER;
         activeTerrain = Terrain.GRASS;
         expandNext = false;
@@ -23,11 +27,11 @@ public class GameManager
     {
         if(!board.getTilePlaced())
         {
-            return new TilePlacementMove(board.getActivePlayer(), targetPoint, board.getDeck().getOrientation());
+            return new TilePlacementMove(board.getActivePlayer(), board.getHexButton(targetPoint), board.getDeck().getOrientation());
         }
         else if (!expandNext)
         {
-            return new BuildingPlacementMove(board.getActivePlayer(), targetPoint, activeBuilding);
+            return new BuildingPlacementMove(board.getActivePlayer(), board.getHexButton(targetPoint), activeBuilding);
         }
         else
         {
@@ -162,5 +166,10 @@ public class GameManager
     public Point getHexOffsetPoint()
     {
         return hexOffsetPoint;
+    }
+
+    public void parseMoves(TilePlacementMove storedTilePlacement, PlayerMove playerMove)
+    {
+        parser.extractAndSendAction(storedTilePlacement, playerMove);
     }
 }

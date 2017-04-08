@@ -1,3 +1,5 @@
+import javafx.geometry.Point3D;
+
 import java.awt.*;
 
 public class Parser{
@@ -44,6 +46,7 @@ public class Parser{
             tileUnifiedName = input[12];
 
             String tileTerrainNames[] = tileUnifiedName.split("\\+");
+
             switch (tileTerrainNames[0]) {
                 case "JUNGLE":
                     terrainHexA = Terrain.JUNGLE;
@@ -58,6 +61,7 @@ public class Parser{
                     terrainHexA = Terrain.LAKE;
                     break;
             }
+
             switch (tileTerrainNames[1]) {
                 case "JUNGLE":
                     terrainHexB = Terrain.JUNGLE;
@@ -72,6 +76,7 @@ public class Parser{
                     terrainHexB = Terrain.LAKE;
                     break;
             }
+
             Hex hexA = new Hex(terrainHexA, tileCount);
             Hex hexB = new Hex(terrainHexB, tileCount);
             nextTile = new Tile(hexA,hexB,tileCount, Orientation.N);
@@ -129,9 +134,30 @@ public class Parser{
 
     }
     //Normal build actions
+
+    public void extractAndSendAction(TilePlacementMove tilePlacement, PlayerMove buildAction)
+    {
+        HexButton tileHex = tilePlacement.getTargetHex();
+        Orientation orientation = tilePlacement.getOrientation();
+
+        if(buildAction instanceof BuildingPlacementMove)
+        {
+            Building building = ((BuildingPlacementMove) buildAction).getBuilding();
+            HexButton targetHex = ((BuildingPlacementMove) buildAction).getTargetHex();
+            sendAction(tileHex, orientation.ordinal(), building, targetHex);
+        }
+        else if(buildAction instanceof SettlementExpansionMove)
+        {
+            Settlement settlement = ((SettlementExpansionMove) buildAction).getSettlement();
+            HexButton targetHex = settlement.getHexes().get(0);
+            Terrain terrain = ((SettlementExpansionMove) buildAction).getTerrain();
+            sendAction(tileHex, orientation.ordinal(), terrain, targetHex);
+        }
+    }
+
     public String sendAction(HexButton tileLocation, int orientation, Building buildingType, HexButton buildLocation){
         String outputMessage = "GAME " + gid + " MOVE " + moveNumber + " PLACE " + tileUnifiedName;
-        outputMessage += " AT " + tileLocation.getABCPoint().getX() + " " + tileLocation.getABCPoint().getY() + " " + tileLocation.getABCPoint().getZ() + " " + orientation;
+        outputMessage += " AT " + (int) tileLocation.getABCPoint().getX() + " " + (int) tileLocation.getABCPoint().getY() + " " + (int) tileLocation.getABCPoint().getZ() + " " + orientation;
         if(buildingType.equals(Building.VILLAGER)){
             outputMessage += " FOUND SETTLEMENT AT ";
         }
@@ -141,19 +167,21 @@ public class Parser{
         else if(buildingType.equals(Building.TOTORO)){
             outputMessage += " BUILD TOTORO SANCTUARY AT ";
         }
-        outputMessage += buildLocation.getABCPoint().getX() + " " + buildLocation.getABCPoint().getY() + " " + buildLocation.getABCPoint().getZ();
+        outputMessage += (int) buildLocation.getABCPoint().getX() + " " + (int) buildLocation.getABCPoint().getY() + " " + (int) buildLocation.getABCPoint().getZ();
+        System.out.println("Returned: " + outputMessage);
         return outputMessage;
     }
     //Expansion case
     public String sendAction(HexButton tileLocation, int orientation, Terrain terrainType, HexButton settlementLocation){
         String outputMessage = "GAME " + gid + " MOVE " + moveNumber + " PLACE " + tileUnifiedName;
-        outputMessage += " AT " + tileLocation.getABCPoint().getX() + " " + tileLocation.getABCPoint().getY() + " " + tileLocation.getABCPoint().getZ() + " " + orientation;
-        outputMessage += " EXPAND SETTLEMENT AT " + settlementLocation.getABCPoint().getX() + " " + settlementLocation.getABCPoint().getY() + " " + settlementLocation.getABCPoint().getZ();
+        outputMessage += " AT " + (int) tileLocation.getABCPoint().getX() + " " + (int) tileLocation.getABCPoint().getY() + " " + (int) tileLocation.getABCPoint().getZ() + " " + orientation;
+        outputMessage += " EXPAND SETTLEMENT AT " + (int) settlementLocation.getABCPoint().getX() + " " + (int) settlementLocation.getABCPoint().getY() + " " + (int) settlementLocation.getABCPoint().getZ();
         String temp = terrainType.name();
         if(temp.equals("ROCKY")){
             temp = "ROCK";          //since the server uses rock instead of rocky
         }
         outputMessage += " " + temp;
+        System.out.println("Returned: " + outputMessage);
         return outputMessage;
     }
     //Unable to build case

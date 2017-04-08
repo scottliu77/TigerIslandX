@@ -57,6 +57,8 @@ public class Board {
     private Timer timeoutTimer;
     private boolean timeout;
 
+    private TilePlacementMove storedTilePlacement;
+
     // Constructor:
     public Board(GameManager manager, boolean playerFirst) {
         this.manager = manager;
@@ -184,6 +186,11 @@ public class Board {
         {
             if (!tilePlaced) // if tilePlaced is false, Board expects a Tile Placement
             {
+                if(! (playerMove instanceof TilePlacementMove))
+                {
+                    System.out.println("Sync error! TilePlacement expected by Board but not received");
+                }
+                storedTilePlacement = (TilePlacementMove) playerMove;
                 playerMove.execute(this);
                 tilePlaced = true;
                 settlementManager.updateSettlements();
@@ -221,6 +228,8 @@ public class Board {
                 // activePlayer is then switched from player1 to player2 or vice-versa:
                 activePlayer = (activePlayer == player1 ? player2 : player1);
                 getActiveAnalyzer().analyze();
+
+                manager.parseMoves(storedTilePlacement, playerMove);
             }
         }
 

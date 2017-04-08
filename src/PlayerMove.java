@@ -11,36 +11,57 @@ interface PlayerMove
 class TilePlacementMove implements PlayerMove
 {
     private Player player;
-    private Point targetPoint;
+    private HexButton targetHex;
     private Orientation orientation;
 
-    public TilePlacementMove(Player player, Point targetPoint, Orientation orientation)
+    public TilePlacementMove(Player player, HexButton targetHex, Orientation orientation)
     {
         this.player = player;
-        this.targetPoint = targetPoint;
+        this.targetHex = targetHex;
         this.orientation = orientation;
     }
 
     public void execute(Board board)
     {
-        board.placeTile(targetPoint, orientation);
+        board.placeTile(targetHex.getOrigin(), orientation);
+    }
+
+    public HexButton getTargetHex()
+    {
+        return targetHex;
+    }
+
+    public Orientation getOrientation()
+    {
+        return orientation;
     }
 }
 
 class BuildingPlacementMove implements PlayerMove
 {
-    private Point targetPoint;
+    //private Point targetPoint;
+    private HexButton targetHex;
     private Building building;
 
-    public BuildingPlacementMove(Player player, Point targetPoint, Building building)
+    public BuildingPlacementMove(Player player, HexButton targetHex, Building building)
     {
-        this.targetPoint = targetPoint;
+        this.targetHex = targetHex;
         this.building = building;
+    }
+
+    public Building getBuilding()
+    {
+        return building;
+    }
+
+    public HexButton getTargetHex()
+    {
+        return targetHex;
     }
 
     public void execute(Board board)
     {
-        board.placeBuilding(targetPoint, building);
+        board.placeBuilding(targetHex.getOrigin(), building);
     }
 }
 
@@ -55,6 +76,8 @@ class SettlementExpansionMove implements PlayerMove
         this.settlement = settlement;
         this.terrain = terrain;
     }
+
+    public Terrain getTerrain() { return terrain; }
 
     public Settlement getSettlement()
     {
