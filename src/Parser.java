@@ -158,10 +158,12 @@ public class Parser{
     public String sendAction(HexButton tileLocation, int orientation, Building buildingType, HexButton buildLocation){
         String outputMessage = "GAME " + gid + " MOVE " + moveNumber + " PLACE " + tileUnifiedName;
         outputMessage += " AT " + (int) tileLocation.getABCPoint().getX() + " " + (int) tileLocation.getABCPoint().getY() + " " + (int) tileLocation.getABCPoint().getZ() + " " + orientation;
-        if(buildingType.equals(Building.VILLAGER)){
+        if(buildingType.equals(Building.VILLAGER))
+        {
             outputMessage += " FOUND SETTLEMENT AT ";
         }
-        else if(buildingType.equals(Building.TIGER)){
+        else if(buildingType.equals(Building.TIGER))
+        {
             outputMessage += " BUILD TIGER PLAYGROUND AT ";
         }
         else if(buildingType.equals(Building.TOTORO)){
