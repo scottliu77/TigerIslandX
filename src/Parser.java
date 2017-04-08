@@ -15,7 +15,8 @@ public class Parser{
     private int pidOpponent;
     private int rid;
     private int rounds;
-    private int score;
+    private int score1;
+    private int score2;
     private Terrain expandTerrain;
     private Terrain terrainHexA;
     private Terrain terrainHexB;
