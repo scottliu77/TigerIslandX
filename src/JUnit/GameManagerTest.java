@@ -11,7 +11,7 @@ public class GameManagerTest {
     }
     @Test
     public void GUITest() throws Exception{
-        TigerIsland tigerIsland = new TigerIsland();
+        UI tigerIsland = new UI();
         tigerIsland.createAndShowGUI();
 
     }
