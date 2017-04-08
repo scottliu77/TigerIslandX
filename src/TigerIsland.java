@@ -51,9 +51,6 @@ public class TigerIsland
 
         fileMenu.add(exit);
 
-
-
-
         JMenu menuChangeMenu = new JMenu("Change View");
 
         JMenuItem setMenu0 = new JMenuItem("Game 0");
@@ -109,8 +106,9 @@ public class TigerIsland
         int numberOfGames = Integer.parseInt(JOptionPane.showInputDialog("How many games?"));
         Boolean playerFirst = true;
 
-        int instawins = 0;
-        int defaults = 0;
+        int instawins[] = new int[2];
+        int defaults[] = new int[2];
+        int gameCount[] = new int[2];
 
         for(int i = 0; i < numberOfGames; i++)
         {
@@ -125,20 +123,34 @@ public class TigerIsland
             GameResult result = newGame.getBoard().getGameResult();
 
             // Right now I only bother keeping track of instawins and default because those are all that ever seem to happen
+
+            int playerIndex = playerFirst ? 0 : 1;
+
             if(result == GameResult.INSTAWIN)
             {
-                instawins++;
+                instawins[playerIndex]++;
             }
             else if (result == GameResult.DEFAULT)
             {
-                defaults++;
+                defaults[playerIndex]++;
             }
+
+            gameCount[playerIndex]++;
+
+            System.out.println("First move Instawins: " + instawins[0] + ", rate: " + ((float) instawins[0] / (float) gameCount[0]) * 100 + "%");
+            System.out.println("Second move Instawins: " + instawins[1] + ", rate: " + ((float) instawins[1] / (float) gameCount[1]) * 100 + "%");
+            System.out.println("First move Defaults: " + defaults[0] + ", rate: " + ((float) defaults[0] / (float) gameCount[0]) * 100 + "%");
+            System.out.println("Second move Defaults: " + defaults[1] + ", rate: " + ((float) defaults[1] / (float) gameCount[1]) * 100 + "%");
+
         }
 
-        int points = ((instawins * 20) - (defaults)) * 10;
+        int instaTotal = instawins[0] + instawins[1];
+        int defaultTotal = defaults[0] + defaults[1];
 
-        System.out.println("Instawins: " + instawins + ", rate: " + ((float) instawins / (float) numberOfGames) * 100 + "%");
-        System.out.println("Defaults: " + defaults + ", rate: " + ((float) defaults / (float) numberOfGames) * 100 + "%");
+        int points = ((instaTotal * 20) - (defaultTotal)) * 10;
+
+        System.out.println("Instawins: " + instaTotal + ", rate: " + ((float) instaTotal / (float) numberOfGames) * 100 + "%");
+        System.out.println("Defaults: " + defaultTotal + ", rate: " + ((float) defaultTotal / (float) numberOfGames) * 100 + "%");
         System.out.println("Net points: " + points + ", average: " + ((float) points / (float) numberOfGames) + " points per game");
     }
 }

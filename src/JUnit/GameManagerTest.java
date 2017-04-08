@@ -13,5 +13,6 @@ public class GameManagerTest {
     public void GUITest() throws Exception{
         TigerIsland tigerIsland = new TigerIsland();
         tigerIsland.createAndShowGUI();
+
     }
 }
