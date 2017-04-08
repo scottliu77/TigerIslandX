@@ -52,7 +52,7 @@ public class Parser{
                 case "GRASS":
                     terrainHexA = Terrain.GRASS;
                     break;
-                case "ROCKY":
+                case "ROCK":
                     terrainHexA = Terrain.ROCKY;
                     break;
                 case "LAKE":
@@ -67,7 +67,7 @@ public class Parser{
                 case "GRASS":
                     terrainHexB = Terrain.GRASS;
                     break;
-                case "ROCKY":
+                case "ROCK":
                     terrainHexB = Terrain.ROCKY;
                     break;
                 case "LAKE":
