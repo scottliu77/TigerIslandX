@@ -23,7 +23,7 @@ public class Network implements Runnable {
         }
     }
 
-    private void Client() throws IOException {
+    private void Client() throws IOException, NetworkConnectivityException {
         Socket kkSocket = null;
         BufferedReader in = null;
         PrintWriter out = null;
@@ -35,11 +35,9 @@ public class Network implements Runnable {
             out = new PrintWriter(kkSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
         } catch (UnknownHostException e) {
-            System.err.println("Don't know about host: " + address);
-            System.exit(1);
+            throw new NetworkConnectivityException("Don't know about host: " + address);
         } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to: " + address);
-            System.exit(1);
+            throw new NetworkConnectivityException("Couldn't get I/O for the connection to: " + address);
         }
 
         Thread receiveMessage = new Thread(new ReceiveChat(in, stdIn, out));
@@ -87,6 +85,12 @@ public class Network implements Runnable {
             catch(Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    class NetworkConnectivityException extends Exception {
+        private NetworkConnectivityException(String s) {
+            super(s);
         }
     }
 }
