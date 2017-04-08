@@ -74,6 +74,12 @@ public class TigerIsland
             }
         });
 
+        JMenuItem sendMessageToParser = new JMenuItem("Send Msg to Parser");
+        sendMessageToParser.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent event){panel.sendMessageToParser();}
+        });
+
         JMenu autoplayMenu = new JMenu("Autoplay");
 
         JMenuItem autoplayGames = new JMenuItem("Autoplay games");
@@ -85,6 +91,7 @@ public class TigerIsland
         autoplayMenu.add(autoplayGames);
 
         fileMenu.add(addGame);
+        fileMenu.add(sendMessageToParser);
 
         menuChangeMenu.add(setMenu0);
         menuChangeMenu.add(setMenu1);
@@ -251,5 +258,10 @@ class TigerPanel extends JPanel
         this.activeMenu = menus.get(index);
         activeMenu.drawMenu(g2d);
         repaint();
+    }
+
+    public void sendMessageToParser()
+    {
+        activeMenu.sendMessageToParser(JOptionPane.showInputDialog("Send message to parse: "));
     }
 }

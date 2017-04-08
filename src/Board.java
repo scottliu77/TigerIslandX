@@ -338,7 +338,7 @@ public class Board {
         placePerimeterHexes(origin);
     }
 
-    private void placePerimeterHexes(Point center) {
+    public void placePerimeterHexes(Point center) {
         for (int i = 0; i < 6; i++) {
             Point neighborPoint = neighborPts[i];
             Point buttonPoint = new Point(center.x + neighborPoint.x, center.y + neighborPoint.y);

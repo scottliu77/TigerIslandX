@@ -152,6 +152,7 @@ class Menu
     {
         return hoverButton;
     }
+
 }
 
 // The baseMenu holds the board and most game logic.
@@ -350,5 +351,11 @@ class BaseMenu extends Menu
             hexButton = (HexButton) hoverButton;
         }
         return hexButton;
+    }
+
+    public void sendMessageToParser(String s)
+    {
+        gameManager.sendMessageToParser(s);
+        addHexButtons(gameManager.getButtonMap());
     }
 }

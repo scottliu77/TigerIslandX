@@ -17,7 +17,7 @@ public class GameManager
     GameManager(boolean playerFirst)
     {
         board = new Board(this, playerFirst);
-        parser = new Parser();
+        parser = new Parser(this);
         activeBuilding = Building.VILLAGER;
         activeTerrain = Terrain.GRASS;
         expandNext = false;
@@ -171,5 +171,10 @@ public class GameManager
     public void parseMoves(TilePlacementMove storedTilePlacement, PlayerMove playerMove)
     {
         parser.extractAndSendAction(storedTilePlacement, playerMove);
+    }
+
+    public void sendMessageToParser(String s)
+    {
+        parser.receiveMessage(s);
     }
 }

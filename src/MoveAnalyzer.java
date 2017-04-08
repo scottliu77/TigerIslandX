@@ -403,7 +403,8 @@ public class MoveAnalyzer
     {
         if(!board.getTilePlaced())
         {
-            board.processTurn(getNextTilePlacement());
+            TilePlacementMove tilePlacement = getNextTilePlacement();
+            board.processTurn(tilePlacement);
         }
         else
         {

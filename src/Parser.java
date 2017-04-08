@@ -26,9 +26,7 @@ public class Parser{
     private int tileCount = 100;
 
 
-    public void Parser(){   }
-
-    public void Parser(GameManager m){
+    public Parser(GameManager m){
         manager = m;
     }
 
@@ -81,14 +79,14 @@ public class Parser{
             Hex hexB = new Hex(terrainHexB, tileCount);
             nextTile = new Tile(hexA,hexB,tileCount, Orientation.N);
             tileCount++;
-            /*
-            manager.getBoard().getDeck().setTopTile(nextTile);
+
+            //manager.getBoard().getDeck().setTopTile(nextTile);
             //
             //This may or not be the correct way of calling the AI to place the Tile and select a build action
             //
-            manager.getBoard().getActiveAnalyzer().selectAndPlayMove();
-            manager.getBoard().getActiveAnalyzer().selectAndPlayMove();
-            */
+            manager.selectAndPlayMove();
+            manager.selectAndPlayMove();
+
         }
 
         //Enter message for tournament. Includes Player ID
@@ -131,6 +129,7 @@ public class Parser{
 
 
         }
+
 
     }
     //Normal build actions
