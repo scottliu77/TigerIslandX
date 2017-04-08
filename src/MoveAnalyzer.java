@@ -211,7 +211,7 @@ public class MoveAnalyzer
                 legalVillagerPlacements.add(move);
                 legalBuildingPlacements.add(move);
 
-                if(board.hexIsTotorolessSettlementAdjacent(hex))
+                if(board.hexIsTotorolessSettlementAdjacent(hex) && !board.hexIsTotoroedSettlementAdjacent(hex))
                 {
                     villagerPlacementsThatExpand.add(move);
                 }
@@ -250,7 +250,16 @@ public class MoveAnalyzer
                     {
                         SettlementExpansionMove expansionMove = new SettlementExpansionMove(board.getActivePlayer(), settlement, terrain);
                         legalSettlementExpansions.add(expansionMove);
-                        if(expansion.getEfficiency() > 0.49)
+
+                        // efficiency > 0.80 winrate is approx 48%
+                        // efficiency > 0.67
+                        // efficiency > 0.65 winrate is approx 50%
+                        // efficiency > 0.51 winrate is approx 50%
+                        // efficiency > 0.49 winrate is approx 50%
+                        // efficiency > 0.34 winrate is approx 50%
+                        // efficiency > 0.32 winrate is approx 50%
+
+                        if(expansion.getEfficiency() > 0.32)
                         {
                             efficientExpansions.add(expansionMove);
                         }

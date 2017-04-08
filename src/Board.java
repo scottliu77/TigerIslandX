@@ -755,6 +755,20 @@ public class Board {
         return false;
     }
 
+    public boolean hexIsTotoroedSettlementAdjacent(HexButton hex)
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            HexButton neighbor = getNeighborButton(hex, i);
+            Hex neighborHex = neighbor.getHex();
+            if(neighborHex.isOccupied() && neighborHex.getOwner() == activePlayer && getSettlementManager().getSettlement(neighbor).hasTotoro())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean hexIsTigerEligibleAdjacent(HexButton hex)
     {
         boolean status = false;
