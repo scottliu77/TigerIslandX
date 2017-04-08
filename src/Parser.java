@@ -227,8 +227,8 @@ public class Parser{
         }
         check = input[0].equals("END")&&input[1].equals("OF")&&input[2].equals("ROUND");
         if(check){
-            rid = input[3];
-            rounds = input[5];
+            rid = Integer.parseInt(input[3]);
+            rounds = Integer.parseInt(input[5]);
             //System.out.println("Round over. Round ID: "+ input[3]);
         }
 
