@@ -216,6 +216,22 @@ public class Parser{
 
         }
 
+        check = input[0].equals("GAME")&&input[2].equals("OVER");
+        if(check){
+            gid = Integer.parseInt(input[1]);
+            pid = Integer.parseInt(input[4]);
+            score1 = Integer.parseInt(input[5]);
+            pidOpponent = Integer.parseInt(input[7]);
+            score2 = Integer.parseInt(input[8]);
+        }
+        check = input[0].equals("END")&&input[1].equals("OF")&&input[2].equals("ROUND");
+        if(check){
+            rid = input[3];
+            rounds = input[5];
+            //System.out.println("Round over. Round ID: "+ input[3]);
+        }
+
+
     }
     //Normal build actions
 
