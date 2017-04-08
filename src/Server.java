@@ -43,6 +43,9 @@ class NetPlayer implements Runnable {
 
     private final BlockingQueue<String> msgQ;
 
+
+    private Boolean authenticated = false;
+
     NetPlayer(int port, BlockingQueue<String> queue) {
         this.port = port;
         this.msgQ = queue;
@@ -54,13 +57,23 @@ class NetPlayer implements Runnable {
             while (true) {
                 if ( !msgQ.isEmpty() ) {
                     try {
-                        if (msgQ.peek().substring(0,4).equals( Integer.toString( port ) )) {
+                        if ( !msgQ.peek().substring(0,4).equals( Integer.toString( port ) ) ) {
+//                            System.out.println("waiting...");
                             synchronized (this) {
                                 this.wait(250);
                             }
                         }else{
-                            System.out.println("Sent: " + msgQ.peek() );
-                            out.println( msgQ.poll() );
+//                            System.out.println("Sent: " + msgQ.peek() );
+                            if (!authenticated && msgQ.peek().substring(4, 21).equals("ENTER THUNDERDOME") ) {
+                                System.out.println("tourney password: " + msgQ.poll().substring(22) );
+                                out.println( "TWO SHALL ENTER, ONE SHALL LEAVE" );
+                                authenticated = true;
+                            }else if ( msgQ.peek().substring(4, 9).equals("I AM ") ) {
+                                System.out.println("username and password: " + msgQ.poll().substring(9));
+                                out.println("WAIT FOR THE TOURNAMENT TO BEGIN " + "player1" );
+                            }else{
+                                System.out.println( msgQ.poll() );
+                            }
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -150,7 +163,7 @@ class NetPlayer implements Runnable {
         connectStreamsToBuffers();
 
         System.out.println( "Connected client on port " + port + "." );
-        out.println ( "####Connected to server on port " + port + "." );
+        out.println ( "WELCOME TO ANOTHER EDITION OF THUNDERDOME!" );
 
         Thread sendMessages = new Thread(new MessageListener());
         sendMessages.start();
