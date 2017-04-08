@@ -8,11 +8,11 @@ public class Parser{
     private GameManager manager;
 
     private int challenges;
-    private int cid;
-    private int gid;
+    private String cid;
+    private String gid;
     private int orientation;
-    private int pid;
-    private int pidOpponent;
+    private String pid;
+    private String pidOpponent;
     private int rid;
     private int rounds;
     private int score1;
@@ -39,7 +39,7 @@ public class Parser{
         //Server supplies tile to be placed
         check = input[0].equals("MAKE")&&input[1].equals("YOUR")&&input[2].equals("MOVE")&&input[3].equals("IN");
         if(check){
-            gid = Integer.parseInt(input[5]);
+            gid = input[5];
             time = Integer.parseInt(input[7]);
             moveNumber = Integer.parseInt(input[10]);
             tileUnifiedName = input[12];
@@ -93,13 +93,13 @@ public class Parser{
         //Enter message for tournament. Includes Player ID
         check = input[0].equals("WAIT")&&input[1].equals("FOR")&&input[2].equals("THE")&&input[3].equals("TOURNAMENT")&&input[4].equals("TO")&&input[5].equals("BEGIN");
         if(check){
-            pid = Integer.parseInt(input[6]);
+            pid = input[6];
         }
 
         //
         check = input[0].equals("NEW")&&input[1].equals("CHALLENGE");
         if(check){
-            cid = Integer.parseInt(input[2]);
+            cid = input[2];
             rounds = Integer.parseInt(input[6]);
         }
 
@@ -113,15 +113,15 @@ public class Parser{
         //
         check = input[0].equals("NEW")&&input[1].equals("MATCH")&&input[2].equals("BEGINNING")&&input[3].equals("NOW");
         if(check) {
-            pidOpponent = Integer.parseInt(input[8]);
+            pidOpponent = input[8];
         }
 
         //Received move from opponent
         check = input[0].equals("GAME")&&input[2].equals("MOVE")&&input[4].equals("PLAYER");
         if(check) {
-            gid = Integer.parseInt(input[1]);
+            gid = input[1];
             moveNumber = Integer.parseInt(input[3]);
-            pidOpponent = Integer.parseInt(input[5]);
+            pidOpponent = input[5];
 
             check = input[6].equals("PLACED") && input[8].equals("AT");
             if(check){
@@ -219,11 +219,12 @@ public class Parser{
 
         check = input[0].equals("GAME")&&input[2].equals("OVER");
         if(check){
-            gid = Integer.parseInt(input[1]);
-            pid = Integer.parseInt(input[4]);
+            gid = input[1];
+            pid = input[4];
             score1 = Integer.parseInt(input[5]);
-            pidOpponent = Integer.parseInt(input[7]);
+            pidOpponent = input[7];
             score2 = Integer.parseInt(input[8]);
+
         }
         check = input[0].equals("END")&&input[1].equals("OF")&&input[2].equals("ROUND");
         if(check){
@@ -309,8 +310,9 @@ public class Parser{
     }
 
 
-    public int getPid(){ return pid;}
-    public int getPidOpponent(){return pidOpponent;}
-    public int getCid(){ return cid;}
+    public String getPid(){ return pid;}
+    public String getPidOpponent(){return pidOpponent;}
+    public String getGid() { return gid;}
+    public String getCid(){ return cid;}
     public int getRounds(){ return rounds;}
 }
