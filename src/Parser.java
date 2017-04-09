@@ -235,7 +235,7 @@ public class Parser implements Runnable {
                 Hex hexB = new Hex(terrainHexB, tileCount);
                 nextTile = new Tile(hexA,hexB,tileCount, Orientation.N);
                 tileCount++;
-                orientation = Integer.parseInt(input[12]);
+                orientation = Integer.parseInt(input[12])-1;
                 Point3D tilePlacementPoint3d = new Point3D(Integer.parseInt(input[9]),Integer.parseInt(input[10]),Integer.parseInt(input[11]));
                 HexButton targetHex = manager.getBoard().getCubicMap().get(tilePlacementPoint3d);
                 TilePlacementMove tilePlacementMove = new TilePlacementMove(null, targetHex, Orientation.values()[orientation]);
@@ -301,6 +301,10 @@ public class Parser implements Runnable {
             }
             else{
                 //Opponent either forfeited or lost
+                System.out.println("Opponent Lost/Game over");
+                manager = new GameManager(true,this);
+                gid = "empty";
+                games.setGameID(threadName, "empty");
             }
 
 
@@ -338,14 +342,14 @@ public class Parser implements Runnable {
         {
             Building building = ((BuildingPlacementMove) buildAction).getBuilding();
             HexButton targetHex = ((BuildingPlacementMove) buildAction).getTargetHex();
-            sendActionResult = sendAction(tileHex, orientation.ordinal(), building, targetHex);
+            sendActionResult = sendAction(tileHex, orientation.ordinal()+1, building, targetHex);
         }
         else if(buildAction instanceof SettlementExpansionMove)
         {
             Settlement settlement = ((SettlementExpansionMove) buildAction).getSettlement();
             HexButton targetHex = settlement.getHexes().get(0);
             Terrain terrain = ((SettlementExpansionMove) buildAction).getTerrain();
-            sendActionResult = sendAction(tileHex, orientation.ordinal(), terrain, targetHex);
+            sendActionResult = sendAction(tileHex, orientation.ordinal()+1, terrain, targetHex);
         }
 
         sendToQueue(sendActionResult);
@@ -354,9 +358,13 @@ public class Parser implements Runnable {
     public void extractAndSendAction(TilePlacementMove tilePlacement){
         HexButton tileHex = tilePlacement.getTargetHex();
         Orientation orientation = tilePlacement.getOrientation();
-        String sendActionResult = sendAction(tileHex, orientation.ordinal());
+        String sendActionResult = sendAction(tileHex, orientation.ordinal()+1);
 
         sendToQueue(sendActionResult);
+
+        manager = new GameManager(true,this);
+        gid = "empty";
+        games.setGameID(threadName, "empty");
 
     }
 
