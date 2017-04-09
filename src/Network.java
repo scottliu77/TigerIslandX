@@ -71,6 +71,9 @@ public class Network implements Runnable {
                     if (fromServer.substring(0,3).equals( "NEW" )) {
 //                        System.out.println( "New challenge" );
                     }else
+                    if (fromServer.substring(0,5).equals( "BEGIN" )) {
+//                        System.out.println( "Begin challenge" );
+                    }else
                     if (fromServer.substring(0,3).equals( "END" )) {
 //                        System.out.println( "End of round " + fromServer.toLowerCase().substring(13) );
                     }else
