@@ -24,7 +24,7 @@ public class Parser implements Runnable {
     private Terrain terrainHexB;
     private Tile nextTile;
     private String tileUnifiedName;
-    private int time;
+    private double time;
     private int moveNumber;
     private int tileCount = 100;
 
@@ -111,7 +111,7 @@ public class Parser implements Runnable {
         if(check){
             System.out.println("Message parsed as move prompt");
             gid = input[5];
-            time = Integer.parseInt(input[7]);
+            time = Double.parseDouble(input[7]);
             moveNumber = Integer.parseInt(input[10]);
             tileUnifiedName = input[12];
 
