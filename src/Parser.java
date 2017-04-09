@@ -1,8 +1,9 @@
 import javafx.geometry.Point3D;
 
 import java.awt.*;
+import java.util.concurrent.BlockingQueue;
 
-public class Parser{
+public class Parser implements Runnable {
     private String input[];
     private String output;
     private GameManager manager;
@@ -26,10 +27,22 @@ public class Parser{
     private int moveNumber;
     private int tileCount = 100;
 
+    private BlockingQueue<String> inputQueue;
+    private BlockingQueue<String> outputQueue;
 
-    public Parser(GameManager m){
+
+    public Parser(GameManager m, BlockingQueue<String> input, BlockingQueue<String> output){
         manager = m;
+        inputQueue = input;
+        outputQueue = output;
     }
+
+    public void run() {
+        // check input queue for new message, send to receiveMessage()
+
+
+    }
+
 
     public void receiveMessage(String inputMessage){
         boolean check;
@@ -307,6 +320,11 @@ public class Parser{
         String outputMessage = "I AM " + username + " " + userPassword;
 
         return outputMessage;
+    }
+
+
+    public void sendToQueue(String message) {
+        // add to this.output queue
     }
 
 

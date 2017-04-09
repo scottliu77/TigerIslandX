@@ -4,14 +4,19 @@
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+import java.util.concurrent.BlockingQueue;
 
 public class Network implements Runnable {
     private int port;
     private String address;
+    private BlockingQueue<String> output;
+    private BlockingQueue<String> input;
 
-    Network (String address, int port) {
+    Network (String address, int port,  BlockingQueue<String> output,  BlockingQueue<String> input) {
         this.address = address;
         this.port = port;
+        this.output = output;
+        this.input = input;
     }
 
     public void run() {
