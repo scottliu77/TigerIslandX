@@ -68,11 +68,19 @@ public class Parser implements Runnable {
                     if (messageGID.equals(gid)) {
                         receiveMessage(serverToClient.poll());
                     }
+
+                    synchronized (serverToClient) {
+                        try {
+                            serverToClient.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }else{
                 synchronized (serverToClient) {
                     try {
-                        serverToClient.wait(250);
+                        serverToClient.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

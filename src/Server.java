@@ -77,6 +77,9 @@ class NetPlayer implements Runnable {
                             //test messages
                             out.println("GAME ghjk MOVE 123 PLACE JUNGLE+ROCK AT 2 0 -2 0 FOUND SETTLEMENT AT 3 0 -3");
                             out.println("MAKE YOUR MOVE IN GAME ghjk WITHIN 5 SECOND: MOVE 1256 PLACE LAKE+GRASS");
+
+                            out.println("GAME abc MOVE 123 PLACE JUNGLE+ROCK AT 2 0 -2 0 FOUND SETTLEMENT AT 3 0 -3");
+                            out.println("MAKE YOUR MOVE IN GAME abc WITHIN 5 SECOND: MOVE 1256 PLACE LAKE+GRASS");
                         }else{
                             System.out.println( msgQ.poll() );
                         }
