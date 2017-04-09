@@ -9,8 +9,8 @@ import java.util.concurrent.BlockingQueue;
 public class Network implements Runnable {
     private int port;
     private String address;
-    private BlockingQueue<String> serverToClient;
-    private BlockingQueue<String> clientToServer;
+    private final BlockingQueue<String> serverToClient;
+    private final BlockingQueue<String> clientToServer;
 
     Network (String address, int port,  BlockingQueue<String> output,  BlockingQueue<String> input) {
         this.address = address;
@@ -29,11 +29,9 @@ public class Network implements Runnable {
     }
 
     private void Client() throws IOException, NetworkConnectivityException {
-        Socket kkSocket = null;
-        BufferedReader in = null;
-        PrintWriter out = null;
-
-//        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+        Socket kkSocket;
+        BufferedReader in;
+        PrintWriter out;
 
         try {
             kkSocket = new Socket(address, port );
@@ -106,7 +104,7 @@ public class Network implements Runnable {
 
 
     private class ReceiveMove implements Runnable {
-        private BlockingQueue clientToServer;
+        private final BlockingQueue clientToServer;
         private PrintWriter out;
 
         private ReceiveMove(PrintWriter out, BlockingQueue in) {
@@ -115,7 +113,6 @@ public class Network implements Runnable {
         }
 
         public void run() {
-            String fromClient;
             while(true) {
                 if ( !clientToServer.isEmpty() ) {
                     System.out.println("Sending: " + clientToServer.peek());
@@ -133,7 +130,7 @@ public class Network implements Runnable {
         }
     }
 
-    class NetworkConnectivityException extends Exception {
+    private class NetworkConnectivityException extends Exception {
         private NetworkConnectivityException(String s) {
             super(s);
         }

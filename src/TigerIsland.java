@@ -39,10 +39,5 @@ public class TigerIsland {
         parser2.setName("parser 2");
         parser1.start();
         parser2.start();
-
-
-        while (true) {
-
-        }
     }
 }
