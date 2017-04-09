@@ -66,7 +66,6 @@ class NetPlayer implements Runnable {
                             }
                         }
                     }else{
-//                            System.out.println("Sent: " + msgQ.peek() );
                         if (!authenticated && msgQ.peek().substring(4, 21).equals("ENTER THUNDERDOME") ) {
                             System.out.println("tourney password: " + msgQ.poll().substring(22) );
                             out.println( "TWO SHALL ENTER, ONE SHALL LEAVE" );
@@ -78,11 +77,9 @@ class NetPlayer implements Runnable {
                             //test messages
                             out.println("GAME ghjk MOVE 123 PLACE JUNGLE+ROCK AT 2 0 -2 0 FOUND SETTLEMENT AT 3 0 -3");
                             out.println("MAKE YOUR MOVE IN GAME ghjk WITHIN 5 SECOND: MOVE 1256 PLACE LAKE+GRASS");
-                            //
                         }else{
-
+                            System.out.println( msgQ.poll() );
                         }
-                        System.out.println( msgQ.poll() );
                     }
                 }else {
                     synchronized (msgQ) {
