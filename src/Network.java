@@ -7,6 +7,9 @@ import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 
 public class Network implements Runnable {
+    private static final String TOURNEY_PASS = "heygang";
+    private static final String USER_PASS = "O O";
+
     private int port;
     private String address;
     private final BlockingQueue<String> serverToClient;
@@ -57,35 +60,25 @@ public class Network implements Runnable {
                     System.out.println("\033[0;31mServer: \033[0m" + fromServer);
 
                     if ( fromServer.equals( "WELCOME TO ANOTHER EDITION OF THUNDERDOME!" ) ) {
-                        System.out.println( "Welcome to the ThunderDome, enter tournament password: " );
-                        message = console.nextLine();
-                        out.println("ENTER THUNDERDOME " + message );
+                        out.println("ENTER THUNDERDOME " + TOURNEY_PASS);
                     }else
                     if ( fromServer.equals( "TWO SHALL ENTER, ONE SHALL LEAVE" )) {
-                        System.out.println( "Two enter, one will leave. Enter credentials (username password): " );
-                        message = console.nextLine();
-                        out.println("I AM " + message );
+                        out.println("I AM " + USER_PASS );
                     }else
-                    if (fromServer.substring(0,32).equals( "WAIT FOR THE TOURNAMENT TO BEGIN" )) {
-                        System.out.println( "Waiting for tournament to begin..." + fromServer.substring(32));
+                    if (fromServer.substring(0,4).equals( "WAIT" )) {
+//                        System.out.println( "Waiting for tournament to begin..." + fromServer.substring(32));
                     }else
-                    if (fromServer.substring(0,13).equals( "NEW CHALLENGE" )) {
-                        System.out.println( "New challenge" );
+                    if (fromServer.substring(0,3).equals( "NEW" )) {
+//                        System.out.println( "New challenge" );
                     }else
-                    if (fromServer.substring(0,12).equals( "END OF ROUND" )) {
-                        System.out.println( "End of round " + fromServer.toLowerCase().substring(13) );
-                    }else
-                    if (fromServer.equals("END OF CHALLENGES")) {
-                        System.out.println( "End of challenges" );
-                    }else
-                    if (fromServer.equals("WAIT FOR THE NEXT CHALLENGE TO BEGIN")) {
-                        System.out.println( "Waiting for another challenge" );
+                    if (fromServer.substring(0,3).equals( "END" )) {
+//                        System.out.println( "End of round " + fromServer.toLowerCase().substring(13) );
                     }else
                     if (fromServer.equals("THANK YOU FOR PLAYING! GOODBYE")) {
                         System.out.println( "All done." );
                         break;
                     }else{
-                        System.out.println( "Rec: " + fromServer );
+                        //System.out.println( "Rec: " + fromServer );
                         serverToClient.put( fromServer );
                         synchronized (serverToClient) {
                             serverToClient.notifyAll();
