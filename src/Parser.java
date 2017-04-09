@@ -135,7 +135,7 @@ public class Parser implements Runnable {
             nextTile = new Tile(hexA,hexB,tileCount, Orientation.N);
             tileCount++;
 
-            //manager.getBoard().getDeck().setTopTile(nextTile);
+            manager.getBoard().getDeck().setTopTile(nextTile);
             //
             //This may or not be the correct way of calling the AI to place the Tile and select a build action
             //
@@ -358,7 +358,7 @@ public class Parser implements Runnable {
             outputMessage += " BUILD TOTORO SANCTUARY AT ";
         }
         outputMessage += (int) buildLocation.getABCPoint().getX() + " " + (int) buildLocation.getABCPoint().getY() + " " + (int) buildLocation.getABCPoint().getZ();
-        //System.out.println("Returned: " + outputMessage);
+        System.out.println("Returned: " + outputMessage);
         return outputMessage;
     }
     //Expansion case
@@ -371,7 +371,7 @@ public class Parser implements Runnable {
             temp = "ROCK";          //since the server uses rock instead of rocky
         }
         outputMessage += " " + temp;
-        //System.out.println("Returned: " + outputMessage);
+        System.out.println("Returned: " + outputMessage);
         return outputMessage;
     }
     //Unable to build case

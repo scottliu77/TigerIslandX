@@ -74,16 +74,10 @@ public class UI
             }
         });
 
-        JMenuItem sendMessageToParser = new JMenuItem("Send Client Msg to Parser");
+        JMenuItem sendMessageToParser = new JMenuItem("Feed Msg to Parser");
         sendMessageToParser.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent event){panel.sendMessageToParser();}
-        });
-
-        JMenuItem sendServerMessageToParser = new JMenuItem("Send Server Msg to Parser");
-        sendServerMessageToParser.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent event){panel.sendServerMessageToParser();}
         });
 
         JMenu autoplayMenu = new JMenu("Autoplay");
