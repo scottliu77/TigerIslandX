@@ -203,6 +203,7 @@ public class Board {
 
                 if (activeAnalyzer.noPossibleBuildActions())
                 {
+
                     forfeitGame(activePlayer);
                 }
 
@@ -797,6 +798,7 @@ public class Board {
         return status;
     }
 
-
-
+    public TilePlacementMove getStoredTilePlacement() {
+        return storedTilePlacement;
+    }
 }

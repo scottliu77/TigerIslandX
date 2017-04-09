@@ -8,6 +8,11 @@ import static java.lang.System.exit;
  */
 public class TigerIsland {
     public static void main(String[] args) {
+        String a = args[0];
+        if(a.equals("UI")){
+            UI.startUI();
+            while(true){}
+        }
         int port = 0000;
         String address = "127.0.0.1";
 
@@ -23,15 +28,18 @@ public class TigerIsland {
         BlockingQueue<String> clientToServer = new ArrayBlockingQueue<String>(64);
 
         Thread net = new Thread( new Network(address, port, serverToClient, clientToServer ) );
+        net.setName("network");
         net.start();
 
-        GameManager game1 = new GameManager(true);
-        GameManager game2 = new GameManager(true);
-        Thread parser1 = new Thread( new Parser(game1, serverToClient, clientToServer) );
-        Thread parser2 = new Thread( new Parser(game2, serverToClient, clientToServer) );
 
+        Thread parser1 = new Thread( new Parser(serverToClient, clientToServer) );
+        Thread parser2 = new Thread( new Parser(serverToClient, clientToServer) );
+
+        parser1.setName("parser 1");
+        parser2.setName("parser 2");
         parser1.start();
         parser2.start();
+
 
         while (true) {
 

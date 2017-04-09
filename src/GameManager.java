@@ -14,13 +14,21 @@ public class GameManager
 
     public static final Point hexOffsetPoint = new Point( 256 + 236,  128 + 236);
 
-    GameManager(boolean playerFirst)
+    GameManager(boolean playerFirst, Parser p)
     {
         board = new Board(this, playerFirst);
-        parser = new Parser(this);
+        parser = p;
         activeBuilding = Building.VILLAGER;
         activeTerrain = Terrain.GRASS;
         expandNext = false;
+    }
+    GameManager(boolean playerFirst)
+    {
+        board = new Board(this, playerFirst);
+        activeBuilding = Building.VILLAGER;
+        activeTerrain = Terrain.GRASS;
+        expandNext = false;
+        parser = new Parser(this);
     }
 
     public PlayerMove generateMove(Point targetPoint)
@@ -73,7 +81,7 @@ public class GameManager
 
     public void sendForfeitSignal(Player loser)
     {
-
+        parser.extractAndSendAction(board.getStoredTilePlacement());
     }
 
     public void sendVictorySignal(Player winner)

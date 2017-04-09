@@ -1,6 +1,7 @@
 import javafx.geometry.Point3D;
 
 import java.awt.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class Parser implements Runnable {
@@ -27,20 +28,57 @@ public class Parser implements Runnable {
     private int moveNumber;
     private int tileCount = 100;
 
-    private BlockingQueue<String> inputQueue;
-    private BlockingQueue<String> outputQueue;
+    private final BlockingQueue<String> serverToClient;
+    private final BlockingQueue<String> clientToServer;
 
+    boolean dummyParser = false;
 
-    public Parser(GameManager m, BlockingQueue<String> input, BlockingQueue<String> output){
+    public Parser(BlockingQueue<String> input, BlockingQueue<String> output){
+        manager = new GameManager(true, this);
+        serverToClient = input;
+        clientToServer = output;
+    }
+
+    public Parser(GameManager m){
         manager = m;
-        inputQueue = input;
-        outputQueue = output;
+        serverToClient = new ArrayBlockingQueue<String>(1000);
+        clientToServer = new ArrayBlockingQueue<String>(1000);
     }
 
     public void run() {
         // check input queue for new message, send to receiveMessage()
+        String messageSplit[];
+        while(true) {
+            if ( !serverToClient.isEmpty() ) {
+                synchronized (serverToClient) {
+                    if(serverToClient.isEmpty()) continue;
+                    System.out.println( "Input: " + serverToClient.peek() );
+                    messageSplit = serverToClient.peek().split(" ");
+                    String messageGID;
+                    if (messageSplit[4].equals("GAME")) {
+                        messageGID = messageSplit[5];
+                    } else if (messageSplit[0].equals("GAME")) {
+                        messageGID = messageSplit[1];
+                    } else {
+                        System.out.println("Bad Message: " + serverToClient.poll());
+                        break;
+                    }
 
-
+                    if (gid == null) gid = messageGID;
+                    if (messageGID.equals(gid)) {
+                        receiveMessage(serverToClient.poll());
+                    }
+                }
+            }else{
+                synchronized (serverToClient) {
+                    try {
+                        serverToClient.wait(250);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
 
@@ -232,11 +270,13 @@ public class Parser implements Runnable {
 
         check = input[0].equals("GAME")&&input[2].equals("OVER");
         if(check){
-            gid = input[1];
+            //gid = input[1];
             pid = input[4];
             score1 = Integer.parseInt(input[5]);
             pidOpponent = input[7];
             score2 = Integer.parseInt(input[8]);
+            manager = new GameManager(true,this);
+            gid = null;
 
         }
         check = input[0].equals("END")&&input[1].equals("OF")&&input[2].equals("ROUND");
@@ -248,28 +288,40 @@ public class Parser implements Runnable {
 
 
     }
-    //Normal build actions
+
 
     public void extractAndSendAction(TilePlacementMove tilePlacement, PlayerMove buildAction)
     {
         HexButton tileHex = tilePlacement.getTargetHex();
         Orientation orientation = tilePlacement.getOrientation();
-
+        String sendActionResult = "";
         if(buildAction instanceof BuildingPlacementMove)
         {
             Building building = ((BuildingPlacementMove) buildAction).getBuilding();
             HexButton targetHex = ((BuildingPlacementMove) buildAction).getTargetHex();
-            sendAction(tileHex, orientation.ordinal(), building, targetHex);
+            sendActionResult = sendAction(tileHex, orientation.ordinal(), building, targetHex);
         }
         else if(buildAction instanceof SettlementExpansionMove)
         {
             Settlement settlement = ((SettlementExpansionMove) buildAction).getSettlement();
             HexButton targetHex = settlement.getHexes().get(0);
             Terrain terrain = ((SettlementExpansionMove) buildAction).getTerrain();
-            sendAction(tileHex, orientation.ordinal(), terrain, targetHex);
+            sendActionResult = sendAction(tileHex, orientation.ordinal(), terrain, targetHex);
         }
+
+        sendToQueue(sendActionResult);
+    }
+    //unable to build case
+    public void extractAndSendAction(TilePlacementMove tilePlacement){
+        HexButton tileHex = tilePlacement.getTargetHex();
+        Orientation orientation = tilePlacement.getOrientation();
+        String sendActionResult = sendAction(tileHex, orientation.ordinal());
+
+        sendToQueue(sendActionResult);
+
     }
 
+    //Normal build actions
     public String sendAction(HexButton tileLocation, int orientation, Building buildingType, HexButton buildLocation){
         String outputMessage = "GAME " + gid + " MOVE " + moveNumber + " PLACE " + tileUnifiedName;
         outputMessage += " AT " + (int) tileLocation.getABCPoint().getX() + " " + (int) tileLocation.getABCPoint().getY() + " " + (int) tileLocation.getABCPoint().getZ() + " " + orientation;
@@ -285,7 +337,7 @@ public class Parser implements Runnable {
             outputMessage += " BUILD TOTORO SANCTUARY AT ";
         }
         outputMessage += (int) buildLocation.getABCPoint().getX() + " " + (int) buildLocation.getABCPoint().getY() + " " + (int) buildLocation.getABCPoint().getZ();
-        System.out.println("Returned: " + outputMessage);
+        //System.out.println("Returned: " + outputMessage);
         return outputMessage;
     }
     //Expansion case
@@ -298,7 +350,7 @@ public class Parser implements Runnable {
             temp = "ROCK";          //since the server uses rock instead of rocky
         }
         outputMessage += " " + temp;
-        System.out.println("Returned: " + outputMessage);
+        //System.out.println("Returned: " + outputMessage);
         return outputMessage;
     }
     //Unable to build case
@@ -324,7 +376,14 @@ public class Parser implements Runnable {
 
 
     public void sendToQueue(String message) {
-        // add to this.output queue
+        try {
+            clientToServer.put( message );
+            synchronized (clientToServer) {
+                clientToServer.notifyAll();
+            }
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 

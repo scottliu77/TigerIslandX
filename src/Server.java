@@ -56,34 +56,39 @@ class NetPlayer implements Runnable {
         public void run() {
             while (true) {
                 if ( !msgQ.isEmpty() ) {
-                    try {
-                        if ( !msgQ.peek().substring(0,4).equals( Integer.toString( port ) ) ) {
+                    if ( !msgQ.peek().substring(0,4).equals( Integer.toString( port ) ) ) {
 //                            System.out.println("waiting...");
-                            synchronized (this) {
-                                this.wait(250);
-                            }
-                        }else{
-//                            System.out.println("Sent: " + msgQ.peek() );
-                            if (!authenticated && msgQ.peek().substring(4, 21).equals("ENTER THUNDERDOME") ) {
-                                System.out.println("tourney password: " + msgQ.poll().substring(22) );
-                                out.println( "TWO SHALL ENTER, ONE SHALL LEAVE" );
-                                authenticated = true;
-                            }else if ( msgQ.peek().substring(4, 9).equals("I AM ") ) {
-                                System.out.println("username and password: " + msgQ.poll().substring(9));
-                                out.println("WAIT FOR THE TOURNAMENT TO BEGIN " + "player1" );
-                            }else{
-                                System.out.println( msgQ.poll() );
+                        synchronized (msgQ) {
+                            try {
+                                msgQ.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
                         }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    }else{
+//                            System.out.println("Sent: " + msgQ.peek() );
+                        if (!authenticated && msgQ.peek().substring(4, 21).equals("ENTER THUNDERDOME") ) {
+                            System.out.println("tourney password: " + msgQ.poll().substring(22) );
+                            out.println( "TWO SHALL ENTER, ONE SHALL LEAVE" );
+                            authenticated = true;
+                        }else if ( msgQ.peek().substring(4, 9).equals("I AM ") ) {
+                            System.out.println("username and password: " + msgQ.poll().substring(9));
+                            out.println("WAIT FOR THE TOURNAMENT TO BEGIN " + "player1" );
+                            out.println("GAME ghjk MOVE 123 PLACE JUNGLE+ROCK AT 2 0 -2 0 FOUND SETTLEMENT AT 3 0 -3");
+                            out.println("MAKE YOUR MOVE IN GAME ghjk WITHIN 5 SECOND: MOVE 1256 PLACE LAKE+GRASS");
+                        }else{
+
+                        }
+                        System.out.println( msgQ.poll() );
                     }
-                }else try {
-                    synchronized (this) {
-                        this.wait(250);
+                }else {
+                    synchronized (msgQ) {
+                        try {
+                            msgQ.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -127,8 +132,8 @@ class NetPlayer implements Runnable {
             try {
                 System.out.println("Rec: " + outputLine);
                 msgQ.put(outputLine);
-                synchronized (this) {
-                    this.notifyAll();
+                synchronized (msgQ) {
+                    msgQ.notifyAll();
                 }
 
             } catch (InterruptedException e) {

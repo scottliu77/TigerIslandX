@@ -9,14 +9,14 @@ import java.util.concurrent.BlockingQueue;
 public class Network implements Runnable {
     private int port;
     private String address;
-    private BlockingQueue<String> output;
-    private BlockingQueue<String> input;
+    private BlockingQueue<String> serverToClient;
+    private BlockingQueue<String> clientToServer;
 
     Network (String address, int port,  BlockingQueue<String> output,  BlockingQueue<String> input) {
         this.address = address;
         this.port = port;
-        this.output = output;
-        this.input = input;
+        this.serverToClient = output;
+        this.clientToServer = input;
     }
 
     public void run() {
@@ -45,6 +45,9 @@ public class Network implements Runnable {
             throw new NetworkConnectivityException("Couldn't get I/O for the connection to: " + address);
         }
 
+        Thread receiveMessage = new Thread(new ReceiveMove(out, clientToServer));
+        receiveMessage.setName("Network-receiving-moves");
+        receiveMessage.start();
 
         String fromServer;
         while (true) {
@@ -81,9 +84,11 @@ public class Network implements Runnable {
                         System.out.println( "All done." );
                         break;
                     }else{
-                        // TODO:
-                        // put into queue for parser
-                        System.out.println( fromServer );
+                        System.out.println( "Rec: " + fromServer );
+                        serverToClient.put( fromServer );
+                        synchronized (serverToClient) {
+                            serverToClient.notifyAll();
+                        }
                     }
                 }
             }
@@ -99,21 +104,34 @@ public class Network implements Runnable {
         kkSocket.close();
     }
 
-//
-//    private class ReceiveChat implements Runnable {
-//        private BufferedReader in;
-//        private String fromServer;
-//        private PrintWriter out;
-//
-//        private ReceiveChat(BufferedReader in, PrintWriter out) {
-//            this.in = in;
-//            this.out = out;
-//        }
-//
-//        public void run() {
-//
-//        }
-//    }
+
+    private class ReceiveMove implements Runnable {
+        private BlockingQueue clientToServer;
+        private PrintWriter out;
+
+        private ReceiveMove(PrintWriter out, BlockingQueue in) {
+            this.clientToServer = in;
+            this.out = out;
+        }
+
+        public void run() {
+            String fromClient;
+            while(true) {
+                if ( !clientToServer.isEmpty() ) {
+                    System.out.println("Sending: " + clientToServer.peek());
+                    out.println( clientToServer.poll() );
+                }else{
+                    synchronized (clientToServer) {
+                        try {
+                            clientToServer.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     class NetworkConnectivityException extends Exception {
         private NetworkConnectivityException(String s) {
