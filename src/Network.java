@@ -64,9 +64,6 @@ public class Network implements Runnable {
                     if ( fromServer.equals( "TWO SHALL ENTER, ONE SHALL LEAVE" )) {
                         out.println("I AM " + USER_PASS );
                     }else
-                    if (fromServer.substring(0,4).equals( "WAIT" )) {
-//                        System.out.println( "Waiting for tournament to begin..." + fromServer.substring(32));
-                    }else
                     if (fromServer.substring(0,3).equals( "NEW" )) {
 //                        System.out.println( "New challenge" );
                     }else

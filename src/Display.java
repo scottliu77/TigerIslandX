@@ -326,9 +326,10 @@ class HexDetailDisplay extends Display
     public void drawBackground()
     {
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, 160, 144);
+        g2d.fillRect(0, 0, 200, 144);
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(0, 0, 159, 143);
+        g2d.drawRect(0, 0, 199
+                , 143);
     }
 
     public void update(HexButton hoverButton)

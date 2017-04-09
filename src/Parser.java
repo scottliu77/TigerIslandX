@@ -15,6 +15,7 @@ public class Parser implements Runnable {
     private int orientation;
     private String pid;
     private String pidOpponent;
+    private String pidFound;
     private int rid;
     private int rounds;
     private String score1;
@@ -165,6 +166,7 @@ public class Parser implements Runnable {
         check = input[0].equals("WAIT")&&input[1].equals("FOR")&&input[2].equals("THE")&&input[3].equals("TOURNAMENT")&&input[4].equals("TO")&&input[5].equals("BEGIN");
         if(check){
             pid = input[6];
+            System.out.println("client pid: "+pid);
         }
 
         //
@@ -187,126 +189,137 @@ public class Parser implements Runnable {
             pidOpponent = input[8];
         }
 
-        //Received move from opponent
+        //Received move
         check = input[0].equals("GAME")&&input[2].equals("MOVE")&&input[4].equals("PLAYER");
         if(check) {
             System.out.println("Message parsed as move");
 
             gid = input[1];
             moveNumber = input[3];
-            pidOpponent = input[5];
+            pidFound = input[5];
             tileUnifiedName = input[7];
 
-            check = input[6].equals("PLACED") && input[8].equals("AT");
-            if(check){
-                String tileTerrainNames[] = tileUnifiedName.split("\\+");
+            if(pidFound.equals(pid)){
+                //do nothing
 
-                switch (tileTerrainNames[0]) {
-                    case "JUNGLE":
-                        terrainHexA = Terrain.JUNGLE;
-                        break;
-                    case "GRASS":
-                        terrainHexA = Terrain.GRASS;
-                        break;
-                    case "ROCK":
-                        terrainHexA = Terrain.ROCKY;
-                        break;
-                    case "LAKE":
-                        terrainHexA = Terrain.LAKE;
-                        break;
+                check = input[6].equals("FORFEITED:")||input[6].equals("LOST:");
+                if(check){
+                    manager = new GameManager(true,this);
+                    gid = "empty";
+                    games.setGameID(threadName, "empty");
                 }
 
-                switch (tileTerrainNames[1]) {
-                    case "JUNGLE":
-                        terrainHexB = Terrain.JUNGLE;
-                        break;
-                    case "GRASS":
-                        terrainHexB = Terrain.GRASS;
-                        break;
-                    case "ROCK":
-                        terrainHexB = Terrain.ROCKY;
-                        break;
-                    case "LAKE":
-                        terrainHexB = Terrain.LAKE;
-                        break;
-                }
+            }
+            else {
+                check = input[6].equals("PLACED") && input[8].equals("AT");
+                if (check) {
+                    String tileTerrainNames[] = tileUnifiedName.split("\\+");
 
-                Hex hexA = new Hex(terrainHexA, tileCount);
-                Hex hexB = new Hex(terrainHexB, tileCount);
-                nextTile = new Tile(hexA,hexB,tileCount, Orientation.N);
-                tileCount++;
-                orientation = Integer.parseInt(input[12])-1;
-                Point3D tilePlacementPoint3d = new Point3D(Integer.parseInt(input[9]),Integer.parseInt(input[10]),Integer.parseInt(input[11]));
-                HexButton targetHex = manager.getBoard().getCubicMap().get(tilePlacementPoint3d);
-                TilePlacementMove tilePlacementMove = new TilePlacementMove(null, targetHex, Orientation.values()[orientation]);
-                PlayerMove buildAction = null;
-
-                //place tile here
-
-
-                check2 = input[13].equals("FOUNDED") && input[14].equals("SETTLEMENT");
-                if(check2){
-                    System.out.println("Parsing buildaction as villager placement");
-                    Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]),Integer.parseInt(input[17]),Integer.parseInt(input[18]));
-                    HexButton buildTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
-                    buildAction = new BuildingPlacementMove(null, buildTarget, Building.VILLAGER);
-                    //buildPlacementPoint3d to build settlement
-
-                }
-                check2 = input[13].equals("EXPANDED") && input[14].equals("SETTLEMENT");
-                if(check2){
-                    System.out.println("Parsing buildaction as expansion");
-                    Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]),Integer.parseInt(input[17]),Integer.parseInt(input[18]));
-
-                    switch (input[19]) {
+                    switch (tileTerrainNames[0]) {
                         case "JUNGLE":
-                            expandTerrain = Terrain.JUNGLE;
+                            terrainHexA = Terrain.JUNGLE;
                             break;
                         case "GRASS":
-                            expandTerrain = Terrain.GRASS;
+                            terrainHexA = Terrain.GRASS;
                             break;
                         case "ROCK":
-                            expandTerrain = Terrain.ROCKY;
+                            terrainHexA = Terrain.ROCKY;
                             break;
                         case "LAKE":
-                            expandTerrain = Terrain.LAKE;
+                            terrainHexA = Terrain.LAKE;
                             break;
                     }
 
-                    HexButton expansionTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
-                    buildAction = new SettlementExpansionMove(null, manager.getBoard().getSettlementManager().getSettlement(expansionTarget), expandTerrain);
+                    switch (tileTerrainNames[1]) {
+                        case "JUNGLE":
+                            terrainHexB = Terrain.JUNGLE;
+                            break;
+                        case "GRASS":
+                            terrainHexB = Terrain.GRASS;
+                            break;
+                        case "ROCK":
+                            terrainHexB = Terrain.ROCKY;
+                            break;
+                        case "LAKE":
+                            terrainHexB = Terrain.LAKE;
+                            break;
+                    }
 
-                    //use values to expand settlement here
+                    Hex hexA = new Hex(terrainHexA, tileCount);
+                    Hex hexB = new Hex(terrainHexB, tileCount);
+                    nextTile = new Tile(hexA, hexB, tileCount, Orientation.N);
+                    tileCount++;
+                    orientation = Integer.parseInt(input[12]) - 1;
+                    Point3D tilePlacementPoint3d = new Point3D(Integer.parseInt(input[9]), Integer.parseInt(input[10]), Integer.parseInt(input[11]));
+                    HexButton targetHex = manager.getBoard().getCubicMap().get(tilePlacementPoint3d);
+                    TilePlacementMove tilePlacementMove = new TilePlacementMove(null, targetHex, Orientation.values()[orientation]);
+                    PlayerMove buildAction = null;
 
+                    //place tile here
+
+
+                    check2 = input[13].equals("FOUNDED") && input[14].equals("SETTLEMENT");
+                    if (check2) {
+                        System.out.println("Parsing buildaction as villager placement");
+                        Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]), Integer.parseInt(input[17]), Integer.parseInt(input[18]));
+                        HexButton buildTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
+                        buildAction = new BuildingPlacementMove(null, buildTarget, Building.VILLAGER);
+                        //buildPlacementPoint3d to build settlement
+
+                    }
+                    check2 = input[13].equals("EXPANDED") && input[14].equals("SETTLEMENT");
+                    if (check2) {
+                        System.out.println("Parsing buildaction as expansion");
+                        Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]), Integer.parseInt(input[17]), Integer.parseInt(input[18]));
+
+                        switch (input[19]) {
+                            case "JUNGLE":
+                                expandTerrain = Terrain.JUNGLE;
+                                break;
+                            case "GRASS":
+                                expandTerrain = Terrain.GRASS;
+                                break;
+                            case "ROCK":
+                                expandTerrain = Terrain.ROCKY;
+                                break;
+                            case "LAKE":
+                                expandTerrain = Terrain.LAKE;
+                                break;
+                        }
+
+                        HexButton expansionTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
+                        buildAction = new SettlementExpansionMove(null, manager.getBoard().getSettlementManager().getSettlement(expansionTarget), expandTerrain);
+
+                        //use values to expand settlement here
+
+                    }
+                    check2 = input[13].equals("BUILT") && input[14].equals("TOTORO");
+                    if (check2) {
+                        System.out.println("Parsing buildaction as totoro placement");
+                        Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[17]), Integer.parseInt(input[18]), Integer.parseInt(input[19]));
+                        buildAction = new BuildingPlacementMove(null, manager.getBoard().getCubicMap().get(buildPlacementPoint3d), Building.TOTORO);
+
+                        //build totoro here
+                    }
+                    check2 = input[13].equals("BUILT") && input[14].equals("TIGER");
+                    if (check2) {
+                        System.out.println("Parsing buildaction as tiger placement");
+                        Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[17]), Integer.parseInt(input[18]), Integer.parseInt(input[19]));
+                        buildAction = new BuildingPlacementMove(null, manager.getBoard().getCubicMap().get(buildPlacementPoint3d), Building.TIGER);
+
+                        //build tiger here
+
+                    }
+
+                    manager.processTurn(tilePlacementMove, buildAction);
+                } else {
+                    //Opponent either forfeited or lost
+                    System.out.println("Opponent Lost/Game over");
+                    manager = new GameManager(true, this);
+                    gid = "empty";
+                    games.setGameID(threadName, "empty");
                 }
-                check2 = input[13].equals("BUILT") && input[14].equals("TOTORO");
-                if(check2){
-                    System.out.println("Parsing buildaction as totoro placement");
-                    Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[17]),Integer.parseInt(input[18]),Integer.parseInt(input[19]));
-                    buildAction = new BuildingPlacementMove(null, manager.getBoard().getCubicMap().get(buildPlacementPoint3d), Building.TOTORO);
-
-                    //build totoro here
-                }
-                check2 = input[13].equals("BUILT") && input[14].equals("TIGER");
-                if(check2){
-                    System.out.println("Parsing buildaction as tiger placement");
-                    Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[17]),Integer.parseInt(input[18]),Integer.parseInt(input[19]));
-                    buildAction = new BuildingPlacementMove(null, manager.getBoard().getCubicMap().get(buildPlacementPoint3d), Building.TIGER);
-
-                    //build tiger here
-
-                }
-
-                manager.processTurn(tilePlacementMove, buildAction);
             }
-            else{
-                //Opponent either forfeited or lost
-                System.out.println("Opponent Lost/Game over");
-                manager = new GameManager(true,this);
-                gid = "empty";
-                games.setGameID(threadName, "empty");
-            }
-
 
         }
 
