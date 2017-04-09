@@ -82,7 +82,6 @@ public class Network implements Runnable {
                     }else{
                         //System.out.println( "Rec: " + fromServer );
                         startTime = System.currentTimeMillis();
-                        System.out.println("Start time: " + startTime);
                         serverToClient.put( fromServer );
                         synchronized (serverToClient) {
                             serverToClient.notifyAll();

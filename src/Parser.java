@@ -17,15 +17,15 @@ public class Parser implements Runnable {
     private String pidOpponent;
     private int rid;
     private int rounds;
-    private int score1;
-    private int score2;
+    private String score1;
+    private String score2;
     private Terrain expandTerrain;
     private Terrain terrainHexA;
     private Terrain terrainHexB;
     private Tile nextTile;
     private String tileUnifiedName;
-    private double time;
-    private int moveNumber;
+    private String time;
+    private String moveNumber;
     private int tileCount = 100;
 
     private String threadName;
@@ -111,8 +111,8 @@ public class Parser implements Runnable {
         if(check){
             System.out.println("Message parsed as move prompt");
             gid = input[5];
-            time = Double.parseDouble(input[7]);
-            moveNumber = Integer.parseInt(input[10]);
+            time = input[7];
+            moveNumber = input[10];
             tileUnifiedName = input[12];
 
             String tileTerrainNames[] = tileUnifiedName.split("\\+");
@@ -193,7 +193,7 @@ public class Parser implements Runnable {
             System.out.println("Message parsed as move");
 
             gid = input[1];
-            moveNumber = Integer.parseInt(input[3]);
+            moveNumber = input[3];
             pidOpponent = input[5];
             tileUnifiedName = input[7];
 
@@ -310,9 +310,9 @@ public class Parser implements Runnable {
         if(check){
             //gid = input[1];
             pid = input[4];
-            score1 = Integer.parseInt(input[5]);
+            score1 = input[5];
             pidOpponent = input[7];
-            score2 = Integer.parseInt(input[8]);
+            score2 = input[8];
             manager = new GameManager(true,this);
             gid = "empty";
             games.setGameID(threadName, "empty");
