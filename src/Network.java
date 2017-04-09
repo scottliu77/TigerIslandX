@@ -37,6 +37,7 @@ public class Network implements Runnable {
             kkSocket = new Socket(address, port );
             out = new PrintWriter(kkSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
+            System.out.println("Connected to Server");
         } catch (UnknownHostException e) {
             throw new NetworkConnectivityException("Don't know about host: " + address);
         } catch (IOException e) {
@@ -53,15 +54,17 @@ public class Network implements Runnable {
                 Scanner console = new Scanner(System.in);
                 String message;
                 while ((fromServer = in.readLine()) != null) {
+                    System.out.println("\033[0;31mServer: \033[0m" + fromServer);
+
                     if ( fromServer.equals( "WELCOME TO ANOTHER EDITION OF THUNDERDOME!" ) ) {
                         System.out.println( "Welcome to the ThunderDome, enter tournament password: " );
                         message = console.nextLine();
-                        out.println( port + "ENTER THUNDERDOME " + message );
+                        out.println("ENTER THUNDERDOME " + message );
                     }else
                     if ( fromServer.equals( "TWO SHALL ENTER, ONE SHALL LEAVE" )) {
                         System.out.println( "Two enter, one will leave. Enter credentials (username password): " );
                         message = console.nextLine();
-                        out.println( port + "I AM " + message );
+                        out.println("I AM " + message );
                     }else
                     if (fromServer.substring(0,32).equals( "WAIT FOR THE TOURNAMENT TO BEGIN" )) {
                         System.out.println( "Waiting for tournament to begin..." + fromServer.substring(32));
