@@ -74,10 +74,16 @@ public class UI
             }
         });
 
-        JMenuItem sendMessageToParser = new JMenuItem("Send Msg to Parser");
+        JMenuItem sendMessageToParser = new JMenuItem("Send Client Msg to Parser");
         sendMessageToParser.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent event){panel.sendMessageToParser();}
+        });
+
+        JMenuItem sendServerMessageToParser = new JMenuItem("Send Server Msg to Parser");
+        sendServerMessageToParser.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent event){panel.sendServerMessageToParser();}
         });
 
         JMenu autoplayMenu = new JMenu("Autoplay");
@@ -263,5 +269,10 @@ class TigerPanel extends JPanel
     public void sendMessageToParser()
     {
         activeMenu.sendMessageToParser(JOptionPane.showInputDialog("Send message to parse: "));
+    }
+
+    public void sendServerMessageToParser()
+    {
+        activeMenu.sendServerMessageToParser(JOptionPane.showInputDialog("Send message to parse: "));
     }
 }

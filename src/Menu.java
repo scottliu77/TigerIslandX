@@ -358,4 +358,9 @@ class BaseMenu extends Menu
         gameManager.sendMessageToParser(s);
         addHexButtons(gameManager.getButtonMap());
     }
+
+    public void sendServerMessageToParser(String s)
+    {
+
+    }
 }

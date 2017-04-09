@@ -87,9 +87,12 @@ public class Parser implements Runnable {
         boolean check2;
         input = inputMessage.split(" ");
 
+        System.out.println("Parsing: " + inputMessage);
+
         //Server supplies tile to be placed
         check = input[0].equals("MAKE")&&input[1].equals("YOUR")&&input[2].equals("MOVE")&&input[3].equals("IN");
         if(check){
+            System.out.println("Message parsed as move prompt");
             gid = input[5];
             time = Integer.parseInt(input[7]);
             moveNumber = Integer.parseInt(input[10]);
@@ -170,9 +173,12 @@ public class Parser implements Runnable {
         //Received move from opponent
         check = input[0].equals("GAME")&&input[2].equals("MOVE")&&input[4].equals("PLAYER");
         if(check) {
+            System.out.println("Message parsed as move");
+
             gid = input[1];
             moveNumber = Integer.parseInt(input[3]);
             pidOpponent = input[5];
+            tileUnifiedName = input[7];
 
             check = input[6].equals("PLACED") && input[8].equals("AT");
             if(check){
@@ -223,14 +229,16 @@ public class Parser implements Runnable {
 
                 check2 = input[13].equals("FOUNDED") && input[14].equals("SETTLEMENT");
                 if(check2){
+                    System.out.println("Parsing buildaction as villager placement");
                     Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]),Integer.parseInt(input[17]),Integer.parseInt(input[18]));
                     HexButton buildTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
-                    buildAction = new BuildingPlacementMove(null, targetHex, Building.VILLAGER);
+                    buildAction = new BuildingPlacementMove(null, buildTarget, Building.VILLAGER);
                     //buildPlacementPoint3d to build settlement
 
                 }
                 check2 = input[13].equals("EXPANDED") && input[14].equals("SETTLEMENT");
                 if(check2){
+                    System.out.println("Parsing buildaction as expansion");
                     Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]),Integer.parseInt(input[17]),Integer.parseInt(input[18]));
 
                     switch (input[19]) {
@@ -256,6 +264,7 @@ public class Parser implements Runnable {
                 }
                 check2 = input[13].equals("BUILT") && input[14].equals("TOTORO");
                 if(check2){
+                    System.out.println("Parsing buildaction as totoro placement");
                     Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[17]),Integer.parseInt(input[18]),Integer.parseInt(input[19]));
                     buildAction = new BuildingPlacementMove(null, manager.getBoard().getCubicMap().get(buildPlacementPoint3d), Building.TOTORO);
 
@@ -263,6 +272,7 @@ public class Parser implements Runnable {
                 }
                 check2 = input[13].equals("BUILT") && input[14].equals("TIGER");
                 if(check2){
+                    System.out.println("Parsing buildaction as tiger placement");
                     Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[17]),Integer.parseInt(input[18]),Integer.parseInt(input[19]));
                     buildAction = new BuildingPlacementMove(null, manager.getBoard().getCubicMap().get(buildPlacementPoint3d), Building.TIGER);
 
