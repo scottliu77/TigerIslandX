@@ -8,7 +8,7 @@ import static java.lang.System.exit;
  */
 public class TigerIsland {
     public static void main(String[] args) {
-        String a = args[0];
+       String a = args[0];
         if(a.equals("UI")){
             UI.startUI();
             while(true){}

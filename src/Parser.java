@@ -214,6 +214,9 @@ public class Parser implements Runnable {
                 tileCount++;
                 orientation = Integer.parseInt(input[12]);
                 Point3D tilePlacementPoint3d = new Point3D(Integer.parseInt(input[9]),Integer.parseInt(input[10]),Integer.parseInt(input[11]));
+                HexButton targetHex = manager.getBoard().getCubicMap().get(tilePlacementPoint3d);
+                TilePlacementMove tilePlacementMove = new TilePlacementMove(null, targetHex, Orientation.values()[orientation]);
+                PlayerMove buildAction = null;
 
                 //place tile here
 
@@ -221,7 +224,8 @@ public class Parser implements Runnable {
                 check2 = input[13].equals("FOUNDED") && input[14].equals("SETTLEMENT");
                 if(check2){
                     Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]),Integer.parseInt(input[17]),Integer.parseInt(input[18]));
-                    Point pixelPoint = HexButton.toPixelPt(buildPlacementPoint3d);
+                    HexButton buildTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
+                    buildAction = new BuildingPlacementMove(null, targetHex, Building.VILLAGER);
                     //buildPlacementPoint3d to build settlement
 
                 }
@@ -244,22 +248,29 @@ public class Parser implements Runnable {
                             break;
                     }
 
+                    HexButton expansionTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
+                    buildAction = new SettlementExpansionMove(null, manager.getBoard().getSettlementManager().getSettlement(expansionTarget), expandTerrain);
+
                     //use values to expand settlement here
 
                 }
                 check2 = input[13].equals("BUILT") && input[14].equals("TOTORO");
                 if(check2){
                     Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[17]),Integer.parseInt(input[18]),Integer.parseInt(input[19]));
+                    buildAction = new BuildingPlacementMove(null, manager.getBoard().getCubicMap().get(buildPlacementPoint3d), Building.TOTORO);
 
                     //build totoro here
                 }
                 check2 = input[13].equals("BUILT") && input[14].equals("TIGER");
                 if(check2){
                     Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[17]),Integer.parseInt(input[18]),Integer.parseInt(input[19]));
+                    buildAction = new BuildingPlacementMove(null, manager.getBoard().getCubicMap().get(buildPlacementPoint3d), Building.TIGER);
 
                     //build tiger here
 
                 }
+
+                manager.processTurn(tilePlacementMove, buildAction);
             }
             else{
                 //Opponent either forfeited or lost

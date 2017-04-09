@@ -1,3 +1,5 @@
+import javafx.geometry.Point3D;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,18 +17,6 @@ public class Board {
     private static final int HEIGHT = 512;
     private static final int xOffset = 10;
     private static final int yOffset = 5;
-    /*
-    private static final Point[] neighborPts =
-            {
-                    new Point(0, -40),
-                    new Point(30, -20),
-                    new Point(30, 20),
-                    new Point(0, 40),
-                    new Point(-30, 20),
-                    new Point(-30, -20)
-            };
-
-            */
 
     private static final Point[] neighborPts =
     {
@@ -47,6 +37,7 @@ public class Board {
 
     private GameManager manager;
     private HashMap<Point, HexButton> buttonMap;
+    private HashMap<Point3D, HexButton> cubicMap;
     private SettlementManager settlementManager;
     private MoveAnalyzer analyzer1;
     private MoveAnalyzer analyzer2;
@@ -149,9 +140,12 @@ public class Board {
 
     private void resetMapWithCenterHex() {
         buttonMap = new HashMap<Point, HexButton>();
+        cubicMap = new HashMap<Point3D, HexButton>();
 
         Point point = new Point(256 + 236, 128 + 236);
-        buttonMap.put(point, new HexButton(point, new Hex(Terrain.EMPTY), manager));
+        HexButton center = new HexButton(point, new Hex(Terrain.EMPTY), manager);
+        buttonMap.put(point, center);
+        cubicMap.put(center.getABCPoint(), center);
         placeStartingTile(point);
     }
 
@@ -234,6 +228,14 @@ public class Board {
             }
         }
 
+    }
+
+    public void processTurn(TilePlacementMove tilePlacementMove, PlayerMove buildAction)
+    {
+        tilePlacementMove.execute(this);
+        buildAction.execute(this);
+        activePlayer = (activePlayer == player1 ? player2 : player1);
+        getActiveAnalyzer().analyze();
     }
 
     public void instaWin(Player winner)
@@ -335,6 +337,7 @@ public class Board {
         } else {
             HexButton button = new HexButton(origin, hex, manager);
             buttonMap.put(origin, button);
+            cubicMap.put(button.getABCPoint(), button);
         }
         placePerimeterHexes(origin);
     }
@@ -360,6 +363,7 @@ public class Board {
         if (!buttonMap.containsKey(buttonPoint)) {
             HexButton button = new HexButton(buttonPoint, new Hex(Terrain.EMPTY), manager);
             buttonMap.put(buttonPoint, button);
+            cubicMap.put(button.getABCPoint(), button);
         }
     }
 
@@ -465,6 +469,11 @@ public class Board {
 
     public HashMap<Point, HexButton> getButtonMap() {
         return buttonMap;
+    }
+
+    public HashMap<Point3D, HexButton> getCubicMap()
+    {
+        return cubicMap;
     }
 
     public HexButton getNeighborButton(HexButton base, int index) {
@@ -801,4 +810,6 @@ public class Board {
     public TilePlacementMove getStoredTilePlacement() {
         return storedTilePlacement;
     }
+
+
 }

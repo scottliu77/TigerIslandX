@@ -5,6 +5,7 @@ import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
+import java.util.concurrent.BlockingQueue;
 
 public class NetworkTest {
 
@@ -13,7 +14,7 @@ public class NetworkTest {
 //        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 //        System.setErr(new PrintStream(outContent));
 
-        Network net = new Network( "127.0.0.1", 3000  );
+        Network net = new Network( "127.0.0.1", 3000, null, null);
         Thread netThread = new Thread( net );
 
 //        try {

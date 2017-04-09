@@ -89,6 +89,11 @@ public class GameManager
 
     }
 
+    public void processTurn(TilePlacementMove tilePlacementMove, PlayerMove buildAction)
+    {
+        board.processTurn(tilePlacementMove, buildAction);
+    }
+
     public void processTurn(PlayerMove playerMove)
     {
         board.processTurn(playerMove);

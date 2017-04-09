@@ -111,10 +111,20 @@ class HexButton extends Button
 
     static public Point toPixelPt(Point3D hexPt)
     {
-        int q = (int) hexPt.getX();
-        int r = (int) hexPt.getZ();
-        int x = (int) Math.round(20.0 * sqrt(3) * (q + (r/2)));
+        Point offsetPt = GameManager.hexOffsetPoint;
+
+        double q = hexPt.getX();
+        double r = hexPt.getZ();
+        int x = (int) Math.round(20.0 * sqrt(3) * (q +  (r/2)));
+        //double dx = sqrt(3) * (q + q + r) * 10.0;
+        //System.out.println("dx = " + (dx + offsetPt.x));
+        //double tensqrt3 = 10 * Math.sqrt(3);
+        //int x = (int) Math.round(tensqrt3 * (q + q + r));
         int y = (int) Math.round(20.0 * 1.5 * r);
+
+        x += (offsetPt.x);
+        y += (offsetPt.y);
+
         return new Point(x, y);
     }
 

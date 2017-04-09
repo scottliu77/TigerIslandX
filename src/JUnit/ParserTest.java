@@ -7,7 +7,7 @@ public class ParserTest {
         Parser testParser = new Parser(new GameManager(true));
         String message = "WAIT FOR THE TOURNAMENT TO BEGIN 1231321";
         testParser.receiveMessage(message);
-        assert(testParser.getPid() == 1231321);
+        assert(testParser.getPid() == "1231321");
 
     }
 
@@ -16,7 +16,7 @@ public class ParserTest {
         Parser testParser = new Parser(new GameManager(true));
         String message = "NEW CHALLENGE 456 YOU WILL PLAY 35 MATCHES";
         testParser.receiveMessage(message);
-        assert(testParser.getCid() == 456);
+        assert(testParser.getCid() == "456");
         assert(testParser.getRounds() == 35);
 
     }
@@ -25,7 +25,7 @@ public class ParserTest {
         Parser testParser = new Parser(new GameManager(true));
         String message = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER 1231";
         testParser.receiveMessage(message);
-        assert(testParser.getPidOpponent() == 1231);
+        assert(testParser.getPidOpponent() == "1231");
 
     }
     @Test
