@@ -11,7 +11,7 @@ public class Parser implements Runnable {
 
     private int challenges;
     private String cid;
-    private String gid;
+    private String gid = "empty";
     private int orientation;
     private String pid;
     private String pidOpponent;
@@ -28,12 +28,13 @@ public class Parser implements Runnable {
     private int moveNumber;
     private int tileCount = 100;
 
+    private String threadName;
     private final BlockingQueue<String> serverToClient;
     private final BlockingQueue<String> clientToServer;
+    private final GameIDs games;
 
-    boolean dummyParser = false;
-
-    public Parser(BlockingQueue<String> input, BlockingQueue<String> output){
+    public Parser(BlockingQueue<String> input, BlockingQueue<String> output, GameIDs games){
+        this.games = games;
         manager = new GameManager(true, this);
         serverToClient = input;
         clientToServer = output;
@@ -41,18 +42,20 @@ public class Parser implements Runnable {
 
     public Parser(GameManager m){
         manager = m;
+        games = new GameIDs();
         serverToClient = new ArrayBlockingQueue<String>(1000);
         clientToServer = new ArrayBlockingQueue<String>(1000);
     }
 
     public void run() {
+        threadName = Thread.currentThread().getName();
         // check input queue for new message, send to receiveMessage()
         String messageSplit[];
         while(true) {
             if ( !serverToClient.isEmpty() ) {
                 synchronized (serverToClient) {
                     if(serverToClient.isEmpty()) continue;
-                    System.out.println( "Input: " + serverToClient.peek() );
+                    //System.out.println( Thread.currentThread().getName() + ": checking: " + serverToClient.peek() );
                     messageSplit = serverToClient.peek().split(" ");
                     String messageGID;
                     if (messageSplit[4].equals("GAME")) {
@@ -64,17 +67,23 @@ public class Parser implements Runnable {
                         break;
                     }
 
-                    if (gid == null) gid = messageGID;
+                    if (gid.equals("empty")) {
+                        //check if the other parser hasn't already taken the messageGID
+                        synchronized (games) {
+                            if (!games.checkGame(threadName, messageGID)) {
+                                gid = messageGID;
+                                games.setGameID(threadName, gid);
+                            }
+                        }
+                    }else
                     if (messageGID.equals(gid)) {
                         receiveMessage(serverToClient.poll());
                     }
 
-                    synchronized (serverToClient) {
-                        try {
-                            serverToClient.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        serverToClient.wait(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }else{
@@ -95,7 +104,7 @@ public class Parser implements Runnable {
         boolean check2;
         input = inputMessage.split(" ");
 
-        System.out.println("Parsing: " + inputMessage);
+        //System.out.println("Parsing: " + inputMessage);
 
         //Server supplies tile to be placed
         check = input[0].equals("MAKE")&&input[1].equals("YOUR")&&input[2].equals("MOVE")&&input[3].equals("IN");
