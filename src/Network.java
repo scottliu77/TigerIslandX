@@ -9,6 +9,7 @@ import java.util.concurrent.BlockingQueue;
 public class Network implements Runnable {
     private static final String TOURNEY_PASS = "heygang";
     private static final String USER_PASS = "O O";
+    private long startTime = 0;
 
     private int port;
     private String address;
@@ -32,14 +33,14 @@ public class Network implements Runnable {
     }
 
     private void Client() throws IOException, NetworkConnectivityException {
-        Socket kkSocket;
+        Socket socket;
         BufferedReader in;
         PrintWriter out;
 
         try {
-            kkSocket = new Socket(address, port );
-            out = new PrintWriter(kkSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
+            socket = new Socket(address, port );
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("Connected to Server");
         } catch (UnknownHostException e) {
             throw new NetworkConnectivityException("Don't know about host: " + address);
@@ -54,8 +55,6 @@ public class Network implements Runnable {
         String fromServer;
         while (true) {
             try {
-                Scanner console = new Scanner(System.in);
-                String message;
                 while ((fromServer = in.readLine()) != null) {
                     System.out.println("\033[0;31mServer: \033[0m" + fromServer);
 
@@ -82,6 +81,8 @@ public class Network implements Runnable {
                         break;
                     }else{
                         //System.out.println( "Rec: " + fromServer );
+                        startTime = System.currentTimeMillis();
+                        System.out.println("Start time: " + startTime);
                         serverToClient.put( fromServer );
                         synchronized (serverToClient) {
                             serverToClient.notifyAll();
@@ -98,7 +99,7 @@ public class Network implements Runnable {
         out.close();
         in.close();
 //        stdIn.close();
-        kkSocket.close();
+        socket.close();
     }
 
 
@@ -115,7 +116,10 @@ public class Network implements Runnable {
             while(true) {
                 if ( !clientToServer.isEmpty() ) {
                     System.out.println("Sending: " + clientToServer.peek());
+                    final long endTime = System.currentTimeMillis();
+                    long diff = (endTime - startTime);
                     out.println( clientToServer.poll() );
+                    System.out.println("Total time: " + diff);
                 }else{
                     synchronized (clientToServer) {
                         try {

@@ -314,7 +314,8 @@ public class Parser implements Runnable {
             pidOpponent = input[7];
             score2 = Integer.parseInt(input[8]);
             manager = new GameManager(true,this);
-            gid = null;
+            gid = "empty";
+            games.setGameID(threadName, "empty");
 
         }
         check = input[0].equals("END")&&input[1].equals("OF")&&input[2].equals("ROUND");
