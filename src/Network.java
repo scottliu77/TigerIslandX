@@ -118,7 +118,7 @@ public class Network implements Runnable {
         public void run() {
             while(true) {
                 if ( !clientToServer.isEmpty() ) {
-                    System.out.println("Sending: " + clientToServer.peek());
+                    System.out.println("\033[1;34mSending: \033[0m" + clientToServer.peek());
                     final long endTime = System.currentTimeMillis();
                     long diff = (endTime - startTime);
                     out.println( clientToServer.poll() );

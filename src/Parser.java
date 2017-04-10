@@ -108,15 +108,16 @@ public class Parser implements Runnable {
     public void receiveMessage(String inputMessage){
         boolean check;
         boolean check2;
+        String localGid;
         input = inputMessage.split(" ");
 
-        System.out.println("Parsing: " + inputMessage);
+        //System.out.println("Parsing: " + inputMessage);
 
         //Server supplies tile to be placed
         check = input[0].equals("MAKE")&&input[1].equals("YOUR")&&input[2].equals("MOVE")&&input[3].equals("IN");
         if(check){
             System.out.println("Message parsed as move prompt");
-            gid = input[5];
+            localGid = input[5];
             time = input[7];
             moveNumber = input[10];
             tileUnifiedName = input[12];
@@ -171,7 +172,7 @@ public class Parser implements Runnable {
         check = input[0].equals("WAIT")&&input[1].equals("FOR")&&input[2].equals("THE")&&input[3].equals("TOURNAMENT")&&input[4].equals("TO")&&input[5].equals("BEGIN");
         if(check){
             pid = input[6];
-            System.out.println("client pid: "+pid);
+            //System.out.println("client pid: "+pid);
         }
 
         //
@@ -197,18 +198,20 @@ public class Parser implements Runnable {
         //Received move
         check = input[0].equals("GAME")&&input[2].equals("MOVE")&&input[4].equals("PLAYER");
         if(check) {
-            System.out.println("Message parsed as move");
 
-            gid = input[1];
+            //gid = input[1];
             moveNumber = input[3];
             pidFound = input[5];
             tileUnifiedName = input[7];
+
+            System.out.println("Message parsed as move by " + threadName + " with game " + gid + " and player id " + pid);
 
             if(pidFound.equals(pid)){
                 //do nothing
 
                 check = input[6].equals("FORFEITED:")||input[6].equals("LOST:");
                 if(check){
+                    System.out.println("Reseting game " + gid);
                     manager = new GameManager(true,this);
                     gid = "empty";
                     games.setGameID(threadName, "empty");
@@ -319,7 +322,8 @@ public class Parser implements Runnable {
                     manager.processTurn(tilePlacementMove, buildAction);
                 } else {
                     //Opponent either forfeited or lost
-                    System.out.println("Opponent Lost/Game over");
+                    System.out.println("\033[0;35mOpponent Lost/Game over\033[0m");
+                    System.out.println("Reseting game " + gid);
                     manager = new GameManager(true, this);
                     gid = "empty";
                     games.setGameID(threadName, "empty");
@@ -331,10 +335,12 @@ public class Parser implements Runnable {
         check = input[0].equals("GAME")&&input[2].equals("OVER");
         if(check){
             //gid = input[1];
-            pid = input[4];
+            //pid = input[4];
             score1 = input[5];
             pidOpponent = input[7];
             score2 = input[8];
+
+            System.out.println("Reseting game " + gid);
             manager = new GameManager(true,this);
             gid = "empty";
             games.setGameID(threadName, "empty");
@@ -380,6 +386,7 @@ public class Parser implements Runnable {
 
         sendToQueue(sendActionResult);
 
+        System.out.println("Reseting game " + gid);
         manager = new GameManager(true,this);
         gid = "empty";
         games.setGameID(threadName, "empty");
@@ -402,7 +409,7 @@ public class Parser implements Runnable {
             outputMessage += " BUILD TOTORO SANCTUARY AT ";
         }
         outputMessage += (int) buildLocation.getABCPoint().getX() + " " + (int) buildLocation.getABCPoint().getY() + " " + (int) buildLocation.getABCPoint().getZ();
-        System.out.println("Returned: " + outputMessage);
+        //System.out.println("Returned: " + outputMessage);
         return outputMessage;
     }
     //Expansion case
@@ -415,7 +422,7 @@ public class Parser implements Runnable {
             temp = "ROCK";          //since the server uses rock instead of rocky
         }
         outputMessage += " " + temp;
-        System.out.println("Returned: " + outputMessage);
+        //System.out.println("Returned: " + outputMessage);
         return outputMessage;
     }
     //Unable to build case
