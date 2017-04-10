@@ -262,6 +262,7 @@ public class Parser implements Runnable {
                     nextTile = new Tile(hexA, hexB, tileCount, Orientation.N);
                     tileCount++;
                     orientation = Integer.parseInt(input[12]) - 1;
+                    manager.getBoard().getDeck().setTopTile(nextTile);
                     Point3D tilePlacementPoint3d = new Point3D(Integer.parseInt(input[9]), Integer.parseInt(input[10]), Integer.parseInt(input[11]));
                     HexButton targetHex = manager.getBoard().getCubicMap().get(tilePlacementPoint3d);
                     TilePlacementMove tilePlacementMove = new TilePlacementMove(null, targetHex, Orientation.values()[orientation]);
