@@ -82,11 +82,11 @@ public class Board {
         if(playerFirst)
         {
             analyzer1 = new MoveAnalyzer(this);
-            analyzer2 = new RandomRandy(this);
+            analyzer2 = new MoveAnalyzer(this);
         }
         else
         {
-            analyzer1 = new RandomRandy(this);
+            analyzer1 = new MoveAnalyzer(this);
             analyzer2 = new MoveAnalyzer(this);
         }
 
@@ -188,13 +188,13 @@ public class Board {
                 playerMove.execute(this);
                 tilePlaced = true;
                 settlementManager.updateSettlements();
-                //activeAnalyzer.analyze();
-
+                activeAnalyzer.analyze();
+                /*
                 activeAnalyzer.setStartTime();
                 activeAnalyzer.updateMoveset();
                 activeAnalyzer.updateSettlementExpansions();
                 activeAnalyzer.updateBuildingPlacements();
-
+                */
                 if (activeAnalyzer.noPossibleBuildActions())
                 {
 
@@ -220,6 +220,7 @@ public class Board {
                     endGame(activePlayer);
                 }
 
+                activeAnalyzer.analyze();
                 // activePlayer is then switched from player1 to player2 or vice-versa:
                 activePlayer = (activePlayer == player1 ? player2 : player1);
                 getActiveAnalyzer().analyze();
