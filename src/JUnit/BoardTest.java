@@ -1,3 +1,4 @@
+import javafx.geometry.Point3D;
 import org.junit.Test;
 
 import java.awt.*;
@@ -11,12 +12,13 @@ import static java.awt.image.ImageObserver.WIDTH;
 public class BoardTest {
     private Object manager;
 
+
     @Test
     public void BoardResetWithCenterHex() throws Exception {
         HashMap<Point, HexButton> buttonMap = new HashMap<Point, HexButton>();
         Point point = new Point(256 + 236, 128 + 236);
         GameManager manager = null;
-        buttonMap.put(point, new HexButton(point, new Hex(Terrain.EMPTY), manager));
+        buttonMap.put(point, new HexButton(point, new Point3D(0,0,0), new Hex(Terrain.EMPTY), manager));
 
     }
 
@@ -77,37 +79,6 @@ public class BoardTest {
 
     }
 
-      @Test
-    public void ResetButtonMap() throws Exception {
-        HashMap<Point, HexButton> buttonMap = new HashMap<Point, HexButton>();
-
-        int startX = 256;
-        int startY = 128;
-        int hexBoxSize = 40;
-        int hexVertOffset = 20;
-        int hexHoriOffset = 30;
-
-        int xOffset = 0;
-        int yOffset = 0;
-        for (int i = startX + xOffset; i <= ((startX + WIDTH) - hexBoxSize); i += hexHoriOffset * 2) {
-            for (int j = startY + yOffset; j <= startY + HEIGHT - hexBoxSize; j += hexVertOffset * 2) {
-                Point point = new Point(i, j);
-                Hex hex = new Hex(Terrain.EMPTY);
-                HexButton hexButton = new HexButton(point, hex, (GameManager) manager);
-               assert(buttonMap.put(point, hexButton)!=null);
-            }
-        }
-
-        for (int i = startX + hexHoriOffset + xOffset; i <= ((startX + WIDTH) - hexBoxSize); i += hexHoriOffset * 2) {
-            for (int j = startY + hexVertOffset + yOffset; j <= ((startY + HEIGHT) - hexBoxSize); j += hexVertOffset * 2) {
-                Point point = new Point(i, j);
-                Hex hex = new Hex(Terrain.EMPTY);
-                HexButton hexButton = new HexButton(point, hex, (GameManager) manager);
-              assert(  buttonMap.put(point, hexButton)!=null);
-
-            }
-        }
-    }
 
     /*
      @Test

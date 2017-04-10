@@ -254,14 +254,6 @@ class BaseMenu extends Menu
         //drawMenu(G2D);
     }
 
-    public void resetHexes()
-    {
-        super.removeHexButtons(gameManager.getButtonMap().values());
-        gameManager.resetHexes();
-        addHexButtons(gameManager.getButtonMap());
-        updateDisplays();
-    }
-
     public void resetWithOneHex()
     {
         super.removeHexButtons(gameManager.getButtonMap().values());

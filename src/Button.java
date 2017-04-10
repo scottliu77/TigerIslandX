@@ -99,14 +99,14 @@ class HexButton extends Button
     private Point3D abcPt;
     private Point qrPt;
 
-    public HexButton(Point origin, Hex hex, GameManager manager)
+    public HexButton(Point origin, Point3D abcOrigin, Hex hex, GameManager manager)
     {
         super(origin, hex.getImage(), hex.getHoverImage());
         this.hex = hex;
         this.manager = manager;
         hitboxOrigin = new Point(getOrigin().x + 8, getOrigin().y + 4);
         hitboxTerminal = new Point(getOrigin().x + 32, getOrigin().y + 36);
-        abcPt = toHexPt(origin);
+        abcPt = abcOrigin;
     }
 
     static public Point toPixelPt(Point3D hexPt)
@@ -128,6 +128,7 @@ class HexButton extends Button
         return new Point(x, y);
     }
 
+    /*
     public Point3D toHexPt(Point pixelPt)
     {
         double x = pixelPt.x;
@@ -144,14 +145,46 @@ class HexButton extends Button
         double q = ((x * (sqrt(3.0) / 3.0) - (y / 3.0)) / 20.0);
         double r = (y * (2.0 / 3.0) / 20.0);
 
-        //System.out.println("q, r : " + q + ", " + r);
+        System.out.println("q, r : " + q + ", " + r);
 
         int intQ = (int) Math.round(q);
         int intR = (int) Math.round(r);
 
-        //System.out.println("(int) q, r: " + intQ + ", " + intR);
+        System.out.println("(int) q, r: " + intQ + ", " + intR);
 
         qrPt = new Point(intQ, intR);
+
+        double fracA = q;
+        double fracB = r;
+        double fracC = -q - r;
+
+        double ra = Math.round(fracA);
+        double rb = Math.round(fracB);
+        double rc = Math.round(fracC);
+
+        double adiff = Math.abs(ra - fracA);
+        double bdiff = Math.abs(rb - fracB);
+        double cdiff = Math.abs(rc - fracC);
+
+        if(adiff > bdiff && adiff > cdiff)
+        {
+            System.out.println("Adjusting rounded A");
+            ra = -rb - rc;
+        }
+        else if (bdiff > cdiff)
+        {
+            rb = -ra - rc;
+            System.out.println("Adjusting rounded B");
+
+        }
+        else
+        {
+            rc = -ra - rb;
+            System.out.println("Adjusting rounded C");
+
+        }
+
+        System.out.println("ra, rb, rc: " + ra + ", " + rb + ", " + rc);
 
         int a = intQ;
         int c = intR;
@@ -159,6 +192,7 @@ class HexButton extends Button
 
         return new Point3D(a, b, c);
     }
+    */
 
     public boolean pointIsOn(Point point)
     {

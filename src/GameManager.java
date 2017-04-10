@@ -100,10 +100,6 @@ public class GameManager
     }
 
 
-    public void resetHexes()
-    {
-        board.resetButtonMap();
-    }
 
     public void resetWithOneHex()
     {

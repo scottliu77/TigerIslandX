@@ -53,17 +53,17 @@ public class Hex
 
         // Draw base and hover hex images for buttons:
 
-        //g2d.setColor(terrain.getColor());
-        //g2d.fill(hexagon);
-        //g2d.setColor(Color.BLACK);
+        g2d.setColor(terrain.getColor());
+        g2d.fill(hexagon);
+        g2d.setColor(Color.BLACK);
         g2d.draw(hexagon);
 
-        //g2d = hoverImage.createGraphics();
-        //g2d.drawImage(image, 0, 0, null);
-        //g2d.setColor(Color.PINK);
-        //Stroke stroke = new BasicStroke(3);
-        //g2d.setStroke(stroke);
-        //g2d.draw(hexagon);
+        g2d = hoverImage.createGraphics();
+        g2d.drawImage(image, 0, 0, null);
+        g2d.setColor(Color.PINK);
+        Stroke stroke = new BasicStroke(3);
+        g2d.setStroke(stroke);
+        g2d.draw(hexagon);
 
         // Alternate hover graphic, roughly equivalent to mouse detection box:
         //g2d.setColor(Color.GREEN);

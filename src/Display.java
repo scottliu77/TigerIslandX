@@ -343,7 +343,7 @@ class HexDetailDisplay extends Display
             Hex hex = hexButton.getHex();
             Point point = hexButton.getOrigin();
             Point3D abcPt = hexButton.getABCPoint();
-            Point qrPt = hexButton.getQRPoint();
+            //Point qrPt = hexButton.getQRPoint();
             g2d.drawImage(hex.getImage(), 100, 4, null);
             g2d.setColor(Color.BLACK);
             g2d.drawString("TileId: " + hex.getTileId(), 4, 19);
@@ -351,7 +351,8 @@ class HexDetailDisplay extends Display
             g2d.drawString("Building: " + hex.getBuilding().toString(), 4, 59);
             g2d.drawString("Pt: (" + point.x + ", " + point.y + ") == (" + (int) abcPt.getX() + ", " + (int) abcPt.getY() + ", " + (int) abcPt.getZ() + ")"
                     + " == ", 4, 79);
-            g2d.drawString("("+ HexButton.toPixelPt(abcPt).x + ", " + HexButton.toPixelPt(abcPt).y + ")", 110, 100);
+            //g2d.drawString("("+ HexButton.toPixelPt(abcPt).x + ", " + HexButton.toPixelPt(abcPt).y + ")", 110, 100);
+            //g2d.drawString("(" + qrPt.x + ", " + qrPt.y + ")", 110, 100);
             // Outputs for checking QR and ABC coordinate conversions:
             //g2d.drawString("QR: " + qrPt.x + ", " + qrPt.y, 4, 39);
             //g2d.drawString("Origin: (" + point.x + ", " + point.y + ")", 4, 59);

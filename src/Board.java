@@ -29,6 +29,17 @@ public class Board {
     };
 
 
+    private static final Point3D[] abcNeighborPts =
+            {
+                    new Point3D(0, 1, -1),
+                    new Point3D(1, 0, -1),
+                    new Point3D(1, -1, 0),
+                    new Point3D(0, -1, 1),
+                    new Point3D(-1, 0, 1),
+                    new Point3D(-1, 1, 0),
+            };
+
+
     private Player player1;
     private Player player2;
 
@@ -96,41 +107,6 @@ public class Board {
     // Resetting and Initialization methods:
 
 
-    public void resetButtonMap() {
-        buttonMap = new HashMap<Point, HexButton>();
-
-        int startX = 256;
-        int startY = 128;
-        int hexBoxSize = 40;
-        int hexVertOffset = 20;
-        int hexHoriOffset = 30;
-
-        for (int i = startX + xOffset; i <= startX + WIDTH - hexBoxSize; i += hexHoriOffset * 2) {
-            for (int j = startY + yOffset; j <= startY + HEIGHT - hexBoxSize; j += hexVertOffset * 2) {
-                Point point = new Point(i, j);
-                Hex hex = new Hex(Terrain.EMPTY);
-                HexButton hexButton = new HexButton(point, hex, manager);
-                buttonMap.put(point, hexButton);
-                //System.out.println(point.toString());
-                //g2d.drawImage(hexTemplate, i, j, null);
-                //g2d.drawImage(hexTemplate, i + 30, j + 20, null);
-            }
-        }
-
-        for (int i = startX + hexHoriOffset + xOffset; i <= startX + WIDTH - hexBoxSize; i += hexHoriOffset * 2) {
-            for (int j = startY + hexVertOffset + yOffset; j <= startY + HEIGHT - hexBoxSize; j += hexVertOffset * 2) {
-                Point point = new Point(i, j);
-                Hex hex = new Hex(Terrain.EMPTY);
-                HexButton hexButton = new HexButton(point, hex, manager);
-                buttonMap.put(point, hexButton);
-                //System.out.println(point.toString());
-                //g2d.drawImage(hexTemplate, i, j, null);
-            }
-        }
-
-        resetBoard();
-    }
-
     public void clearHexes() {
         for (HexButton button : buttonMap.values()) {
             button.resetButton();
@@ -143,7 +119,8 @@ public class Board {
         cubicMap = new HashMap<Point3D, HexButton>();
 
         Point point = new Point(256 + 236, 128 + 236);
-        HexButton center = new HexButton(point, new Hex(Terrain.EMPTY), manager);
+        Point3D abcPoint = new Point3D(0, 0, 0);
+        HexButton center = new HexButton(point, abcPoint, new Hex(Terrain.EMPTY), manager);
         buttonMap.put(point, center);
         cubicMap.put(center.getABCPoint(), center);
         placeStartingTile(point);
@@ -292,11 +269,11 @@ public class Board {
         HexButton centerButton = buttonMap.get(origin);
 
         centerButton.changeHex(new Hex(Terrain.VOLCANO, 0));
-        placePerimeterHexes(origin);
-        placeHex(origin, new Hex(Terrain.JUNGLE, 0), 0);
-        placeHex(origin, new Hex(Terrain.LAKE, 0), 1);
-        placeHex(origin, new Hex(Terrain.GRASS, 0), 3);
-        placeHex(origin, new Hex(Terrain.ROCKY, 0), 4);
+        placePerimeterHexes(origin, centerButton.getABCPoint());
+        placeHex(origin, centerButton.getABCPoint(), new Hex(Terrain.JUNGLE, 0), 0);
+        placeHex(origin, centerButton.getABCPoint(), new Hex(Terrain.LAKE, 0), 1);
+        placeHex(origin, centerButton.getABCPoint(), new Hex(Terrain.GRASS, 0), 3);
+        placeHex(origin, centerButton.getABCPoint(), new Hex(Terrain.ROCKY, 0), 4);
     }
 
     public void placeTile(Point origin, Orientation orientation)
@@ -308,10 +285,10 @@ public class Board {
         if (tilePlacementIsLegal(tile, centerButton))
         {
             centerButton.changeHex(tile.getVolcano());
-            placePerimeterHexes(origin);
+            placePerimeterHexes(origin, centerButton.getABCPoint());
 
-            placeHex(origin, tile.getA(), tile.getOrientation().ordinal());
-            placeHex(origin, tile.getB(), tile.getOrientationPlus(1).ordinal());
+            placeHex(origin, centerButton.getABCPoint(), tile.getA(), tile.getOrientation().ordinal());
+            placeHex(origin, centerButton.getABCPoint(), tile.getB(), tile.getOrientationPlus(1).ordinal());
 
             deck.nextTile();
         }
@@ -322,47 +299,54 @@ public class Board {
 
         if (tilePlacementIsLegal(tile, centerButton)) {
             centerButton.changeHex(tile.getVolcano());
-            placePerimeterHexes(origin);
+            placePerimeterHexes(origin, centerButton.getABCPoint());
 
-            placeHex(origin, tile.getA(), tile.getOrientation().ordinal());
-            placeHex(origin, tile.getB(), tile.getOrientationPlus(1).ordinal());
+            placeHex(origin, centerButton.getABCPoint(), tile.getA(), tile.getOrientation().ordinal());
+            placeHex(origin, centerButton.getABCPoint(), tile.getB(), tile.getOrientationPlus(1).ordinal());
         }
     }
 
-    private void placeHex(Point center, Hex hex, int orientation) {
+    private void placeHex(Point center, Point3D abcCenter, Hex hex, int orientation) {
         Point delta = neighborPts[orientation];
         Point origin = new Point(center.x + delta.x, center.y + delta.y);
+
+        Point3D abcDelta = abcNeighborPts[orientation];
+        Point3D abcOrigin = new Point3D(abcCenter.getX() + abcDelta.getX(), abcCenter.getY() + abcDelta.getY(), abcCenter.getZ() + abcDelta.getZ());
         if (buttonMap.containsKey(origin)) {
             HexButton button = buttonMap.get(origin);
             button.changeHex(hex);
         } else {
-            HexButton button = new HexButton(origin, hex, manager);
+            HexButton button = new HexButton(origin, abcOrigin, hex, manager);
             buttonMap.put(origin, button);
             cubicMap.put(button.getABCPoint(), button);
         }
-        placePerimeterHexes(origin);
+        placePerimeterHexes(origin, abcOrigin);
     }
 
-    public void placePerimeterHexes(Point center) {
+    public void placePerimeterHexes(Point center, Point3D abcOrigin) {
         for (int i = 0; i < 6; i++) {
             Point neighborPoint = neighborPts[i];
+            Point3D abcNeighbor = abcNeighborPts[i];
             Point buttonPoint = new Point(center.x + neighborPoint.x, center.y + neighborPoint.y);
-            placeIfUnmapped(buttonPoint);
-            place2ndLayerPerimeter(buttonPoint);
+            Point3D abcPoint = new Point3D(abcOrigin.getX() + abcNeighbor.getX(), abcOrigin.getY() + abcNeighbor.getY(), abcOrigin.getZ() + abcNeighbor.getZ());
+            placeIfUnmapped(buttonPoint, abcPoint);
+            place2ndLayerPerimeter(buttonPoint, abcPoint);
         }
     }
 
-    private void place2ndLayerPerimeter(Point center) {
+    private void place2ndLayerPerimeter(Point center, Point3D abcOrigin) {
         for (int i = 0; i < 6; i++) {
             Point neighborPoint = neighborPts[i];
+            Point3D abcNeighbor = abcNeighborPts[i];
+            Point3D abcPoint = new Point3D(abcOrigin.getX() + abcNeighbor.getX(), abcOrigin.getY() + abcNeighbor.getY(), abcOrigin.getZ() + abcNeighbor.getZ());
             Point buttonPoint = new Point(center.x + neighborPoint.x, center.y + neighborPoint.y);
-            placeIfUnmapped(buttonPoint);
+            placeIfUnmapped(buttonPoint, abcPoint);
         }
     }
 
-    private void placeIfUnmapped(Point buttonPoint) {
+    private void placeIfUnmapped(Point buttonPoint, Point3D abcPoint) {
         if (!buttonMap.containsKey(buttonPoint)) {
-            HexButton button = new HexButton(buttonPoint, new Hex(Terrain.EMPTY), manager);
+            HexButton button = new HexButton(buttonPoint, abcPoint, new Hex(Terrain.EMPTY), manager);
             buttonMap.put(buttonPoint, button);
             cubicMap.put(button.getABCPoint(), button);
         }
@@ -482,10 +466,12 @@ public class Board {
             System.out.println("Error, invalid neighbor index = " + index);
             return null;
         } else {
-            Point delta = neighborPts[index];
-            Point neighborPt = new Point(base.getOrigin().x + delta.x, base.getOrigin().y + delta.y);
+            Point xyDelta = neighborPts[index];
+            Point3D abcDelta = abcNeighborPts[index];
+            Point neighborPt = new Point(base.getOrigin().x + xyDelta.x, base.getOrigin().y + xyDelta.y);
+            Point3D abcNeighborPt = new Point3D(base.getABCPoint().getX() + abcDelta.getX(), base.getABCPoint().getY() + abcDelta.getY(), base.getABCPoint().getZ() + abcDelta.getZ());
             if (!buttonMap.containsKey(neighborPt)) {
-                return new HexButton(neighborPt, new Hex(Terrain.EMPTY), manager);
+                return new HexButton(neighborPt, abcNeighborPt, new Hex(Terrain.EMPTY), manager);
             } else {
                 return buttonMap.get(neighborPt);
             }
