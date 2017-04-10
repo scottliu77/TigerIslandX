@@ -83,7 +83,11 @@ public class Parser implements Runnable {
                         }
                     }else
                     if (messageGID.equals(gid)) {
-                        receiveMessage(serverToClient.poll());
+                        try {
+                            receiveMessage(serverToClient.poll());
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     try {
