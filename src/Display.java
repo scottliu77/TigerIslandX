@@ -315,7 +315,7 @@ class HexDetailDisplay extends Display
 
     public HexDetailDisplay()
     {
-        super(new BufferedImage(160, 144, BufferedImage.TYPE_INT_ARGB), new Point(816, 336));
+        super(new BufferedImage(200, 144, BufferedImage.TYPE_INT_ARGB), new Point(816, 336));
         g2d = super.createGraphics();
         g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
@@ -328,8 +328,7 @@ class HexDetailDisplay extends Display
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, 200, 144);
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(0, 0, 199
-                , 143);
+        g2d.drawRect(0, 0, 199, 143);
     }
 
     public void update(HexButton hoverButton)

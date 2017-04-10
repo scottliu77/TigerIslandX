@@ -13,7 +13,7 @@ public class Parser implements Runnable {
     private String cid;
     private String gid = "empty";
     private int orientation;
-    private String pid;
+    private String pid = "-1";
     private String pidOpponent;
     private String pidFound;
     private int rid;
@@ -63,9 +63,14 @@ public class Parser implements Runnable {
                         messageGID = messageSplit[5];
                     } else if (messageSplit[0].equals("GAME")) {
                         messageGID = messageSplit[1];
+                    } else if (messageSplit[3].equals("TOURNAMENT")) {
+                        if (pid.equals("-1")) {
+                            receiveMessage(serverToClient.poll());
+                        }
+                        continue;
                     } else {
                         System.out.println("Bad Message: " + serverToClient.poll());
-                        break;
+                        continue;
                     }
 
                     if (gid.equals("empty")) {
@@ -105,7 +110,7 @@ public class Parser implements Runnable {
         boolean check2;
         input = inputMessage.split(" ");
 
-        //System.out.println("Parsing: " + inputMessage);
+        System.out.println("Parsing: " + inputMessage);
 
         //Server supplies tile to be placed
         check = input[0].equals("MAKE")&&input[1].equals("YOUR")&&input[2].equals("MOVE")&&input[3].equals("IN");
