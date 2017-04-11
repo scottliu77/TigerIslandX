@@ -153,6 +153,7 @@ public class Board {
     public void processTurn(PlayerMove playerMove)
     {
         MoveAnalyzer activeAnalyzer = getActiveAnalyzer();
+        settlementManager.updateSettlements();
         if(playerMove != null && gameResult == null)
         {
             if (!tilePlaced) // if tilePlaced is false, Board expects a Tile Placement
@@ -212,6 +213,7 @@ public class Board {
     {
         tilePlacementMove.execute(this);
         buildAction.execute(this);
+        settlementManager.updateSettlements();
         activePlayer = (activePlayer == player1 ? player2 : player1);
         getActiveAnalyzer().analyze();
     }

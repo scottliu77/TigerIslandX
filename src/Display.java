@@ -349,8 +349,7 @@ class HexDetailDisplay extends Display
             g2d.drawString("TileId: " + hex.getTileId(), 4, 19);
             g2d.drawString("Level: " + hex.getLevel(), 4, 39);
             g2d.drawString("Building: " + hex.getBuilding().toString(), 4, 59);
-            g2d.drawString("Pt: (" + point.x + ", " + point.y + ") == (" + (int) abcPt.getX() + ", " + (int) abcPt.getY() + ", " + (int) abcPt.getZ() + ")"
-                    + " == ", 4, 79);
+            g2d.drawString("Pt: (" + point.x + ", " + point.y + ") == (" + (int) abcPt.getX() + ", " + (int) abcPt.getY() + ", " + (int) abcPt.getZ() + ")", 4, 79);
             //g2d.drawString("("+ HexButton.toPixelPt(abcPt).x + ", " + HexButton.toPixelPt(abcPt).y + ")", 110, 100);
             //g2d.drawString("(" + qrPt.x + ", " + qrPt.y + ")", 110, 100);
             // Outputs for checking QR and ABC coordinate conversions:
@@ -369,6 +368,7 @@ class HexDetailDisplay extends Display
             }
             g2d.drawString("Owner: " + playerName, 4, 119);
             g2d.drawString("SettlementId: " + hex.getSettlementId(), 4, 139);
+            //System.out.println("Pt: (" + point.x + ", " + point.y + ") == (" + (int) abcPt.getX() + ", " + (int) abcPt.getY() + ", " + (int) abcPt.getZ() + ")");
         }
     }
 }

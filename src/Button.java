@@ -97,7 +97,6 @@ class HexButton extends Button
     private Point hitboxTerminal;
 
     private Point3D abcPt;
-    private Point qrPt;
 
     public HexButton(Point origin, Point3D abcOrigin, Hex hex, GameManager manager)
     {
@@ -108,91 +107,6 @@ class HexButton extends Button
         hitboxTerminal = new Point(getOrigin().x + 32, getOrigin().y + 36);
         abcPt = abcOrigin;
     }
-
-    static public Point toPixelPt(Point3D hexPt)
-    {
-        Point offsetPt = GameManager.hexOffsetPoint;
-
-        double q = hexPt.getX();
-        double r = hexPt.getZ();
-        int x = (int) Math.round(20.0 * sqrt(3) * (q +  (r/2)));
-        //double dx = sqrt(3) * (q + q + r) * 10.0;
-        //System.out.println("dx = " + (dx + offsetPt.x));
-        //double tensqrt3 = 10 * Math.sqrt(3);
-        //int x = (int) Math.round(tensqrt3 * (q + q + r));
-        int y = (int) Math.round(20.0 * 1.5 * r);
-
-        x += (offsetPt.x);
-        y += (offsetPt.y);
-
-        return new Point(x, y);
-    }
-
-    /*
-    public Point3D toHexPt(Point pixelPt)
-    {
-        double x = pixelPt.x;
-        double y = pixelPt.y;
-        Point offsetPt = GameManager.hexOffsetPoint;
-
-        //System.out.println("x, y : " + x + ", " + y);
-
-        x -= offsetPt.x;
-        y -= offsetPt.y;
-
-        //System.out.println("adj x, y: " + x + ", " + y);
-
-        double q = ((x * (sqrt(3.0) / 3.0) - (y / 3.0)) / 20.0);
-        double r = (y * (2.0 / 3.0) / 20.0);
-
-        System.out.println("q, r : " + q + ", " + r);
-
-        int intQ = (int) Math.round(q);
-        int intR = (int) Math.round(r);
-
-        System.out.println("(int) q, r: " + intQ + ", " + intR);
-
-        qrPt = new Point(intQ, intR);
-
-        double fracA = q;
-        double fracB = r;
-        double fracC = -q - r;
-
-        double ra = Math.round(fracA);
-        double rb = Math.round(fracB);
-        double rc = Math.round(fracC);
-
-        double adiff = Math.abs(ra - fracA);
-        double bdiff = Math.abs(rb - fracB);
-        double cdiff = Math.abs(rc - fracC);
-
-        if(adiff > bdiff && adiff > cdiff)
-        {
-            System.out.println("Adjusting rounded A");
-            ra = -rb - rc;
-        }
-        else if (bdiff > cdiff)
-        {
-            rb = -ra - rc;
-            System.out.println("Adjusting rounded B");
-
-        }
-        else
-        {
-            rc = -ra - rb;
-            System.out.println("Adjusting rounded C");
-
-        }
-
-        System.out.println("ra, rb, rc: " + ra + ", " + rb + ", " + rc);
-
-        int a = intQ;
-        int c = intR;
-        int b = -a - c;
-
-        return new Point3D(a, b, c);
-    }
-    */
 
     public boolean pointIsOn(Point point)
     {
@@ -293,10 +207,7 @@ class HexButton extends Button
         }
     }
 
-    public Point getQRPoint()
-    {
-        return qrPt;
-    }
+
 }
 
 
