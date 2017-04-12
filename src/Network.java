@@ -65,10 +65,12 @@ public class Network implements Runnable {
                         out.println("I AM " + USER_PASS );
                     }else
                     if (fromServer.substring(0,4).equals( "WAIT" )) {
-                        serverToClient.put( fromServer );
-                        serverToClient.put( fromServer );
-                        synchronized (serverToClient) {
-                            serverToClient.notifyAll();
+                        if ( fromServer.substring(13,17).equals("TOUR") ) {
+                            serverToClient.put( fromServer );
+                            serverToClient.put( fromServer );
+                            synchronized (serverToClient) {
+                                serverToClient.notifyAll();
+                            }
                         }
                     }else
                     if (fromServer.substring(0,3).equals( "NEW" )) {
