@@ -433,7 +433,7 @@ public class Parser implements Runnable {
     //Unable to build case
     public String sendAction(HexButton tileLocation, int orientation){
         String outputMessage = "GAME " + gid + " MOVE " + moveNumber + " PLACE " + tileUnifiedName;
-        outputMessage += " AT " + tileLocation.getABCPoint().getX() + " " + tileLocation.getABCPoint().getY() + " " + tileLocation.getABCPoint().getZ() + " " + orientation;
+        outputMessage += " AT " + (int) tileLocation.getABCPoint().getX() + " " + (int) tileLocation.getABCPoint().getY() + " " + (int) tileLocation.getABCPoint().getZ() + " " + orientation;
         outputMessage += " UNABLE TO BUILD";
         return outputMessage;
     }
