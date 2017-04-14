@@ -2,12 +2,13 @@
 CEN3031 Spring 2017
 
 All game functionality has been implemented.
-  -Meeples, Totoros, & Tigers are able to be placed.
-  -Settlements are able to be built 
-  -Nuking works 
+
+  + Meeples, Totoros, and Tigers are able to be placed
+  + Settlements are able to be built and expanded
+  + Nuking 
 
 ## Setup and Install
-Clone repository using IntelliJ IDEA. 
+Clone repository using IntelliJ IDEA.
 
 Add JUnit 1.2.5 and Cucumber Java8 1.2.5 to dependencies via the Project Structure menu.
 
@@ -21,7 +22,12 @@ Note: For performance reasons the GUI and networking functionality are mutually 
 Games can be reconstructed from logs in the GUI by feeding past-tense server messages into the Parser.
 
 ## Tournament Mode
-To deploy the network client, use the server's IP address, target port, tournament password, team login name and team password as arguments.
+To deploy the network client, use the command line arguments:
+ + server's IP address
+ + target port
+ + tournament password
+ + team login name
+ + team password
 
-If the server is running, the client will connect and begin resolving signals automatically.
+If the server is running, the client will connect, automatically authenticate, and will wait for a challenge to begin.
 
