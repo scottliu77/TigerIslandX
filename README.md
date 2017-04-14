@@ -1,11 +1,12 @@
 # TigerIsland Client, Team O
 CEN3031 Spring 2017
 
-All game functionality has been implemented.
+All game functionality/rules have been implemented.
 
   + Meeples, Totoros, and Tigers are able to be placed
   + Settlements are able to be built and expanded
   + Nuking 
+  + Illegal moves are not allowed
 
 ## Setup and Install
 Clone repository using IntelliJ IDEA.
