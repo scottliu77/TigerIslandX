@@ -7,8 +7,8 @@ import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 
 public class Network implements Runnable {
-    private static final String TOURNEY_PASS = "heygang";
-    private static final String USER_PASS = "O O";
+    private static final String TOURNEY_PASS = TigerIsland.tournamentPassword;
+    private static final String USER_PASS = TigerIsland.teamNameUserPass;
     private long startTime = 0;
 
     private int port;

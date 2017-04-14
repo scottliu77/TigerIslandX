@@ -7,6 +7,9 @@ import static java.lang.System.exit;
  * Created by mike on 4/8/17.
  */
 public class TigerIsland {
+    public static String tournamentPassword = "";
+    public static String teamNameUserPass = "";
+
     public static void main(String[] args) {
         String startUI = args[0];
         if (startUI.equals("UI")) {
@@ -18,8 +21,10 @@ public class TigerIsland {
             try {
                 address = args[0];
                 port = Integer.parseInt(args[1]);
+                tournamentPassword = args[2];
+                teamNameUserPass = args[3] + " " + args[4];
             } catch (ArrayIndexOutOfBoundsException e) {
-                System.err.println("Must provide an address and a port: XXX.XXX.XXX.XXX XX");
+                System.err.println("Must provide an address, port, tournament password, team name, and team password:\n<iPv4 address> <port #> <tournament password> <team name> <team password>");
                 exit(1);
             }
 
