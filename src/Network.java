@@ -128,7 +128,7 @@ public class Network implements Runnable {
                 }else{
                     synchronized (clientToServer) {
                         try {
-                            clientToServer.wait();
+                            clientToServer.wait(350);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
