@@ -32,6 +32,7 @@ To deploy the network client, use the command line arguments:
 If the server is running, the client will connect, automatically authenticate, and will wait for a challenge to begin.
 
 ##Tests
+
 Have JUnit and Cucumber tests 
 
 ##AI Strategy 
