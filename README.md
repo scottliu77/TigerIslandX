@@ -2,7 +2,9 @@
 CEN3031 Spring 2017
 
 All game functionality has been implemented.
-
+  -Meeples, Totoros, & Tigers are able to be placed.
+  -Settlements are able to be built 
+  -Nuking works 
 
 ## Setup and Install
 Clone repository using IntelliJ IDEA. 
