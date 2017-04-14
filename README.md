@@ -40,4 +40,5 @@ Have JUnit and Cucumber tests
 Priority:
   1. Tigers/Totoros
   2. Nuking 
-  3. Place a tile random tile
+  3. Expand an existing settlement
+  4. Place a tile and start a new settlement
