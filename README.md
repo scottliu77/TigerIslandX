@@ -36,6 +36,7 @@ If the server is running, the client will connect, automatically authenticate, a
 Have JUnit and Cucumber tests 
 
 ##AI Strategy 
+
 Priority:
   1. Tigers/Totoros
   2. Nuking 
