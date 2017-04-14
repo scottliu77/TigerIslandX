@@ -9,10 +9,12 @@ import static java.lang.System.exit;
 public class TigerIsland {
     public static String tournamentPassword = "";
     public static String teamNameUserPass = "";
+    public static boolean UIshouldRun = false;
 
     public static void main(String[] args) {
         String startUI = args[0];
         if (startUI.equals("UI")) {
+            UIshouldRun = true;
             UI.startUI();
         }else{
             int port = 3000;
