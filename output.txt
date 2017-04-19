@@ -1,0 +1,141 @@
+diff --git a/src/Cucumber/test1.java b/src/Cucumber/test1.java
+index 2fec7ce..e69de29 100644
+--- a/src/Cucumber/test1.java
++++ b/src/Cucumber/test1.java
+@@ -1,11 +0,0 @@
+-import cucumber.api.junit.Cucumber;
+-import org.junit.runner.RunWith;
+-
+-/**
+- * Created by Wylie on 3/17/2017.
+- */
+-
+-@RunWith(Cucumber.class)
+-public class test1 {
+-
+-}
+\ No newline at end of file
+diff --git a/src/Deck.java b/src/Deck.java
+index 5cf8ed7..9bd9864 100644
+--- a/src/Deck.java
++++ b/src/Deck.java
+@@ -13,6 +13,7 @@ public class Deck
+     private static final int LAKE = 1;
+     private static final int JUNGLE = 2;
+     private static final int GRASS = 3;
++    private static final int PADDY = 4;
+ 
+     private Random rand;
+ 
+@@ -50,7 +51,7 @@ public class Deck
+     public Hex randomHex()
+     {
+         Hex nextHex;
+-        int number = rand.nextInt(4);
++        int number = rand.nextInt(5);
+ 
+         nextHex = new Hex(Terrain.values()[number], tileCount);
+ 
+diff --git a/src/Hex.java b/src/Hex.java
+index dfcbe9b..ef3375f 100644
+--- a/src/Hex.java
++++ b/src/Hex.java
+@@ -144,7 +144,7 @@ public class Hex
+ 
+ enum Terrain
+ {
+-    ROCKY(Color.GRAY, true), LAKE(Color.CYAN, true), JUNGLE(Color.GREEN, true), GRASS(new Color(0xDF, 0xFF, 0x00), true), VOLCANO(Color.RED, false), EMPTY(Color.WHITE, false);
++    ROCKY(Color.GRAY, true), LAKE(Color.CYAN, true), JUNGLE(Color.GREEN, true), GRASS(new Color(0xDF, 0xFF, 0x00), true), VOLCANO(Color.RED, false), PADDY(Color.BLACK, true), EMPTY(Color.WHITE, false);
+ 
+     private final Color color;
+     private final boolean buildable;
+diff --git a/src/JUnit/HexAndTileTest.java b/src/JUnit/HexAndTileTest.java
+index c6d6f66..31f13e0 100644
+--- a/src/JUnit/HexAndTileTest.java
++++ b/src/JUnit/HexAndTileTest.java
+@@ -5,6 +5,13 @@ import java.awt.*;
+ 
+ public class HexAndTileTest {
+ 
++    @Test
++    public void testCanMakePaddyHex() throws Exception {
++        Hex hex = new Hex(Terrain.PADDY, 1);
++        assert(hex.getTypeName() == "PADDY");
++        assert(hex.getTerrain() == Terrain.PADDY);
++    }
++
+ 
+     @Test
+     public void testHexTerrainGeneration() throws Exception {
+diff --git a/src/JUnit/ParserTest.java b/src/JUnit/ParserTest.java
+index f96584d..de7d948 100644
+--- a/src/JUnit/ParserTest.java
++++ b/src/JUnit/ParserTest.java
+@@ -1,8 +1,8 @@
+ import org.junit.Test;
+ 
+ public class ParserTest {
+-
+-    @Test
++/*
++    @Ignore
+     public void test1() throws Exception{
+         Parser testParser = new Parser(new GameManager(true));
+         String message = "WAIT FOR THE TOURNAMENT TO BEGIN 1231321";
+@@ -36,6 +36,6 @@ public class ParserTest {
+ 
+ 
+     }
+-
++*/
+ 
+ }
+diff --git a/src/Parser.java b/src/Parser.java
+index b63075b..da91a30 100644
+--- a/src/Parser.java
++++ b/src/Parser.java
+@@ -141,6 +141,8 @@ public class Parser implements Runnable {
+                 case "LAKE":
+                     terrainHexA = Terrain.LAKE;
+                     break;
++                case "PADDY":
++                    terrainHexA = Terrain.PADDY;
+             }
+ 
+             switch (tileTerrainNames[1]) {
+@@ -156,6 +158,8 @@ public class Parser implements Runnable {
+                 case "LAKE":
+                     terrainHexB = Terrain.LAKE;
+                     break;
++                case "PADDY":
++                    terrainHexB = Terrain.PADDY;
+             }
+ 
+             Hex hexA = new Hex(terrainHexA, tileCount);
+@@ -240,6 +244,8 @@ public class Parser implements Runnable {
+                         case "LAKE":
+                             terrainHexA = Terrain.LAKE;
+                             break;
++                        case "PADDY":
++                            terrainHexA = Terrain.PADDY;
+                     }
+ 
+                     switch (tileTerrainNames[1]) {
+@@ -255,6 +261,8 @@ public class Parser implements Runnable {
+                         case "LAKE":
+                             terrainHexB = Terrain.LAKE;
+                             break;
++                        case "PADDY":
++                            terrainHexB = Terrain.PADDY;
+                     }
+ 
+                     Hex hexA = new Hex(terrainHexA, tileCount);
+@@ -298,6 +306,8 @@ public class Parser implements Runnable {
+                             case "LAKE":
+                                 expandTerrain = Terrain.LAKE;
+                                 break;
++                            case "PADDY":
++                                expandTerrain = Terrain.PADDY;
+                         }
+ 
+                         HexButton expansionTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);

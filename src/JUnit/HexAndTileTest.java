@@ -5,6 +5,13 @@ import java.awt.*;
 
 public class HexAndTileTest {
 
+    @Test
+    public void testCanMakePaddyHex() throws Exception {
+        Hex hex = new Hex(Terrain.PADDY, 1);
+        assert(hex.getTypeName() == "PADDY");
+        assert(hex.getTerrain() == Terrain.PADDY);
+    }
+
 
     @Test
     public void testHexTerrainGeneration() throws Exception {

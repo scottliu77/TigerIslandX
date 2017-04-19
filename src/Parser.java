@@ -141,6 +141,8 @@ public class Parser implements Runnable {
                 case "LAKE":
                     terrainHexA = Terrain.LAKE;
                     break;
+                case "PADDY":
+                    terrainHexA = Terrain.PADDY;
             }
 
             switch (tileTerrainNames[1]) {
@@ -156,6 +158,8 @@ public class Parser implements Runnable {
                 case "LAKE":
                     terrainHexB = Terrain.LAKE;
                     break;
+                case "PADDY":
+                    terrainHexB = Terrain.PADDY;
             }
 
             Hex hexA = new Hex(terrainHexA, tileCount);
@@ -240,6 +244,8 @@ public class Parser implements Runnable {
                         case "LAKE":
                             terrainHexA = Terrain.LAKE;
                             break;
+                        case "PADDY":
+                            terrainHexA = Terrain.PADDY;
                     }
 
                     switch (tileTerrainNames[1]) {
@@ -255,6 +261,8 @@ public class Parser implements Runnable {
                         case "LAKE":
                             terrainHexB = Terrain.LAKE;
                             break;
+                        case "PADDY":
+                            terrainHexB = Terrain.PADDY;
                     }
 
                     Hex hexA = new Hex(terrainHexA, tileCount);
@@ -298,6 +306,8 @@ public class Parser implements Runnable {
                             case "LAKE":
                                 expandTerrain = Terrain.LAKE;
                                 break;
+                            case "PADDY":
+                                expandTerrain = Terrain.PADDY;
                         }
 
                         HexButton expansionTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);

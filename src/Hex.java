@@ -144,7 +144,7 @@ public class Hex
 
 enum Terrain
 {
-    ROCKY(Color.GRAY, true), LAKE(Color.CYAN, true), JUNGLE(Color.GREEN, true), GRASS(new Color(0xDF, 0xFF, 0x00), true), VOLCANO(Color.RED, false), EMPTY(Color.WHITE, false);
+    ROCKY(Color.GRAY, true), LAKE(Color.CYAN, true), JUNGLE(Color.GREEN, true), GRASS(new Color(0xDF, 0xFF, 0x00), true), VOLCANO(Color.RED, false), PADDY(Color.BLACK, true), EMPTY(Color.WHITE, false);
 
     private final Color color;
     private final boolean buildable;

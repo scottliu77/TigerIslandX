@@ -13,6 +13,7 @@ public class Deck
     private static final int LAKE = 1;
     private static final int JUNGLE = 2;
     private static final int GRASS = 3;
+    private static final int PADDY = 4;
 
     private Random rand;
 
@@ -50,7 +51,7 @@ public class Deck
     public Hex randomHex()
     {
         Hex nextHex;
-        int number = rand.nextInt(4);
+        int number = rand.nextInt(5);
 
         nextHex = new Hex(Terrain.values()[number], tileCount);
 

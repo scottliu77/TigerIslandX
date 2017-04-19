@@ -1,8 +1,8 @@
 import org.junit.Test;
 
 public class ParserTest {
-
-    @Test
+/*
+    @Ignore
     public void test1() throws Exception{
         Parser testParser = new Parser(new GameManager(true));
         String message = "WAIT FOR THE TOURNAMENT TO BEGIN 1231321";
@@ -36,6 +36,6 @@ public class ParserTest {
 
 
     }
-
+*/
 
 }
