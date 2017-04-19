@@ -9,10 +9,11 @@ public class GameManagerTest {
         HexButton hexButton = testGameManager.getBoard().getHexButton(center);
         assert(hexButton.getHex().getTypeName().equals("VOLCANO"));
     }
+    /*
     @Test
     public void GUITest() throws Exception{
         UI tigerIsland = new UI();
         tigerIsland.createAndShowGUI();
 
-    }
+    }*/
 }

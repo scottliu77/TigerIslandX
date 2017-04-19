@@ -12,6 +12,7 @@ public class Settlement
 
     private boolean hasTiger;
     private boolean hasTotoro;
+    private boolean hasShaman;
 
     private int settlementId;
 
@@ -24,6 +25,7 @@ public class Settlement
         firstHex.getHex().setSettlementId(settlementId);
         hasTiger = false;
         hasTotoro = false;
+        hasShaman = false;
     }
 
     public void checkNeighbors(HexButton startHex, Board board)
@@ -48,6 +50,10 @@ public class Settlement
     public void checkForTiger()
     {
         hasTiger = hasBuilding(Building.TIGER);
+    }
+
+    public void checkForShaman() {
+        hasShaman = hasBuilding(Building.TIGER);
     }
 
     public int getSize()
@@ -87,6 +93,11 @@ public class Settlement
     {
         checkForTiger();
         return hasTiger;
+    }
+
+    public boolean hasShaman() {
+        checkForShaman();
+        return hasShaman;
     }
 
     public Player getOwner()

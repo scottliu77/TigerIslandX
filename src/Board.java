@@ -726,7 +726,14 @@ public class Board {
             {
                 button.placeBuilding(Building.VILLAGER, activePlayer);
                 int level = button.getHex().getLevel();
-                activePlayer.increaseScore(level * level);
+                if(settlement.hasShaman()) {
+                    activePlayer.increaseScore(2 * level * level);
+
+                }
+                else {
+                    activePlayer.increaseScore(level * level);
+
+                }
             }
             activePlayer.decreaseVillagers(expansion.getCost());
         }

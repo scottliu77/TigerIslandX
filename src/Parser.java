@@ -288,6 +288,16 @@ public class Parser implements Runnable {
                         //buildPlacementPoint3d to build settlement
 
                     }
+
+                    check2 = input[13].equals("FOUNDED") && input[14].equals("SHANGRILA");
+                    if(check2) {
+                        System.out.println("Parsing buildaction as shaman placement");
+                        Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]), Integer.parseInt(input[17]), Integer.parseInt(input[18]));
+                        HexButton buildTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
+                        buildAction = new BuildingPlacementMove(null, buildTarget, Building.SHAMAN);
+                        //buildPlacementPoint3d to build settlement
+
+                    }
                     check2 = input[13].equals("EXPANDED") && input[14].equals("SETTLEMENT");
                     if (check2) {
                         System.out.println("Parsing buildaction as expansion");
@@ -347,6 +357,23 @@ public class Parser implements Runnable {
 
         }
 
+        check = input[0].equals("GAME") && input[2].equals("OVER") && input[3].equals("SEND") && input[4].equals("OUTCOME");
+        if(check) {
+            gid = input[4];
+            pid = getPid();
+            pidOpponent = getPidOpponent();
+            Player player1 = manager.getBoard().getPlayer1();
+            Player player2 = manager.getBoard().getPlayer2();
+
+            String outputMessage = sendAction(pid, pidOpponent, player1, player2);
+            sendToQueue(outputMessage);
+
+            manager = new GameManager(true,this);
+            gid = "empty";
+            games.setGameID(threadName, "empty");
+
+        }
+
         check = input[0].equals("GAME")&&input[2].equals("OVER");
         if(check){
             //gid = input[1];
@@ -368,8 +395,8 @@ public class Parser implements Runnable {
             //System.out.println("Round over. Round ID: "+ input[3]);
         }
 
-
     }
+
 
 
     public void extractAndSendAction(TilePlacementMove tilePlacement, PlayerMove buildAction)
@@ -393,6 +420,21 @@ public class Parser implements Runnable {
 
         sendToQueue(sendActionResult);
     }
+
+    // Send scores case
+    public String sendAction(String playerID1, String playerID2, Player player1, Player player2) {
+        String outputMessage = "GAME " + gid + " PLAYER ";
+        if(player1.getName() == playerID1) {
+            outputMessage += playerID1 + player1.getScore() + " PLAYER " + playerID2 + player2.getScore();
+        }
+        else {
+            outputMessage += playerID2 + player1.getScore() + " PLAYER " + playerID1 + player2.getScore();
+
+        }
+        return outputMessage;
+    }
+
+
     //unable to build case
     public void extractAndSendAction(TilePlacementMove tilePlacement){
         HexButton tileHex = tilePlacement.getTargetHex();

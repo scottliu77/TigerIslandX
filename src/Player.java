@@ -26,6 +26,10 @@ public class Player
         return meeples[Building.VILLAGER.ordinal()];
     }
 
+    public int getShaman() {
+        return meeples[Building.SHAMAN.ordinal()];
+    }
+
     public int getTotoros()
     {
         return meeples[Building.TOTORO.ordinal()];
@@ -43,15 +47,16 @@ public class Player
 
     public void resetResources()
     {
-        meeples = new int[3];
-        meeples[Building.VILLAGER.ordinal()] = 20;
+        meeples = new int[4];
+        meeples[Building.VILLAGER.ordinal()] = 19;
         meeples[Building.TIGER.ordinal()] = 2;
         meeples[Building.TOTORO.ordinal()] = 3;
+        meeples[Building.SHAMAN.ordinal()] = 1;
     }
 
     public boolean instaWins()
     {
-        boolean outOfVillagers = (meeples[Building.VILLAGER.ordinal()] == 0);
+        boolean outOfVillagers = (meeples[Building.VILLAGER.ordinal()] == 0 && meeples[Building.SHAMAN.ordinal()] == 0);
         boolean outOfTigers = (meeples[Building.TIGER.ordinal()] == 0);
         boolean outOfTotoros = (meeples[Building.TOTORO.ordinal()] == 0);
 
@@ -70,6 +75,10 @@ public class Player
     }
 
     public void decreaseTigers() {meeples[Building.TIGER.ordinal()]--;}
+
+    public void decreaseShaman() {
+        meeples[Building.SHAMAN.ordinal()]--;
+    }
 
     public void consumeMeeples(Building building, int number)
     {
@@ -93,7 +102,8 @@ public class Player
 
     public boolean outOfResources()
     {
-        return (meeples[Building.TOTORO.ordinal()] == 0 && meeples[Building.VILLAGER.ordinal()] == 0 && meeples[Building.TIGER.ordinal()] == 0);
+        return (meeples[Building.TOTORO.ordinal()] == 0 && meeples[Building.VILLAGER.ordinal()] == 0 && meeples[Building.TIGER.ordinal()] == 0
+        && meeples[Building.SHAMAN.ordinal()] == 0);
     }
 
     public boolean outOfTigersOrTotoros()

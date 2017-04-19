@@ -1,6 +1,14 @@
 import org.junit.Test;
 
 public class ParserTest {
+
+    @Test
+    public void testCanTellSendScoreMessage() throws Exception {
+        Parser parser = new Parser(new GameManager(true));
+        String message = "GAME 1 OVER SEND OUTCOME";
+        parser.receiveMessage(message);
+        assert(parser.getGid() == "1");
+    }
 /*
     @Ignore
     public void test1() throws Exception{
