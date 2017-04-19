@@ -6,6 +6,11 @@ import java.awt.*;
 public class HexAndTileTest {
 
     @Test
+    public void testSevenTerainValuesExist() throws Exception {
+        assert(Terrain.values().length == 7);
+    }
+
+    @Test
     public void testCanMakePaddyHex() throws Exception {
         Hex hex = new Hex(Terrain.PADDY, 1);
         assert(hex.getTypeName() == "PADDY");

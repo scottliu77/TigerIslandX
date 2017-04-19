@@ -1,476 +1,497 @@
 diff --git a/output.txt b/output.txt
-index ac532d3..e69de29 100644
+index 7159772..e69de29 100644
 --- a/output.txt
 +++ b/output.txt
-@@ -1,141 +0,0 @@
--diff --git a/src/Cucumber/test1.java b/src/Cucumber/test1.java
--index 2fec7ce..e69de29 100644
----- a/src/Cucumber/test1.java
--+++ b/src/Cucumber/test1.java
--@@ -1,11 +0,0 @@
---import cucumber.api.junit.Cucumber;
---import org.junit.runner.RunWith;
---
---/**
--- * Created by Wylie on 3/17/2017.
--- */
---
---@RunWith(Cucumber.class)
---public class test1 {
---
---}
--\ No newline at end of file
--diff --git a/src/Deck.java b/src/Deck.java
--index 5cf8ed7..9bd9864 100644
----- a/src/Deck.java
--+++ b/src/Deck.java
--@@ -13,6 +13,7 @@ public class Deck
--     private static final int LAKE = 1;
--     private static final int JUNGLE = 2;
--     private static final int GRASS = 3;
--+    private static final int PADDY = 4;
-- 
--     private Random rand;
-- 
--@@ -50,7 +51,7 @@ public class Deck
--     public Hex randomHex()
--     {
--         Hex nextHex;
---        int number = rand.nextInt(4);
--+        int number = rand.nextInt(5);
-- 
--         nextHex = new Hex(Terrain.values()[number], tileCount);
-- 
+@@ -1,476 +0,0 @@
+-diff --git a/output.txt b/output.txt
+-index ac532d3..e69de29 100644
+---- a/output.txt
+-+++ b/output.txt
+-@@ -1,141 +0,0 @@
+--diff --git a/src/Cucumber/test1.java b/src/Cucumber/test1.java
+--index 2fec7ce..e69de29 100644
+----- a/src/Cucumber/test1.java
+--+++ b/src/Cucumber/test1.java
+--@@ -1,11 +0,0 @@
+---import cucumber.api.junit.Cucumber;
+---import org.junit.runner.RunWith;
+---
+---/**
+--- * Created by Wylie on 3/17/2017.
+--- */
+---
+---@RunWith(Cucumber.class)
+---public class test1 {
+---
+---}
+--\ No newline at end of file
+--diff --git a/src/Deck.java b/src/Deck.java
+--index 5cf8ed7..9bd9864 100644
+----- a/src/Deck.java
+--+++ b/src/Deck.java
+--@@ -13,6 +13,7 @@ public class Deck
+--     private static final int LAKE = 1;
+--     private static final int JUNGLE = 2;
+--     private static final int GRASS = 3;
+--+    private static final int PADDY = 4;
+-- 
+--     private Random rand;
+-- 
+--@@ -50,7 +51,7 @@ public class Deck
+--     public Hex randomHex()
+--     {
+--         Hex nextHex;
+---        int number = rand.nextInt(4);
+--+        int number = rand.nextInt(5);
+-- 
+--         nextHex = new Hex(Terrain.values()[number], tileCount);
+-- 
+--diff --git a/src/Hex.java b/src/Hex.java
+--index dfcbe9b..ef3375f 100644
+----- a/src/Hex.java
+--+++ b/src/Hex.java
+--@@ -144,7 +144,7 @@ public class Hex
+-- 
+-- enum Terrain
+-- {
+---    ROCKY(Color.GRAY, true), LAKE(Color.CYAN, true), JUNGLE(Color.GREEN, true), GRASS(new Color(0xDF, 0xFF, 0x00), true), VOLCANO(Color.RED, false), EMPTY(Color.WHITE, false);
+--+    ROCKY(Color.GRAY, true), LAKE(Color.CYAN, true), JUNGLE(Color.GREEN, true), GRASS(new Color(0xDF, 0xFF, 0x00), true), VOLCANO(Color.RED, false), PADDY(Color.BLACK, true), EMPTY(Color.WHITE, false);
+-- 
+--     private final Color color;
+--     private final boolean buildable;
+--diff --git a/src/JUnit/HexAndTileTest.java b/src/JUnit/HexAndTileTest.java
+--index c6d6f66..31f13e0 100644
+----- a/src/JUnit/HexAndTileTest.java
+--+++ b/src/JUnit/HexAndTileTest.java
+--@@ -5,6 +5,13 @@ import java.awt.*;
+-- 
+-- public class HexAndTileTest {
+-- 
+--+    @Test
+--+    public void testCanMakePaddyHex() throws Exception {
+--+        Hex hex = new Hex(Terrain.PADDY, 1);
+--+        assert(hex.getTypeName() == "PADDY");
+--+        assert(hex.getTerrain() == Terrain.PADDY);
+--+    }
+--+
+-- 
+--     @Test
+--     public void testHexTerrainGeneration() throws Exception {
+--diff --git a/src/JUnit/ParserTest.java b/src/JUnit/ParserTest.java
+--index f96584d..de7d948 100644
+----- a/src/JUnit/ParserTest.java
+--+++ b/src/JUnit/ParserTest.java
+--@@ -1,8 +1,8 @@
+-- import org.junit.Test;
+-- 
+-- public class ParserTest {
+---
+---    @Test
+--+/*
+--+    @Ignore
+--     public void test1() throws Exception{
+--         Parser testParser = new Parser(new GameManager(true));
+--         String message = "WAIT FOR THE TOURNAMENT TO BEGIN 1231321";
+--@@ -36,6 +36,6 @@ public class ParserTest {
+-- 
+-- 
+--     }
+---
+--+*/
+-- 
+-- }
+--diff --git a/src/Parser.java b/src/Parser.java
+--index b63075b..da91a30 100644
+----- a/src/Parser.java
+--+++ b/src/Parser.java
+--@@ -141,6 +141,8 @@ public class Parser implements Runnable {
+--                 case "LAKE":
+--                     terrainHexA = Terrain.LAKE;
+--                     break;
+--+                case "PADDY":
+--+                    terrainHexA = Terrain.PADDY;
+--             }
+-- 
+--             switch (tileTerrainNames[1]) {
+--@@ -156,6 +158,8 @@ public class Parser implements Runnable {
+--                 case "LAKE":
+--                     terrainHexB = Terrain.LAKE;
+--                     break;
+--+                case "PADDY":
+--+                    terrainHexB = Terrain.PADDY;
+--             }
+-- 
+--             Hex hexA = new Hex(terrainHexA, tileCount);
+--@@ -240,6 +244,8 @@ public class Parser implements Runnable {
+--                         case "LAKE":
+--                             terrainHexA = Terrain.LAKE;
+--                             break;
+--+                        case "PADDY":
+--+                            terrainHexA = Terrain.PADDY;
+--                     }
+-- 
+--                     switch (tileTerrainNames[1]) {
+--@@ -255,6 +261,8 @@ public class Parser implements Runnable {
+--                         case "LAKE":
+--                             terrainHexB = Terrain.LAKE;
+--                             break;
+--+                        case "PADDY":
+--+                            terrainHexB = Terrain.PADDY;
+--                     }
+-- 
+--                     Hex hexA = new Hex(terrainHexA, tileCount);
+--@@ -298,6 +306,8 @@ public class Parser implements Runnable {
+--                             case "LAKE":
+--                                 expandTerrain = Terrain.LAKE;
+--                                 break;
+--+                            case "PADDY":
+--+                                expandTerrain = Terrain.PADDY;
+--                         }
+-- 
+--                         HexButton expansionTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
+-diff --git a/src/Board.java b/src/Board.java
+-index 41b4f7d..c307bb8 100644
+---- a/src/Board.java
+-+++ b/src/Board.java
+-@@ -726,7 +726,14 @@ public class Board {
+-             {
+-                 button.placeBuilding(Building.VILLAGER, activePlayer);
+-                 int level = button.getHex().getLevel();
+--                activePlayer.increaseScore(level * level);
+-+                if(settlement.hasShaman()) {
+-+                    activePlayer.increaseScore(2 * level * level);
+-+
+-+                }
+-+                else {
+-+                    activePlayer.increaseScore(level * level);
+-+
+-+                }
+-             }
+-             activePlayer.decreaseVillagers(expansion.getCost());
+-         }
 -diff --git a/src/Hex.java b/src/Hex.java
--index dfcbe9b..ef3375f 100644
+-index ef3375f..7b73db2 100644
 ---- a/src/Hex.java
 -+++ b/src/Hex.java
--@@ -144,7 +144,7 @@ public class Hex
+-@@ -162,7 +162,7 @@ enum Terrain
 - 
-- enum Terrain
+- enum Building
 - {
---    ROCKY(Color.GRAY, true), LAKE(Color.CYAN, true), JUNGLE(Color.GREEN, true), GRASS(new Color(0xDF, 0xFF, 0x00), true), VOLCANO(Color.RED, false), EMPTY(Color.WHITE, false);
--+    ROCKY(Color.GRAY, true), LAKE(Color.CYAN, true), JUNGLE(Color.GREEN, true), GRASS(new Color(0xDF, 0xFF, 0x00), true), VOLCANO(Color.RED, false), PADDY(Color.BLACK, true), EMPTY(Color.WHITE, false);
+--    VILLAGER(true, false, 1), TIGER(true, true, 75), TOTORO(true, true, 200), NONE(false, false, 0);
+-+    VILLAGER(true, false, 1), TIGER(true, true, 75), TOTORO(true, true, 200), SHAMAN(true, false, 1), NONE(false, false, 0);
 - 
--     private final Color color;
--     private final boolean buildable;
--diff --git a/src/JUnit/HexAndTileTest.java b/src/JUnit/HexAndTileTest.java
--index c6d6f66..31f13e0 100644
----- a/src/JUnit/HexAndTileTest.java
--+++ b/src/JUnit/HexAndTileTest.java
--@@ -5,6 +5,13 @@ import java.awt.*;
-- 
-- public class HexAndTileTest {
-- 
--+    @Test
--+    public void testCanMakePaddyHex() throws Exception {
--+        Hex hex = new Hex(Terrain.PADDY, 1);
--+        assert(hex.getTypeName() == "PADDY");
--+        assert(hex.getTerrain() == Terrain.PADDY);
--+    }
--+
-- 
+-     private final boolean occupiesHex;
+-     private final boolean permanent;
+-diff --git a/src/JUnit/GameManagerTest.java b/src/JUnit/GameManagerTest.java
+-index 42a2bd5..9ed280c 100644
+---- a/src/JUnit/GameManagerTest.java
+-+++ b/src/JUnit/GameManagerTest.java
+-@@ -9,10 +9,11 @@ public class GameManagerTest {
+-         HexButton hexButton = testGameManager.getBoard().getHexButton(center);
+-         assert(hexButton.getHex().getTypeName().equals("VOLCANO"));
+-     }
+-+    /*
 -     @Test
--     public void testHexTerrainGeneration() throws Exception {
+-     public void GUITest() throws Exception{
+-         UI tigerIsland = new UI();
+-         tigerIsland.createAndShowGUI();
+- 
+--    }
+-+    }*/
+- }
 -diff --git a/src/JUnit/ParserTest.java b/src/JUnit/ParserTest.java
--index f96584d..de7d948 100644
+-index de7d948..0adc87c 100644
 ---- a/src/JUnit/ParserTest.java
 -+++ b/src/JUnit/ParserTest.java
--@@ -1,8 +1,8 @@
+-@@ -1,6 +1,14 @@
 - import org.junit.Test;
 - 
 - public class ParserTest {
---
---    @Test
--+/*
--+    @Ignore
+-+
+-+    @Test
+-+    public void testCanTellSendScoreMessage() throws Exception {
+-+        Parser parser = new Parser(new GameManager(true));
+-+        String message = "GAME 1 OVER SEND OUTCOME";
+-+        parser.receiveMessage(message);
+-+        assert(parser.getGid() == "1");
+-+    }
+- /*
+-     @Ignore
 -     public void test1() throws Exception{
--         Parser testParser = new Parser(new GameManager(true));
--         String message = "WAIT FOR THE TOURNAMENT TO BEGIN 1231321";
--@@ -36,6 +36,6 @@ public class ParserTest {
+-diff --git a/src/JUnit/PlayerTest.java b/src/JUnit/PlayerTest.java
+-index 93ae18d..0f1c3a4 100644
+---- a/src/JUnit/PlayerTest.java
+-+++ b/src/JUnit/PlayerTest.java
+-@@ -1,4 +1,5 @@
+- import org.junit.*;
+-+import sun.jvm.hotspot.oops.ExceptionTableElement;
 - 
+- import java.awt.*;
 - 
+-@@ -8,11 +9,18 @@ public class PlayerTest {
+-     @Test
+-     public void testVillagerResources() throws Exception{
+-         Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
+--        int startVillagerPool = 20;
+-+        int startVillagerPool = 19;
+-         assert (player1.getVillagers() == startVillagerPool);
 -     }
---
--+*/
 - 
-- }
+-     @Test
+-+    public void testShamanResources() throws Exception {
+-+        Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
+-+        int startShamanPool = 1;
+-+        assert (player1.getShaman() == startShamanPool);
+-+    }
+-+
+-+    @Test
+-     public void testTotoroResources() throws Exception{
+-         Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
+-         int startTotoroPool = 3;
+-@@ -29,18 +37,20 @@ public class PlayerTest {
+-     //This test could be split in 3 parts if desired
+-     public void testResourceDepletion() throws Exception {
+-         Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
+--        int targetVillager = 12;
+-+        int targetVillager = 11;
+-         int targetTotoro = 2;
+-         int targetTiger = 1;
+-+        int targetShaman = 1;
+-         player1.decreaseTigers();
+-         player1.decreaseTotoros();
+-+        player1.decreaseShaman();
+-         player1.decreaseVillagers(8);
+-         assert (player1.getTigers() == targetTiger && player1.getTotoros() == targetTotoro && player1.getVillagers() == targetVillager);
+-     }
+-     @Test
+-     public void testConsumeMeeple() throws Exception {
+-         Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
+--        player1.consumeMeeples(Building.VILLAGER,14);
+-+        player1.consumeMeeples(Building.VILLAGER,13);
+-         player1.consumeMeeples(Building.TOTORO,2);
+-         player1.consumeMeeples(Building.TIGER,2);
+-         assert (player1.getVillagers()==6 && player1.getTotoros()==1 && player1.getTigers()==0);
+-@@ -48,14 +58,17 @@ public class PlayerTest {
+-     @Test
+-     public void testResourceReset() throws Exception {
+-         Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
+--        int targetVillager = 20;
+-+        int targetVillager = 19;
+-         int targetTotoro = 3;
+-         int targetTiger = 2;
+-+        int targetShaman = 1;
+-         player1.decreaseTigers();
+-         player1.decreaseTotoros();
+-         player1.decreaseVillagers(8);
+-+        player1 .decreaseShaman();
+-         player1.resetResources();
+--        assert (player1.getTigers() == targetTiger && player1.getTotoros() == targetTotoro && player1.getVillagers() == targetVillager);
+-+        assert (player1.getTigers() == targetTiger && player1.getTotoros() == targetTotoro && player1.getVillagers() == targetVillager
+-+        && player1.getShaman() == targetShaman);
+-     }
+-     @Test
+-     public void testOutOfResources() throws Exception {
+-@@ -65,7 +78,8 @@ public class PlayerTest {
+-         player1.decreaseTotoros();
+-         player1.decreaseTotoros();
+-         player1.decreaseTotoros();
+--        player1.decreaseVillagers(20);
+-+        player1.decreaseShaman();
+-+        player1.decreaseVillagers(19);
+-         assert (player1.outOfResources() == true);
+-     }
+-     @Test
 -diff --git a/src/Parser.java b/src/Parser.java
--index b63075b..da91a30 100644
+-index da91a30..d8f22a3 100644
 ---- a/src/Parser.java
 -+++ b/src/Parser.java
--@@ -141,6 +141,8 @@ public class Parser implements Runnable {
--                 case "LAKE":
--                     terrainHexA = Terrain.LAKE;
--                     break;
--+                case "PADDY":
--+                    terrainHexA = Terrain.PADDY;
--             }
+-@@ -288,6 +288,16 @@ public class Parser implements Runnable {
+-                         //buildPlacementPoint3d to build settlement
 - 
--             switch (tileTerrainNames[1]) {
--@@ -156,6 +158,8 @@ public class Parser implements Runnable {
--                 case "LAKE":
--                     terrainHexB = Terrain.LAKE;
--                     break;
--+                case "PADDY":
--+                    terrainHexB = Terrain.PADDY;
--             }
-- 
--             Hex hexA = new Hex(terrainHexA, tileCount);
--@@ -240,6 +244,8 @@ public class Parser implements Runnable {
--                         case "LAKE":
--                             terrainHexA = Terrain.LAKE;
--                             break;
--+                        case "PADDY":
--+                            terrainHexA = Terrain.PADDY;
 -                     }
+-+
+-+                    check2 = input[13].equals("FOUNDED") && input[14].equals("SHANGRILA");
+-+                    if(check2) {
+-+                        System.out.println("Parsing buildaction as shaman placement");
+-+                        Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]), Integer.parseInt(input[17]), Integer.parseInt(input[18]));
+-+                        HexButton buildTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
+-+                        buildAction = new BuildingPlacementMove(null, buildTarget, Building.SHAMAN);
+-+                        //buildPlacementPoint3d to build settlement
+-+
+-+                    }
+-                     check2 = input[13].equals("EXPANDED") && input[14].equals("SETTLEMENT");
+-                     if (check2) {
+-                         System.out.println("Parsing buildaction as expansion");
+-@@ -347,6 +357,23 @@ public class Parser implements Runnable {
 - 
--                     switch (tileTerrainNames[1]) {
--@@ -255,6 +261,8 @@ public class Parser implements Runnable {
--                         case "LAKE":
--                             terrainHexB = Terrain.LAKE;
--                             break;
--+                        case "PADDY":
--+                            terrainHexB = Terrain.PADDY;
--                     }
+-         }
 - 
--                     Hex hexA = new Hex(terrainHexA, tileCount);
--@@ -298,6 +306,8 @@ public class Parser implements Runnable {
--                             case "LAKE":
--                                 expandTerrain = Terrain.LAKE;
--                                 break;
--+                            case "PADDY":
--+                                expandTerrain = Terrain.PADDY;
--                         }
+-+        check = input[0].equals("GAME") && input[2].equals("OVER") && input[3].equals("SEND") && input[4].equals("OUTCOME");
+-+        if(check) {
+-+            gid = input[4];
+-+            pid = getPid();
+-+            pidOpponent = getPidOpponent();
+-+            Player player1 = manager.getBoard().getPlayer1();
+-+            Player player2 = manager.getBoard().getPlayer2();
+-+
+-+            String outputMessage = sendAction(pid, pidOpponent, player1, player2);
+-+            sendToQueue(outputMessage);
+-+
+-+            manager = new GameManager(true,this);
+-+            gid = "empty";
+-+            games.setGameID(threadName, "empty");
+-+
+-+        }
+-+
+-         check = input[0].equals("GAME")&&input[2].equals("OVER");
+-         if(check){
+-             //gid = input[1];
+-@@ -368,10 +395,10 @@ public class Parser implements Runnable {
+-             //System.out.println("Round over. Round ID: "+ input[3]);
+-         }
 - 
--                         HexButton expansionTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
-diff --git a/src/Board.java b/src/Board.java
-index 41b4f7d..c307bb8 100644
---- a/src/Board.java
-+++ b/src/Board.java
-@@ -726,7 +726,14 @@ public class Board {
-             {
-                 button.placeBuilding(Building.VILLAGER, activePlayer);
-                 int level = button.getHex().getLevel();
--                activePlayer.increaseScore(level * level);
-+                if(settlement.hasShaman()) {
-+                    activePlayer.increaseScore(2 * level * level);
-+
-+                }
-+                else {
-+                    activePlayer.increaseScore(level * level);
-+
-+                }
-             }
-             activePlayer.decreaseVillagers(expansion.getCost());
-         }
-diff --git a/src/Hex.java b/src/Hex.java
-index ef3375f..7b73db2 100644
---- a/src/Hex.java
-+++ b/src/Hex.java
-@@ -162,7 +162,7 @@ enum Terrain
+--
+-     }
+- 
+- 
+-+
+-     public void extractAndSendAction(TilePlacementMove tilePlacement, PlayerMove buildAction)
+-     {
+-         HexButton tileHex = tilePlacement.getTargetHex();
+-@@ -393,6 +420,21 @@ public class Parser implements Runnable {
+- 
+-         sendToQueue(sendActionResult);
+-     }
+-+
+-+    // Send scores case
+-+    public String sendAction(String playerID1, String playerID2, Player player1, Player player2) {
+-+        String outputMessage = "GAME " + gid + " PLAYER ";
+-+        if(player1.getName() == playerID1) {
+-+            outputMessage += playerID1 + player1.getScore() + " PLAYER " + playerID2 + player2.getScore();
+-+        }
+-+        else {
+-+            outputMessage += playerID2 + player1.getScore() + " PLAYER " + playerID1 + player2.getScore();
+-+
+-+        }
+-+        return outputMessage;
+-+    }
+-+
+-+
+-     //unable to build case
+-     public void extractAndSendAction(TilePlacementMove tilePlacement){
+-         HexButton tileHex = tilePlacement.getTargetHex();
+-diff --git a/src/Player.java b/src/Player.java
+-index d137bf3..df53bef 100644
+---- a/src/Player.java
+-+++ b/src/Player.java
+-@@ -26,6 +26,10 @@ public class Player
+-         return meeples[Building.VILLAGER.ordinal()];
+-     }
+- 
+-+    public int getShaman() {
+-+        return meeples[Building.SHAMAN.ordinal()];
+-+    }
+-+
+-     public int getTotoros()
+-     {
+-         return meeples[Building.TOTORO.ordinal()];
+-@@ -43,15 +47,16 @@ public class Player
+- 
+-     public void resetResources()
+-     {
+--        meeples = new int[3];
+--        meeples[Building.VILLAGER.ordinal()] = 20;
+-+        meeples = new int[4];
+-+        meeples[Building.VILLAGER.ordinal()] = 19;
+-         meeples[Building.TIGER.ordinal()] = 2;
+-         meeples[Building.TOTORO.ordinal()] = 3;
+-+        meeples[Building.SHAMAN.ordinal()] = 1;
+-     }
+- 
+-     public boolean instaWins()
+-     {
+--        boolean outOfVillagers = (meeples[Building.VILLAGER.ordinal()] == 0);
+-+        boolean outOfVillagers = (meeples[Building.VILLAGER.ordinal()] == 0 && meeples[Building.SHAMAN.ordinal()] == 0);
+-         boolean outOfTigers = (meeples[Building.TIGER.ordinal()] == 0);
+-         boolean outOfTotoros = (meeples[Building.TOTORO.ordinal()] == 0);
+- 
+-@@ -71,6 +76,10 @@ public class Player
+- 
+-     public void decreaseTigers() {meeples[Building.TIGER.ordinal()]--;}
+- 
+-+    public void decreaseShaman() {
+-+        meeples[Building.SHAMAN.ordinal()]--;
+-+    }
+-+
+-     public void consumeMeeples(Building building, int number)
+-     {
+-         meeples[building.ordinal()] -= number;
+-@@ -93,7 +102,8 @@ public class Player
+- 
+-     public boolean outOfResources()
+-     {
+--        return (meeples[Building.TOTORO.ordinal()] == 0 && meeples[Building.VILLAGER.ordinal()] == 0 && meeples[Building.TIGER.ordinal()] == 0);
+-+        return (meeples[Building.TOTORO.ordinal()] == 0 && meeples[Building.VILLAGER.ordinal()] == 0 && meeples[Building.TIGER.ordinal()] == 0
+-+        && meeples[Building.SHAMAN.ordinal()] == 0);
+-     }
+- 
+-     public boolean outOfTigersOrTotoros()
+-diff --git a/src/Settlement.java b/src/Settlement.java
+-index af49ea7..b91d7b1 100644
+---- a/src/Settlement.java
+-+++ b/src/Settlement.java
+-@@ -12,6 +12,7 @@ public class Settlement
+- 
+-     private boolean hasTiger;
+-     private boolean hasTotoro;
+-+    private boolean hasShaman;
+- 
+-     private int settlementId;
+- 
+-@@ -24,6 +25,7 @@ public class Settlement
+-         firstHex.getHex().setSettlementId(settlementId);
+-         hasTiger = false;
+-         hasTotoro = false;
+-+        hasShaman = false;
+-     }
+- 
+-     public void checkNeighbors(HexButton startHex, Board board)
+-@@ -50,6 +52,10 @@ public class Settlement
+-         hasTiger = hasBuilding(Building.TIGER);
+-     }
+- 
+-+    public void checkForShaman() {
+-+        hasShaman = hasBuilding(Building.TIGER);
+-+    }
+-+
+-     public int getSize()
+-     {
+-         return hexes.size();
+-@@ -89,6 +95,11 @@ public class Settlement
+-         return hasTiger;
+-     }
+- 
+-+    public boolean hasShaman() {
+-+        checkForShaman();
+-+        return hasShaman;
+-+    }
+-+
+-     public Player getOwner()
+-     {
+-         return owner;
+diff --git a/src/JUnit/HexAndTileTest.java b/src/JUnit/HexAndTileTest.java
+index 31f13e0..36512c6 100644
+--- a/src/JUnit/HexAndTileTest.java
++++ b/src/JUnit/HexAndTileTest.java
+@@ -6,6 +6,11 @@ import java.awt.*;
+ public class HexAndTileTest {
  
- enum Building
- {
--    VILLAGER(true, false, 1), TIGER(true, true, 75), TOTORO(true, true, 200), NONE(false, false, 0);
-+    VILLAGER(true, false, 1), TIGER(true, true, 75), TOTORO(true, true, 200), SHAMAN(true, false, 1), NONE(false, false, 0);
- 
-     private final boolean occupiesHex;
-     private final boolean permanent;
-diff --git a/src/JUnit/GameManagerTest.java b/src/JUnit/GameManagerTest.java
-index 42a2bd5..9ed280c 100644
---- a/src/JUnit/GameManagerTest.java
-+++ b/src/JUnit/GameManagerTest.java
-@@ -9,10 +9,11 @@ public class GameManagerTest {
-         HexButton hexButton = testGameManager.getBoard().getHexButton(center);
-         assert(hexButton.getHex().getTypeName().equals("VOLCANO"));
-     }
-+    /*
      @Test
-     public void GUITest() throws Exception{
-         UI tigerIsland = new UI();
-         tigerIsland.createAndShowGUI();
- 
--    }
-+    }*/
- }
-diff --git a/src/JUnit/ParserTest.java b/src/JUnit/ParserTest.java
-index de7d948..0adc87c 100644
---- a/src/JUnit/ParserTest.java
-+++ b/src/JUnit/ParserTest.java
-@@ -1,6 +1,14 @@
- import org.junit.Test;
- 
- public class ParserTest {
++    public void testSevenTerainValuesExist() throws Exception {
++        assert(Terrain.values().length == 7);
++    }
 +
 +    @Test
-+    public void testCanTellSendScoreMessage() throws Exception {
-+        Parser parser = new Parser(new GameManager(true));
-+        String message = "GAME 1 OVER SEND OUTCOME";
-+        parser.receiveMessage(message);
-+        assert(parser.getGid() == "1");
-+    }
- /*
-     @Ignore
-     public void test1() throws Exception{
-diff --git a/src/JUnit/PlayerTest.java b/src/JUnit/PlayerTest.java
-index 93ae18d..0f1c3a4 100644
---- a/src/JUnit/PlayerTest.java
-+++ b/src/JUnit/PlayerTest.java
-@@ -1,4 +1,5 @@
- import org.junit.*;
-+import sun.jvm.hotspot.oops.ExceptionTableElement;
- 
- import java.awt.*;
- 
-@@ -8,11 +9,18 @@ public class PlayerTest {
-     @Test
-     public void testVillagerResources() throws Exception{
-         Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
--        int startVillagerPool = 20;
-+        int startVillagerPool = 19;
-         assert (player1.getVillagers() == startVillagerPool);
-     }
- 
-     @Test
-+    public void testShamanResources() throws Exception {
-+        Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
-+        int startShamanPool = 1;
-+        assert (player1.getShaman() == startShamanPool);
-+    }
-+
-+    @Test
-     public void testTotoroResources() throws Exception{
-         Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
-         int startTotoroPool = 3;
-@@ -29,18 +37,20 @@ public class PlayerTest {
-     //This test could be split in 3 parts if desired
-     public void testResourceDepletion() throws Exception {
-         Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
--        int targetVillager = 12;
-+        int targetVillager = 11;
-         int targetTotoro = 2;
-         int targetTiger = 1;
-+        int targetShaman = 1;
-         player1.decreaseTigers();
-         player1.decreaseTotoros();
-+        player1.decreaseShaman();
-         player1.decreaseVillagers(8);
-         assert (player1.getTigers() == targetTiger && player1.getTotoros() == targetTotoro && player1.getVillagers() == targetVillager);
-     }
-     @Test
-     public void testConsumeMeeple() throws Exception {
-         Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
--        player1.consumeMeeples(Building.VILLAGER,14);
-+        player1.consumeMeeples(Building.VILLAGER,13);
-         player1.consumeMeeples(Building.TOTORO,2);
-         player1.consumeMeeples(Building.TIGER,2);
-         assert (player1.getVillagers()==6 && player1.getTotoros()==1 && player1.getTigers()==0);
-@@ -48,14 +58,17 @@ public class PlayerTest {
-     @Test
-     public void testResourceReset() throws Exception {
-         Player player1 = new Player("Player 1", Color.WHITE, Color.BLACK);
--        int targetVillager = 20;
-+        int targetVillager = 19;
-         int targetTotoro = 3;
-         int targetTiger = 2;
-+        int targetShaman = 1;
-         player1.decreaseTigers();
-         player1.decreaseTotoros();
-         player1.decreaseVillagers(8);
-+        player1 .decreaseShaman();
-         player1.resetResources();
--        assert (player1.getTigers() == targetTiger && player1.getTotoros() == targetTotoro && player1.getVillagers() == targetVillager);
-+        assert (player1.getTigers() == targetTiger && player1.getTotoros() == targetTotoro && player1.getVillagers() == targetVillager
-+        && player1.getShaman() == targetShaman);
-     }
-     @Test
-     public void testOutOfResources() throws Exception {
-@@ -65,7 +78,8 @@ public class PlayerTest {
-         player1.decreaseTotoros();
-         player1.decreaseTotoros();
-         player1.decreaseTotoros();
--        player1.decreaseVillagers(20);
-+        player1.decreaseShaman();
-+        player1.decreaseVillagers(19);
-         assert (player1.outOfResources() == true);
-     }
-     @Test
-diff --git a/src/Parser.java b/src/Parser.java
-index da91a30..d8f22a3 100644
---- a/src/Parser.java
-+++ b/src/Parser.java
-@@ -288,6 +288,16 @@ public class Parser implements Runnable {
-                         //buildPlacementPoint3d to build settlement
- 
-                     }
-+
-+                    check2 = input[13].equals("FOUNDED") && input[14].equals("SHANGRILA");
-+                    if(check2) {
-+                        System.out.println("Parsing buildaction as shaman placement");
-+                        Point3D buildPlacementPoint3d = new Point3D(Integer.parseInt(input[16]), Integer.parseInt(input[17]), Integer.parseInt(input[18]));
-+                        HexButton buildTarget = manager.getBoard().getCubicMap().get(buildPlacementPoint3d);
-+                        buildAction = new BuildingPlacementMove(null, buildTarget, Building.SHAMAN);
-+                        //buildPlacementPoint3d to build settlement
-+
-+                    }
-                     check2 = input[13].equals("EXPANDED") && input[14].equals("SETTLEMENT");
-                     if (check2) {
-                         System.out.println("Parsing buildaction as expansion");
-@@ -347,6 +357,23 @@ public class Parser implements Runnable {
- 
-         }
- 
-+        check = input[0].equals("GAME") && input[2].equals("OVER") && input[3].equals("SEND") && input[4].equals("OUTCOME");
-+        if(check) {
-+            gid = input[4];
-+            pid = getPid();
-+            pidOpponent = getPidOpponent();
-+            Player player1 = manager.getBoard().getPlayer1();
-+            Player player2 = manager.getBoard().getPlayer2();
-+
-+            String outputMessage = sendAction(pid, pidOpponent, player1, player2);
-+            sendToQueue(outputMessage);
-+
-+            manager = new GameManager(true,this);
-+            gid = "empty";
-+            games.setGameID(threadName, "empty");
-+
-+        }
-+
-         check = input[0].equals("GAME")&&input[2].equals("OVER");
-         if(check){
-             //gid = input[1];
-@@ -368,10 +395,10 @@ public class Parser implements Runnable {
-             //System.out.println("Round over. Round ID: "+ input[3]);
-         }
- 
--
-     }
- 
- 
-+
-     public void extractAndSendAction(TilePlacementMove tilePlacement, PlayerMove buildAction)
-     {
-         HexButton tileHex = tilePlacement.getTargetHex();
-@@ -393,6 +420,21 @@ public class Parser implements Runnable {
- 
-         sendToQueue(sendActionResult);
-     }
-+
-+    // Send scores case
-+    public String sendAction(String playerID1, String playerID2, Player player1, Player player2) {
-+        String outputMessage = "GAME " + gid + " PLAYER ";
-+        if(player1.getName() == playerID1) {
-+            outputMessage += playerID1 + player1.getScore() + " PLAYER " + playerID2 + player2.getScore();
-+        }
-+        else {
-+            outputMessage += playerID2 + player1.getScore() + " PLAYER " + playerID1 + player2.getScore();
-+
-+        }
-+        return outputMessage;
-+    }
-+
-+
-     //unable to build case
-     public void extractAndSendAction(TilePlacementMove tilePlacement){
-         HexButton tileHex = tilePlacement.getTargetHex();
-diff --git a/src/Player.java b/src/Player.java
-index d137bf3..df53bef 100644
---- a/src/Player.java
-+++ b/src/Player.java
-@@ -26,6 +26,10 @@ public class Player
-         return meeples[Building.VILLAGER.ordinal()];
-     }
- 
-+    public int getShaman() {
-+        return meeples[Building.SHAMAN.ordinal()];
-+    }
-+
-     public int getTotoros()
-     {
-         return meeples[Building.TOTORO.ordinal()];
-@@ -43,15 +47,16 @@ public class Player
- 
-     public void resetResources()
-     {
--        meeples = new int[3];
--        meeples[Building.VILLAGER.ordinal()] = 20;
-+        meeples = new int[4];
-+        meeples[Building.VILLAGER.ordinal()] = 19;
-         meeples[Building.TIGER.ordinal()] = 2;
-         meeples[Building.TOTORO.ordinal()] = 3;
-+        meeples[Building.SHAMAN.ordinal()] = 1;
-     }
- 
-     public boolean instaWins()
-     {
--        boolean outOfVillagers = (meeples[Building.VILLAGER.ordinal()] == 0);
-+        boolean outOfVillagers = (meeples[Building.VILLAGER.ordinal()] == 0 && meeples[Building.SHAMAN.ordinal()] == 0);
-         boolean outOfTigers = (meeples[Building.TIGER.ordinal()] == 0);
-         boolean outOfTotoros = (meeples[Building.TOTORO.ordinal()] == 0);
- 
-@@ -71,6 +76,10 @@ public class Player
- 
-     public void decreaseTigers() {meeples[Building.TIGER.ordinal()]--;}
- 
-+    public void decreaseShaman() {
-+        meeples[Building.SHAMAN.ordinal()]--;
-+    }
-+
-     public void consumeMeeples(Building building, int number)
-     {
-         meeples[building.ordinal()] -= number;
-@@ -93,7 +102,8 @@ public class Player
- 
-     public boolean outOfResources()
-     {
--        return (meeples[Building.TOTORO.ordinal()] == 0 && meeples[Building.VILLAGER.ordinal()] == 0 && meeples[Building.TIGER.ordinal()] == 0);
-+        return (meeples[Building.TOTORO.ordinal()] == 0 && meeples[Building.VILLAGER.ordinal()] == 0 && meeples[Building.TIGER.ordinal()] == 0
-+        && meeples[Building.SHAMAN.ordinal()] == 0);
-     }
- 
-     public boolean outOfTigersOrTotoros()
-diff --git a/src/Settlement.java b/src/Settlement.java
-index af49ea7..b91d7b1 100644
---- a/src/Settlement.java
-+++ b/src/Settlement.java
-@@ -12,6 +12,7 @@ public class Settlement
- 
-     private boolean hasTiger;
-     private boolean hasTotoro;
-+    private boolean hasShaman;
- 
-     private int settlementId;
- 
-@@ -24,6 +25,7 @@ public class Settlement
-         firstHex.getHex().setSettlementId(settlementId);
-         hasTiger = false;
-         hasTotoro = false;
-+        hasShaman = false;
-     }
- 
-     public void checkNeighbors(HexButton startHex, Board board)
-@@ -50,6 +52,10 @@ public class Settlement
-         hasTiger = hasBuilding(Building.TIGER);
-     }
- 
-+    public void checkForShaman() {
-+        hasShaman = hasBuilding(Building.TIGER);
-+    }
-+
-     public int getSize()
-     {
-         return hexes.size();
-@@ -89,6 +95,11 @@ public class Settlement
-         return hasTiger;
-     }
- 
-+    public boolean hasShaman() {
-+        checkForShaman();
-+        return hasShaman;
-+    }
-+
-     public Player getOwner()
-     {
-         return owner;
+     public void testCanMakePaddyHex() throws Exception {
+         Hex hex = new Hex(Terrain.PADDY, 1);
+         assert(hex.getTypeName() == "PADDY");
